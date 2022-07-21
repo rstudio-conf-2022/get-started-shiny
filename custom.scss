@@ -73,6 +73,16 @@ input#text {
   margin-left: 0.8em;
 }
 
+
+element.style {
+}
+.reveal div.sourceCode pre code {
+    min-height: 100%;
+}
+.reveal pre.sourceCode code {
+  max-height: 575px;
+}
+
 /*.reveal .code-file p:before {
     display: inline-block;
     font-style: normal;
