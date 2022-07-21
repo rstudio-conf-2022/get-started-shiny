@@ -1,0 +1,332 @@
+city,state,lat,long
+New York,New York,40.66,-73.93
+Los Angeles,California,34.01,-118.41 
+Chicago,Illinois,41.83,-87.68 
+Houston,Texas,29.78,-95.39 
+Phoenix,Arizona,33.57,-112.09 
+Philadelphia,Pennsylvania,40.00,-75.13 
+San Antonio,Texas,29.47,-98.52 
+San Diego,California,32.81,-117.13 
+Dallas,Texas,32.79,-96.76 
+San Jose,California,37.29,-121.81 
+Austin,Texas,30.30,-97.75 
+Jacksonville,Florida,30.33,-81.66 
+Fort Worth,Texas,32.78,-97.34 
+Columbus,Ohio,39.98,-82.98 
+Indianapolis,Indiana,39.77,-86.14 
+Charlotte,North Carolina,35.20,-80.83 
+San Francisco,California,37.72,-123.03 
+Seattle,Washington,47.62,-122.35 
+Denver,Colorado,39.76,-104.88 
+Oklahoma City,Oklahoma,35.46,-97.51 
+Nashville,Tennessee,36.17,-86.78 
+El Paso,Texas,31.84,-106.42 
+Washington,District of Columbia,38.90,-77.01
+Boston,Massachusetts,42.33,-71.02 
+Las Vegas,Nevada,36.22,-115.26 
+Portland,Oregon,45.53,-122.65 
+Detroit,Michigan,42.38,-83.10 
+Louisville,Kentucky,38.16,-85.64 
+Memphis,Tennessee,35.10,-89.97 
+Baltimore,Maryland,39.30,-76.61 
+Milwaukee,Wisconsin,43.06,-87.96 
+Albuquerque,New Mexico,35.10,-106.64 
+Fresno,California,36.78,-119.79 
+Tucson,Arizona,32.15,-110.87 
+Sacramento,California,38.56,-121.46 
+Mesa,Arizona,33.40,-111.71 
+Kansas City,Missouri,39.12,-94.55
+Atlanta,Georgia,33.76,-84.42 
+Omaha,Nebraska,41.26,-96.04 
+Colorado Springs,Colorado,38.86,-104.76 
+Raleigh,North Carolina,35.83,-78.64 
+Virginia Beach,Virginia,36.78,-76.02 
+Long Beach,California,33.80,-118.15 
+Miami,Florida,25.77,-80.20 
+Oakland,California,37.76,-122.22 
+Minneapolis,Minnesota,44.96,-93.26 
+Tulsa,Oklahoma,36.12,-95.90 
+Bakersfield,California,35.32,-119.01 
+Wichita,Kansas,37.69,-97.34 
+Arlington,Texas,32.70,-97.12 
+Aurora,Colorado,39.68,-104.68 
+Tampa,Florida,27.97,-82.47 
+New Orleans,Louisiana,30.05,-89.93 
+Cleveland,Ohio,41.47,-81.67 
+Anaheim,California,33.85,-117.76 
+Honolulu,Hawaii,21.32,-157.84 
+Henderson,Nevada,36.00,-115.03 
+Stockton,California,37.97,-121.31 
+Lexington,Kentucky,38.04,-84.45 
+Corpus Christi,Texas,27.75,-97.17 
+Riverside,California,33.93,-117.39 
+Santa Ana,California,33.73,-117.88 
+Orlando,Florida,28.41,-81.27 
+Irvine,California,33.67,-117.77 
+Cincinnati,Ohio,39.14,-84.50 
+Newark,New Jersey,40.72,-74.17 
+Saint Paul,Minnesota,44.94,-93.10 
+Pittsburgh,Pennsylvania,40.43,-79.97 
+Greensboro,North Carolina,36.09,-79.82 
+St. Louis,Missouri,38.63,-90.24 
+Lincoln,Nebraska,40.81,-96.68 
+Plano,Texas,33.05,-96.74 
+Anchorage,Alaska,61.17,-149.28 
+Durham,North Carolina,35.98,-78.90 
+Jersey City,New Jersey,40.71,-74.06 
+Chandler,Arizona,33.28,-111.85 
+Chula Vista,California,32.62,-117.01 
+Buffalo,New York,42.89,-78.85 
+North Las Vegas,Nevada,36.28,-115.09 
+Gilbert,Arizona,33.31,-111.74 
+Madison,Wisconsin,43.08,-89.42 
+Reno,Nevada,39.54,-119.84 
+Toledo,Ohio,41.66,-83.58 
+Fort Wayne,Indiana,41.08,-85.14 
+Lubbock,Texas,33.56,-101.88 
+St. Petersburg,Florida,27.76,-82.64 
+Laredo,Texas,27.56,-99.48 
+Irving,Texas,32.85,-96.97 
+Chesapeake,Virginia,36.67,-76.30 
+Winston–Salem,North Carolina,36.10,-80.26 
+Glendale,Arizona,33.53,-112.18 
+Scottsdale,Arizona,33.68,-111.86 
+Garland,Texas,32.90,-96.63 
+Boise,Idaho,43.60,-116.23 
+Norfolk,Virginia,36.92,-76.24 
+Spokane,Washington,47.66,-117.43 
+Fremont,California,37.49,-121.94 
+Richmond,Virginia,37.53,-77.47 
+Santa Clarita,California,34.40,-118.50 
+San Bernardino,California,34.14,-117.29 
+Baton Rouge,Louisiana,30.44,-91.13 
+Hialeah,Florida,25.86,-80.30 
+Tacoma,Washington,47.25,-122.45 
+Modesto,California,37.63,-121.00 
+Port St. Lucie,Florida,27.28,-80.38 
+Huntsville,Alabama,34.69,-86.67 
+Des Moines,Iowa,41.57,-93.61 
+Moreno Valley,California,33.92,-117.20 
+Fontana,California,34.10,-117.46 
+Frisco,Texas,33.15,-96.82 
+Rochester,New York,43.16,-77.61 
+Yonkers,New York,40.94,-73.86 
+Fayetteville,North Carolina,35.08,-78.97 
+Worcester,Massachusetts,42.26,-71.80 
+Columbus,Georgia,32.51,-84.87 
+Cape Coral,Florida,26.64,-81.99 
+McKinney,Texas,33.19,-96.66 
+Little Rock,Arkansas,34.72,-92.35 
+Oxnard,California,34.20,-119.20 
+Amarillo,Texas,35.19,-101.83 
+Augusta,Georgia,33.36,-82.07 
+Salt Lake City,Utah,40.77,-111.93 
+Montgomery,Alabama,32.34,-86.26 
+Birmingham,Alabama,33.52,-86.79 
+Grand Rapids,Michigan,42.96,-85.65 
+Grand Prairie,Texas,32.68,-97.02 
+Overland Park,Kansas,38.88,-94.69 
+Tallahassee,Florida,30.45,-84.25 
+Huntington Beach,California,33.69,-118.00 
+Sioux Falls,South Dakota,43.53,-96.73 
+Peoria,Arizona,33.78,-112.30 
+Knoxville,Tennessee,35.97,-83.94 
+Glendale,California,34.18,-118.24 
+Vancouver,Washington,45.63,-122.59 
+Providence,Rhode Island,41.82,-71.41 
+Akron,Ohio,41.08,-81.52 
+Brownsville,Texas,25.99,-97.45 
+Mobile,Alabama,30.66,-88.10 
+Newport News,Virginia,37.07,-76.52 
+Tempe,Arizona,33.38,-111.93 
+Shreveport,Louisiana,32.46,-93.79 
+Chattanooga,Tennessee,35.06,-85.24 
+Fort Lauderdale,Florida,26.14,-80.14 
+Aurora,Illinois,41.76,-88.29 
+Elk Grove,California,38.41,-121.38 
+Ontario,California,34.03,-117.60 
+Salem,Oregon,44.92,-123.02 
+Cary,North Carolina,35.78,-78.81 
+Santa Rosa,California,38.44,-122.70 
+Rancho Cucamonga,California,34.12,-117.56 
+Eugene,Oregon,44.05,-123.11 
+Oceanside,California,33.22,-117.30 
+Clarksville,Tennessee,36.56,-87.34 
+Garden Grove,California,33.77,-117.96 
+Lancaster,California,34.69,-118.17 
+Springfield,Missouri,37.19,-93.29 
+Pembroke Pines,Florida,26.02,-80.34 
+Fort Collins,Colorado,40.54,-105.06 
+Palmdale,California,34.59,-118.10 
+Salinas,California,36.69,-121.63 
+Hayward,California,37.62,-122.10 
+Corona,California,33.86,-117.56 
+Paterson,New Jersey,40.91,-74.16 
+Murfreesboro,Tennessee,35.85,-86.41 
+Macon,Georgia,32.80,-83.69 
+Lakewood,Colorado,39.69,-105.11 
+Killeen,Texas,31.07,-97.73 
+Springfield,Massachusetts,42.11,-72.54 
+Alexandria,Virginia,38.82,-77.08 
+Kansas City,Kansas,39.12,-94.74 
+Sunnyvale,California,37.38,-122.02 
+Hollywood,Florida,26.03,-80.16 
+Roseville,California,38.76,-121.31 
+Charleston,South Carolina,32.81,-79.95 
+Escondido,California,33.13,-117.07 
+Joliet,Illinois,41.51,-88.14 
+Jackson,Mississippi,32.31,-90.21 
+Bellevue,Washington,47.59,-122.15 
+Surprise,Arizona,33.67,-112.45 
+Naperville,Illinois,41.74,-88.16 
+Pasadena,Texas,29.65,-95.15 
+Pomona,California,34.05,-117.76 
+Bridgeport,Connecticut,41.18,-73.19 
+Denton,Texas,33.21,-97.14 
+Rockford,Illinois,42.25,-89.06 
+Mesquite,Texas,32.76,-96.58 
+Savannah,Georgia,32.00,-81.15 
+Syracuse,New York,43.04,-76.14 
+McAllen,Texas,26.23,-98.24 
+Torrance,California,33.83,-118.34 
+Olathe,Kansas,38.88,-94.81 
+Visalia,California,36.32,-119.32 
+Thornton,Colorado,39.91,-104.94 
+Fullerton,California,33.88,-117.92 
+Gainesville,Florida,29.67,-82.34 
+Waco,Texas,31.56,-97.18 
+West Valley City,Utah,40.68,-112.01 
+Warren,Michigan,42.49,-83.02 
+Lakewood,New Jersey,40.08,-74.21 
+Hampton,Virginia,37.04,-76.29 
+Dayton,Ohio,39.77,-84.19 
+Columbia,South Carolina,34.02,-80.89 
+Orange,California,33.78,-117.86 
+Cedar Rapids,Iowa,41.96,-91.67 
+Stamford,Connecticut,41.07,-73.54 
+Victorville,California,34.52,-117.35 
+Pasadena,California,34.16,-118.13 
+Elizabeth,New Jersey,40.66,-74.19 
+New Haven,Connecticut,41.31,-72.92 
+Miramar,Florida,25.97,-80.33 
+Kent,Washington,47.38,-122.21 
+Sterling Heights,Michigan,42.58,-83.03 
+Carrollton,Texas,32.98,-96.89 
+Coral Springs,Florida,26.27,-80.25 
+Midland,Texas,32.02,-102.11 
+Norman,Oklahoma,35.24,-97.34 
+Athens,Georgia,33.94,-83.37 
+Santa Clara,California,37.36,-121.96 
+Columbia,Missouri,38.95,-92.32 
+Fargo,North Dakota,46.86,-96.82 
+Pearland,Texas,29.55,-95.32 
+Simi Valley,California,34.26,-118.74 
+Meridian,Idaho,43.61,-116.39 
+Topeka,Kansas,39.03,-95.69 
+Allentown,Pennsylvania,40.59,-75.47 
+Thousand Oaks,California,34.19,-118.87 
+Abilene,Texas,32.45,-99.73 
+Vallejo,California,38.10,-122.26 
+Concord,California,37.97,-122.00 
+Round Rock,Texas,30.52,-97.66 
+Arvada,Colorado,39.83,-105.15 
+Clovis,California,36.82,-119.68 
+Palm Bay,Florida,27.98,-80.66 
+Independence,Missouri,39.08,-94.35 
+Lafayette,Louisiana,30.20,-92.02 
+Ann Arbor,Michigan,42.27,-83.73 
+Rochester,Minnesota,44.01,-92.47 
+Hartford,Connecticut,41.76,-72.68 
+College Station,Texas,30.58,-96.29 
+Fairfield,California,38.25,-122.03 
+Wilmington,North Carolina,34.20,-77.88 
+North Charleston,South Carolina,32.91,-80.06 
+Billings,Montana,45.78,-108.54 
+West Palm Beach,Florida,26.74,-80.12 
+Berkeley,California,37.86,-122.29 
+Cambridge,Massachusetts,42.37,-71.11 
+Clearwater,Florida,27.97,-82.76 
+West Jordan,Utah,40.60,-112.00 
+Evansville,Indiana,37.98,-87.53 
+Richardson,Texas,32.97,-96.70 
+Broken Arrow,Oklahoma,36.03,-95.78 
+Richmond,California,37.95,-122.36 
+League City,Texas,29.49,-95.10 
+Manchester,New Hampshire,42.98,-71.44 
+Lakeland,Florida,28.05,-81.95 
+Carlsbad,California,33.12,-117.28 
+Antioch,California,37.97,-121.79 
+Westminster,Colorado,39.88,-105.06 
+High Point,North Carolina,35.99,-79.99 
+Provo,Utah,40.24,-111.64 
+Lowell,Massachusetts,42.63,-71.32 
+Elgin,Illinois,42.03,-88.32 
+Waterbury,Connecticut,41.55,-73.03 
+Springfield,Illinois,39.79,-89.64 
+Gresham,Oregon,45.50,-122.44 
+Murrieta,California,33.57,-117.19 
+Lewisville,Texas,33.04,-96.98 
+Las Cruces,New Mexico,32.32,-106.78 
+Lansing,Michigan,42.71,-84.55 
+Beaumont,Texas,30.08,-94.14 
+Odessa,Texas,31.88,-102.34 
+Pueblo,Colorado,38.26,-104.61 
+Peoria,Illinois,40.75,-89.61 
+Downey,California,33.93,-118.13 
+Pompano Beach,Florida,26.24,-80.13 
+Miami Gardens,Florida,25.94,-80.24 
+Temecula,California,33.49,-117.13 
+Everett,Washington,47.95,-122.19 
+Costa Mesa,California,33.66,-117.91 
+Ventura[aa],California,34.26,-119.25 
+Sparks,Nevada,39.55,-119.73 
+Santa Maria,California,34.93,-120.44 
+Sugar Land,Texas,29.59,-95.61 
+Greeley,Colorado,40.41,-104.76 
+South Fulton,Georgia,33.59,-84.67 
+Dearborn,Michigan,42.31,-83.21 
+Concord,North Carolina,35.40,-80.60 
+Edison,New Jersey,40.52,-74.41 
+Tyler,Texas,32.31,-95.30 
+Sandy Springs,Georgia,33.93,-84.36 
+West Covina,California,34.05,-117.90 
+Green Bay,Wisconsin,44.52,-87.98 
+Centennial,Colorado,39.59,-104.86 
+Jurupa Valley,California,34.00,-117.46 
+El Monte,California,34.07,-118.02 
+Allen,Texas,33.09,-96.66 
+Hillsboro,Oregon,45.52,-122.93 
+Menifee,California,33.69,-117.19 
+Nampa,Idaho,43.57,-116.56 
+Spokane Valley,Washington,47.67,-117.23 
+Rio Rancho,New Mexico,35.29,-106.67 
+Brockton,Massachusetts,42.08,-71.02 
+El Cajon,California,32.80,-116.96 
+Burbank,California,34.19,-118.32 
+Inglewood,California,33.95,-118.34 
+Renton,Washington,47.47,-122.19 
+Davie,Florida,26.07,-80.28 
+Rialto,California,34.11,-117.38 
+Boulder,Colorado,40.02,-105.25 
+South Bend,Indiana,41.67,-86.26 
+Woodbridge,New Jersey,40.56,-74.28 
+Vacaville,California,38.35,-121.97 
+Wichita Falls,Texas,33.90,-98.52 
+Lee's Summit,Missouri,38.92,-94.37 
+Edinburg,Texas,26.30,-98.16 
+Chico,California,39.74,-121.83 
+San Mateo,California,37.56,-122.31 
+Bend,Oregon,44.30,-121.18 
+Goodyear,Arizona,33.45,-112.36 
+Buckeye,Arizona,33.37,-112.59 
+Daly City,California,37.70,-122.46 
+Fishers,Indiana,39.96,-86.01 
+Quincy,Massachusetts,42.25,-71.00 
+Davenport,Iowa,41.55,-90.60 
+Hesperia,California,34.41,-117.31 
+New Bedford,Massachusetts,41.64,-70.93 
+Lynn,Massachusetts,42.47,-70.95 
+Carmel,Indiana,39.58,-86.60 
+Longmont,Colorado,40.17,-105.11 
+Tuscaloosa,Alabama,33.21,-87.53 
+Norwalk,California,33.90,-118.08 
