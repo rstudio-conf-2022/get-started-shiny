@@ -15,7 +15,7 @@ execute:
   echo: true
 title-slide-attributes:
     data-background-image: "images/hero-national-harbor.png"
-    data-background-size: auto
+    data-background-size: cover
     data-background-opacity: "0.5"
 ---
 
