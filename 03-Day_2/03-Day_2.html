@@ -454,14 +454,15 @@
 <p><countdown time="600"></countdown></p>
 </section></section>
 <section>
-<section id="dynamic-ui" class="title-slide slide level1 center">
-<h1>Dynamic UI</h1>
+<section id="dynamic-uis" class="title-slide slide level1 center">
+<h1>Dynamic UIs</h1>
 
 </section>
 <section id="uioutput" class="slide level2">
 <h2><code>uiOutput()</code></h2>
 <p>Occasionally with a Shiny app it is necessary to have a user interface that needs to adapt dynamically based on something that cannot be known before runtime.</p>
-<p>We will now work through an example where we allow a user to upload new data which will be used to supplement the existing weather data.</p>
+<p>We will now work through an example where we allow a user to upload data for new cities which will be used to supplement the existing weather data.</p>
+<p>The issue here is that the new data may contain some subset of the existing columns (and they may have different names) so we will need to map between the two sets of columns and we don’t want to hard code for every possible column.</p>
 </section>
 <section id="demo-9---more-weather-part-1" class="slide level2">
 <h2>Demo 9 - More weather (Part 1)</h2>
@@ -761,7 +762,108 @@
 <span id="cb3-158"><a href="#cb3-158"></a>  }</span>
 <span id="cb3-159"><a href="#cb3-159"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>
+</section></section>
+<section>
+<section id="shinydashboard" class="title-slide slide level1 center">
+<h1>shinydashboard</h1>
+
+</section>
+<section id="shinydashboard-1" class="slide level2">
+<h2>shinydashboard</h2>
+<p>Is a package that enables the easy generation of <a href="https://getbootstrap.com/">bootstrap</a> based dynamic Shiny dashboards.</p>
+<p>The core of the package is a common dashboard layout and a number of specialized UI elements (static and reactive) for creating an attractive interface.</p>
+<p><br></p>
+
+<img data-src="images/shinydashboard_layout.png" style="width:40.0%" class="r-stretch quarto-figure-center"></section>
+<section id="dashboard-basics" class="slide level2">
+<h2>Dashboard basics</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">library</span>(shinydashboard)</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="fu">shinyApp</span>(</span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="at">ui =</span> <span class="fu">dashboardPage</span>(</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="fu">dashboardHeader</span>(</span>
+<span id="cb4-7"><a href="#cb4-7"></a>      <span class="at">title=</span><span class="st">"Test"</span>, </span>
+<span id="cb4-8"><a href="#cb4-8"></a>      <span class="at">.list =</span> <span class="fu">list</span>(<span class="fu">div</span>(<span class="st">"hello"</span>))</span>
+<span id="cb4-9"><a href="#cb4-9"></a>    ),</span>
+<span id="cb4-10"><a href="#cb4-10"></a>    <span class="fu">dashboardSidebar</span>(),</span>
+<span id="cb4-11"><a href="#cb4-11"></a>    <span class="fu">dashboardBody</span>()</span>
+<span id="cb4-12"><a href="#cb4-12"></a>  ),</span>
+<span id="cb4-13"><a href="#cb4-13"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb4-14"><a href="#cb4-14"></a>  }</span>
+<span id="cb4-15"><a href="#cb4-15"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="dashboard-header" class="slide level2">
+<h2>Dashboard header</h2>
+<p>This is a container for the <code>title</code> and any <code>dropdownMenu()</code>s.</p>
+<p>Dynamic menus can be generated using:</p>
+<ul>
+<li><p>Adding <code>dropdownMenuOutput("menu")</code> to the header</p></li>
+<li><p>Adding <code>output$menu = renderMenu({...})</code> to the server, where the reactive code returns a <code>dropdownMenu()</code> object.</p></li>
+</ul>
+<p>This is a common design pattern within the package, so many of the static UI elements will also have a <code>*Output()</code> and <code>render*()</code> implementation.</p>
+</section>
+<section id="dashboard-sidebar" class="slide level2">
+<h2>Dashboard sidebar</h2>
+<p>This can function in the same way as the <code>sidebarPanel()</code> in <code>sidebarLayout()</code>, allowing for the inclusion of inputs and any other html content. Alternatively, it can also function as a <code>tabPanel()</code> like menu.</p>
+<p>For the latter, instead of <code>tabsetPanel()</code> we use <code>sidebarMenu()</code>, text and icons are assigned using <code>menuItem()</code>s within this function. However, since the panels being activated are contained in the body and not the sidebar - their UI code goes under <code>dashboardBody()</code> using <code>tabItems()</code> and <code>tabItem()</code>. The connection is made via matching of the <code>tabName</code> arguments.</p>
+</section>
+<section id="body-building-blocks" class="slide level2">
+<h2>Body building blocks</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="box"><code>box()</code></h3>
+<p><img data-src="images/shinydashboard_box.png" data-fig-align="center" style="width:80.0%"> <img data-src="images/shinydashboard_box2.png" data-fig-align="center" style="width:80.0%"></p>
+</div><div class="column" style="width:50%;">
+<h3 id="infobox"><code>infoBox()</code></h3>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/shinydashboard_infobox.png" style="width:90.0%"></p>
+</figure>
+</div>
+<p><br></p>
+<h3 id="valuebox"><code>valueBox()</code></h3>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/shinydashboard_valuebox.png" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="colors" class="slide level2">
+<h2>Colors</h2>
+<p>The color of the various boxes is specified via <code>status</code> or <code>background</code> for <code>box()</code> or <code>color</code> for the others.</p>
+<p>Available options include,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>shinydashboard<span class="sc">:::</span>validStatuses</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "primary" "success" "info"    "warning" "danger" </code></pre>
+</div>
+</div>
+<p><br></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>shinydashboard<span class="sc">:::</span>validColors</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "red"        "yellow"     "aqua"       "blue"       "light-blue"
+ [6] "green"      "navy"       "teal"       "olive"      "lime"      
+[11] "orange"     "fuchsia"    "purple"     "maroon"     "black"     </code></pre>
+</div>
+</div>
+</section>
+<section id="body-layout" class="slide level2">
+<h2>Body layout</h2>
+
+<img data-src="images/layout-fluidrow.png" style="width:60.0%" class="r-stretch quarto-figure-center"><p><em>Note</em> - Bootstrap defines a page to have a width of 12 units, a <code>column()</code>s <code>width</code> is given in these units.</p>
+</section>
+<section id="your-turn---exercise-6" class="slide level2">
+<h2>Your turn - Exercise 6</h2>
+<p>Again starting with the app version from Demo 5 (code available in <code>exercises/ex6.R</code>) convert the app to use shinydashboard instead of <code>fluidPage()</code> and <code>sidebarLayout()</code>.</p>
+<p>The specifics of the design are up to you, but think about where it makes the most sense to include the various UI elements.</p>
+<p>See the documentation of <code>box()</code> and the other building blocks for guidance on how to use them, the examples <a href="http://rstudio.github.io/shinydashboard/structure.html#boxes">here</a> may also be useful.</p>
+<p><countdown time="600"> 
 <script type="application/shiny-prerendered" data-context="server-start">
 library(shiny)
 </script>
@@ -792,7 +894,7 @@ ojs_define <- function(..., .session = shiny::getDefaultReactiveDomain()) {
   invisible()
 }
 </script>
-</p>
+</countdown></p>
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="dependencies">
 {"type":"list","attributes":{},"value":[]}
@@ -801,7 +903,7 @@ ojs_define <- function(..., .session = shiny::getDefaultReactiveDomain()) {
 <!--html_preserve-->
 
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35]}},"value":[{"type":"character","attributes":{},"value":["base","cli","compiler","datasets","digest","ellipsis","evaluate","fastmap","fontawesome","graphics","grDevices","htmltools","httpuv","jsonlite","knitr","later","lifecycle","magrittr","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rstudioapi","shiny","stats","stringi","stringr","tools","utils","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["4.2.0","3.3.0","4.2.0","4.2.0","0.6.29","0.3.2","0.15","1.1.0","0.2.2","4.2.0","4.2.0","0.5.2","1.6.5","1.8.0","1.39","1.3.0","1.0.1","2.0.3","4.2.0","0.12","1.2.0.1","2.5.1","1.0.9","1.0.4","2.14","0.13","1.7.1","4.2.0","1.7.8","1.4.0","4.2.0","4.2.0","0.31","1.8-4","2.3.5"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36]}},"value":[{"type":"character","attributes":{},"value":["base","cli","compiler","datasets","digest","ellipsis","evaluate","fastmap","fontawesome","graphics","grDevices","htmltools","httpuv","jsonlite","knitr","later","lifecycle","magrittr","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rstudioapi","shiny","shinydashboard","stats","stringi","stringr","tools","utils","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["4.2.0","3.3.0","4.2.0","4.2.0","0.6.29","0.3.2","0.15","1.1.0","0.2.2","4.2.0","4.2.0","0.5.2","1.6.5","1.8.0","1.39","1.3.0","1.0.1","2.0.3","4.2.0","0.12","1.2.0.1","2.5.1","1.0.9","1.0.4","2.14","0.13","1.7.1","0.7.2","4.2.0","1.7.8","1.4.0","4.2.0","4.2.0","0.31","1.8-4","2.3.5"]}]}]}
 </script>
 <!--/html_preserve-->
 

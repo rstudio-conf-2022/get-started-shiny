@@ -76,13 +76,15 @@ You should then be able to get the same app behavior as before once `data/weathe
 <countdown time="600"/>
 
 
-# Dynamic UI
+# Dynamic UIs
 
 ## `uiOutput()`
 
 Occasionally with a Shiny app it is necessary to have a user interface that needs to adapt dynamically based on something that cannot be known before runtime.
 
-We will now work through an example where we allow a user to upload new data which will be used to supplement the existing weather data.
+We will now work through an example where we allow a user to upload data for new cities which will be used to supplement the existing weather data.
+
+The issue here is that the new data may contain some subset of the existing columns (and they may have different names) so we will need to map between the two sets of columns and we don't want to hard code for every possible column.
 
 ## Demo 9 - More weather (Part 1)
 
@@ -104,4 +106,125 @@ We will now work through an example where we allow a user to upload new data whi
 #| eval: false
 #| code-line-numbers: "|89-93|95-127"
 #| file: "../demos/demo9_part2.R"
+```
+
+# shinydashboard
+
+## shinydashboard
+
+Is a package that enables the easy generation of [bootstrap](https://getbootstrap.com/) based dynamic Shiny dashboards.
+
+The core of the package is a common dashboard layout and a number of specialized UI elements (static and reactive) for creating an attractive interface. 
+
+<br/>
+
+![](images/shinydashboard_layout.png){fig-align="center" width="40%"}
+
+
+## Dashboard basics
+
+```{r}
+#| eval: false
+library(shiny)
+library(shinydashboard)
+
+shinyApp(
+  ui = dashboardPage(
+    dashboardHeader(
+      title="Test", 
+      .list = list(div("hello"))
+    ),
+    dashboardSidebar(),
+    dashboardBody()
+  ),
+  server = function(input, output) {
+  }
+)
+```
+
+## Dashboard header
+
+This is a container for the `title` and any `dropdownMenu()`s.
+
+Dynamic menus can be generated using:
+
+- Adding `dropdownMenuOutput("menu")` to the header
+
+- Adding `output$menu = renderMenu({...})` to the server, where the reactive code returns a `dropdownMenu()` object.
+
+This is a common design pattern within the package, so many of the static UI elements will also have a `*Output()` and `render*()` implementation.
+
+## Dashboard sidebar
+
+This can function in the same way as the `sidebarPanel()` in `sidebarLayout()`, allowing for the inclusion of inputs and any other html content. Alternatively, it can also function as a `tabPanel()` like menu.
+
+For the latter, instead of `tabsetPanel()` we use `sidebarMenu()`, text and icons are assigned using `menuItem()`s within this function. However, since the panels being activated are contained in the body and not the sidebar - their UI code goes under `dashboardBody()` using `tabItems()` and `tabItem()`. The connection is made via matching of the `tabName` arguments.
+
+## Body building blocks
+
+::: columns
+::: {.column width="50%"}
+### `box()`
+![](images/shinydashboard_box.png){fig-align="center" width="80%"}
+![](images/shinydashboard_box2.png){fig-align="center" width="80%"}
+:::
+
+::: {.column width="50%"}
+### `infoBox()`
+![](images/shinydashboard_infobox.png){fig-align="center" width="90%"}
+
+<br/>
+
+### `valueBox()`
+![](images/shinydashboard_valuebox.png){fig-align="center" width="90%"}
+
+:::
+:::
+
+## Colors
+
+The color of the various boxes is specified via `status` or `background` for `box()` or `color` for the others.
+
+Available options include,
+
+```{r}
+shinydashboard:::validStatuses
+```
+
+<br/>
+
+```{r}
+shinydashboard:::validColors
+```
+
+
+
+## Body layout
+
+![](images/layout-fluidrow.png){fig-align="center" width="60%"}
+
+*Note* - Bootstrap defines a page to have a width of 12 units, a `column()`s `width` is given in these units.
+
+## Your turn - Exercise 6
+
+Again starting with the app version from Demo 5 (code available in `exercises/ex6.R`) convert the app to use shinydashboard instead of `fluidPage()` and `sidebarLayout()`. 
+
+The specifics of the design are up to you, but think about where it makes the most sense to include the various UI elements.
+
+See the documentation of `box()` and the other building blocks for guidance on how to use them, the examples [here](http://rstudio.github.io/shinydashboard/structure.html#boxes) may also be useful.
+
+If you finish early try adding a `valueBox()` or `infoBox()` (or two).
+
+<countdown time="600"/>
+
+
+## Demo 10 - Dynamic boxes
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo10.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|9|12,18-20|13,22-24"
+#| file: "../demos/demo10.R"
 ```
