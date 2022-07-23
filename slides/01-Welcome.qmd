@@ -1,0 +1,211 @@
+---
+title: "Getting Started with Shiny<br/>Welcome"
+author: "Colin Rundel"
+format: 
+  revealjs:
+    logo: images/shiny.png
+    footer: "RStudioConf 2022 - Getting Started with Shiny"
+    slide-number: true
+    highlight-style: a11y
+    theme: [default, custom.scss]
+    revealjs-plugins:
+    - countdown
+execute:
+  echo: true
+title-slide-attributes:
+    data-background-image: "images/hero-national-harbor.png"
+    data-background-size: cover
+    data-background-opacity: "0.5"
+---
+
+```{r setup}
+#| include: false
+library(shiny)
+```
+
+# Welcome
+
+## Instructor
+
+::: columns
+::: {.column width="40%"}
+![](images/colin-rundel.png){fig-align="center" width="75%"}
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="50%"}
+<br/>
+
+### Colin Rundel
+
+#### Associate Professor of the Practice
+
+#### Department of Statistical Science
+
+#### Duke University
+
+#### [rundel.github.io](https://rundel.github.io)
+:::
+:::
+
+## Teaching Assistants
+
+-   Shel Kariuki - UN DESA
+-   Stephanie Zimmer - Abt Associates
+-   Garrick Aden-Buie - RStudio
+-   Carson Sievert - RStudio
+
+## Workshop materials
+
+https://github.com/rstudio-conf-2022/get-started-shiny/
+
+https://rstudio-conf-2022.github.io/get-started-shiny/
+
+## Schedule
+
+::: {.small}
+::: columns
+::: {.column width="45%"}
+### Day 1
+
+| Time          | Activity         |
+| :------------ | :--------------- |
+| 09:00 - 09:30 | Welcome          |
+| 09:30 - 10:30 | Intro to Shiny   |
+| 10:30 - 11:00 | *Coffee break*   |
+| 11:00 - 12:30 | Basic Reactivity |
+| 12:30 - 13:30 | *Lunch break*    |
+| 13:30 - 15:00 | Observers & reactives |
+| 15:00 - 15:30 | *Coffee break*   |
+| 15:30 - 17:00 | Downloads        |
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="50%"}
+### Day 2
+
+| Time          | Activity         |
+| :------------ | :--------------- |
+| 09:00 - 10:30 | Uploads & Dynamic UIs |
+| 10:30 - 11:00 | *Coffee break*   |
+| 11:00 - 12:30 | shinydashboard & modules |
+| 12:30 - 13:30 | *Lunch break*    |
+| 13:30 - 15:00 | Themeing         |
+| 15:00 - 15:30 | *Coffee break*   |
+| 15:30 - 17:00 | Q&A + Wrapup     |
+:::
+:::
+:::
+
+
+## WiFi
+
+:::{.r-stack}
+:::{.larger}
+<br/><br/>
+Username: **conf22**
+
+Password: **together!**
+:::
+:::
+
+
+::: aside
+If you have any difficulty with your connection please let us (myself and or the TAs) know so we can escalate issues if needed
+:::
+
+
+
+## Code of Conduct
+
+All details are available at https://www.rstudio.com/conference/2022/2022-conf-code-of-conduct/. Please review them carefully.  
+
+You can report Code of Conduct violations in person (any rstudio::conf staff ), by email ([conf@rstudio.com](mailto:conf@rstudio.com)), or by phone (844-448-1212). Please see the policy linked above for contact information.
+
+Covid19 specific policies:
+
+- RStudio requires that you wear a mask that fully covers your mouth and nose at all times in all public spaces. 
+
+- We strongly recommend that you use a correctly fitted N95, KN95, or similar particulate filtering mask; there is a limited supply available upon request. 
+
+
+
+
+
+
+## Other useful info
+
+- There are gender neutral bathrooms located on the river side of the Potomac Ballroom.
+
+- The meditation room is located at Potomac Dressing Room (Open 8am - 5pm, Monday - Thursday)
+
+- The lactation room is located at National Harbor 9 (Open 8am - 5pm, Monday - Thursday) 
+    - The hotel also has a dedicated room behind reception.
+
+- Participants who do not wish to be photographed have red lanyards, please note everyone's lanyard colors befor taking a photo and respect their choices.
+
+
+## Asking for help (Stickies)
+
+::: {.r-hstack}
+
+::: {style="text-align: center;"}
+::: {data-id="box1" style="background: #CC4341; width: 200px; height: 200px; margin: 25px;"}
+:::
+I'm stuck
+:::
+
+::: {style="text-align: center;"}
+::: {data-id="box2" style="background: #EAC565; width: 200px; height: 200px; margin: 25px;"}
+:::
+I'm working
+:::
+
+::: {style="text-align: center;"}
+::: {data-id="box3" style="background: #A3C586; width: 200px; height: 200px; margin: 25px;"}
+:::
+I'm done
+:::
+
+:::
+
+::: {.r-hstack}
+::: {style="text-align: center;"}
+![](images/hand.png){fig-align="center" width="20%"}
+<br/>I have a general question
+:::
+:::
+
+# Computational Environment
+
+## RStudio Cloud
+
+You can use the following link to join the workshops RStudio cloud space,
+
+::: {style="text-align: center;"}
+https://rstudio.cloud/spaces/233624/join?access_code=FIXME
+:::
+
+<br/>
+
+Once you have joined you can then select the `get-started-shiny` assignment, 
+
+![](images/cloud_assignment.png){fig-align="center" width="60%"}
+
+which should then create a copy and launch for you.
+
+## Cloud session
+
+If everything is working you should see something very close to the following,
+
+![](images/cloud_session.png){fig-align="center" width="100%"}
+
+
+## File organization
+
+
+
