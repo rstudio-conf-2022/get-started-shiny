@@ -36,7 +36,7 @@ shinyApp(
       )
     )
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
     
     output$download <- downloadHandler(
       filename = function() {

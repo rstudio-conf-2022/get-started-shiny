@@ -27,7 +27,7 @@ shinyApp(
       )
     )
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
     
     d = reactive({
       req(input$upload)

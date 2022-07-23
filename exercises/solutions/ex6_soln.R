@@ -49,7 +49,7 @@ shinyApp(
       )
     )
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
     
     output$minmax_title = renderText({
       paste0("Daily min/max ", names(d_vars)[d_vars == input$var])

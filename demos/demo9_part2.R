@@ -47,7 +47,7 @@ shinyApp(
       )
     )
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
     d = reactiveVal(d_orig)
     d_new = reactiveVal(NULL)
     

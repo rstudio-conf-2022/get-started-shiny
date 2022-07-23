@@ -75,7 +75,7 @@ shinyApp(
       )
     )
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
     
     weatherBoxServer(
       "min_temp", data = d_city, var = "temperature", func = min, 

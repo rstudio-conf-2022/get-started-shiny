@@ -35,7 +35,7 @@ shinyApp(
       )
     )
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
     
     observe({
       showModal(modalDialog(

@@ -30,7 +30,7 @@ shinyApp(
       )
     )
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
     
     d_city = reactive({
       d %>%

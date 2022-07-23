@@ -19,7 +19,7 @@ shinyApp(
       )
     )
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
     output$plot = renderPlot({
       g = d %>%
         filter(city %in% input$city) %>%

@@ -14,7 +14,7 @@ shinyApp(
       )
     )
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
     output$widget = renderTable({
       input$upload
     })

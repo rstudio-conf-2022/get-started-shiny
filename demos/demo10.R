@@ -47,7 +47,7 @@ shinyApp(
       )
     )
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
     
     output$min_temp = renderInfoBox({
       min_temp = min(d_city()$temperature)
