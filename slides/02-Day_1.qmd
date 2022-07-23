@@ -31,23 +31,28 @@ library(shiny)
 
 ## Shiny App
 
-<br/><br/>
+<br/>
 
 ::: columns
-::: {.column width="40%"}
-::: {style="text-align:center; font-size: 90px"}
+::: {.column width="40%" .larger}
+Server
+
+::: {style="border: 2px solid; border-radius: 5px; text-align:center; font-size: 90px; height: 250px"}
 `r fontawesome::fa("r-project")` + `r fontawesome::fa("server")`
 :::
 :::
 
 ::: {.column width="20%"}
-::: {style="text-align: center; font-size: 90px"}
-⇄
+::: {style="text-align: center; font-size: 90px; padding-top: 20px"}
+<br/>⇄
 :::
 :::
 
-::: {.column width="40%"}
-::: {style="text-align: center"}
+
+::: {.column width="40%" .larger}
+Client / Browser
+
+::: {style="border: 2px solid; border-radius: 5px; text-align: center; height: 250px"}
 ::: {style="font-size: 90px"}
 `r fontawesome::fa("file-code")`
 :::
@@ -56,7 +61,9 @@ library(shiny)
 `r fontawesome::fa("html5")` + `r fontawesome::fa("js")` + `r fontawesome::fa("css3")`
 :::
 :::
+
 :::
+
 :::
 
 ## Anatomy of an App
@@ -142,7 +149,7 @@ From [Mastering Shiny](https://mastering-shiny.org/action-layout.html#multi-row)
 [https://shiny.rstudio.com/gallery/widget-gallery.html]()
 :::
 
-<iframe data-src="https://shiny.rstudio.com/gallery/widget-gallery.html">
+<iframe data-src="https://shiny.rstudio.com/gallery/widget-gallery.html" width="100%" height="500px" style="border:1px solid;border-radius: 5px;">
 
 </iframe>
 
@@ -169,7 +176,7 @@ What happens if you use an input capable of selecting multiple values
 * or `selectInput(multiple = TRUE)`?
 
 
-<countdown time="450"/>
+<countdown time="600"/>
 
 
 # Basic Reactivity
@@ -230,9 +237,6 @@ The "reactive" logic is defined by our `server` function - shiny takes care of f
 
 ## Demo 2 - Adding an input
 
-Now we will add an additional input and related plotting logic,
-
-::: {.fragment}
 ::: {.code-file .sourceCode .cell-code}
 `r fontawesome::fa("file")` `demos/demo2.R`
 :::
@@ -241,7 +245,6 @@ Now we will add an additional input and related plotting logic,
 #| file: "../demos/demo2.R"
 #| code-line-numbers: "|14|26-36"
 ```
-:::
 
 
 ## Reactive graph
@@ -337,14 +340,14 @@ shiny::reactlogShow()
 
 ## `.data` & `.env`
 
-These are an excellent option for avoiding some of the complexity around NSE with `rlang` (e.g. `{{` and `!!`) when working with functions built with the tidy eval framework (e.g. `dplyr` and `ggplot2`).
+These are an excellent option for avoiding some of the complexity around NSE with `rlang` (e.g. `{{`, `!!`, `enquo()`, etc.) when working with functions built with the tidy eval framework (e.g. `dplyr` and `ggplot2`).
 
 <blockquote cite="https://rlang.r-lib.org/reference/dot-data.html">
 * `.data` retrieves data-variables from the data frame.
 * `.env` retrieves env-variables from the environment.
 </blockquote>
 
-For more details see the [.data and .env pronouns](https://rlang.r-lib.org/reference/dot-data.html) article.
+For more details see the rlang [.data and .env pronouns](https://rlang.r-lib.org/reference/dot-data.html) article.
 
 # `reactive()` & `observe()`
 
@@ -527,6 +530,14 @@ The handler then defines the `filename` function for generating a default filena
 #| code-line-numbers: "|31|41-51|42-47|48-50"
 #| file: ../demos/demo6.R
 ```
+
+## Modal dialogs
+
+These are a popup window element that allow us to present important messages (e.g. warnings or errors) or other UI elements in a way that does not permanently clutter up the main UI of an app.
+
+The modal dialog consists of a number of Shiny UI elements (static or dynamic) and only displays when it is triggered (usually by something like an action button).
+
+They differ from other UI elements we've seen so far as everything is defined within the app's server component.
 
 ## Demo 7 - A fancy download button
 
