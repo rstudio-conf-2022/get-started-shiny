@@ -6,8 +6,11 @@ Getting Started with Shiny
 -----
 
 🗓️ July 25 and 26, 2022  
+
 ⏰ 9:00 - 17:00  
+
 🏨 National Harbor 6 / 7
+
 ✍️ [rstd.io/conf](http://rstd.io/conf)
 
 -----
