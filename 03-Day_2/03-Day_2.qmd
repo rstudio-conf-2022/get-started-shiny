@@ -10,7 +10,6 @@ format:
     theme: [default, ../custom.scss]
     revealjs-plugins:
     - ../countdown
-server: shiny
 execute:
   echo: true
 title-slide-attributes:
