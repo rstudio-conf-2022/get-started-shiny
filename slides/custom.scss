@@ -84,6 +84,17 @@ element.style {
   max-height: 550px;
 }
 
+.reveal blockquote {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.reveal blockquote>p {
+  margin-top: 0;
+}
+
 .reveal .small {
   font-size: 80%;
 }
