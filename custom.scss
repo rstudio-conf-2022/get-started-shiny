@@ -84,16 +84,14 @@ element.style {
   max-height: 575px;
 }
 
-/*.reveal .code-file p:before {
-    display: inline-block;
-    font-style: normal;
-    font-variant: normal;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f15b";
-    padding-right: 0.33em;
+.reveal .small {
+  font-size: 80%;
 }
-*/
+
+.reveal .large {
+  font-size: 120%;
+}
+
+.reveal .larger {
+  font-size: 150%;
+}
