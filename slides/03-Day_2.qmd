@@ -136,7 +136,7 @@ shinyApp(
     dashboardSidebar(),
     dashboardBody()
   ),
-  server = function(input, output) {
+  server = function(input, output, session) {
   }
 )
 ```
@@ -347,4 +347,100 @@ shinyApp(
 #| eval: false
 #| code-line-numbers: "|9|12,18-20|13,22-24"
 #| file: "../demos/demo11.R"
+```
+
+# Themeing
+
+## Shiny & bootstrap
+
+Most of the interface provided by Shiny is based on the html elements, styling, and javascript provided by the Bootstrap library.
+
+As we've seen so far, knowing the specifics of Bootstrap are not needed for working with Shiny - but understanding some of its conventions goes a long way to helping you customize the elements of your app (via custom CSS and other components).
+
+This is not the only place that Bootstrap shows up in the R ecosystem - both RMarkdown and Quarto html documents use Bootstrap for styling as well.
+
+## Bootswatch
+
+Due to the ubiquity of Bootstrap a large amount of community effort has gone into developing custom themes - a large free collection of this is avaiable at [bootswatch.com/](https://bootswatch.com/).
+
+<iframe data-src="https://bootswatch.com/" width="100%" height="450px" style="border:1px solid;border-radius: 5px;">
+</iframe>
+
+
+## bslib
+
+> The bslib R package provides tools for customizing Bootstrap themes directly from R, making it much easier to customize the appearance of Shiny apps & R Markdown documents. bslib’s primary goals are:
+> 
+> * Make custom theming as easy as possible.
+>   * Custom themes may even be created interactively in real-time.
+>
+> * Also provide easy access to pre-packaged Bootswatch themes.
+>
+> * Make upgrading from Bootstrap 3 to 4 (and beyond) as seamless as possible.
+>
+> * Serve as a general foundation for Shiny and R Markdown extension packages.
+
+
+## `bs_theme()`
+
+Provides a high level interface to adjusting the theme for an entire app,
+
+* Change bootstrap version via `version` argument
+
+* Pick a bootswatch theme via `bootswatch` argument
+
+* Adjust basic color palette (`bg`, `fg`, `primary`, `secondary`, etc.)
+
+* Adjust fonts (`base_font`, `code_font`, `heading_font`, `font_scale`)
+
+
+Resulting object is passed to the `theme` argument of `fluidPage()` and similar page UI elements.
+
+
+## Your turn - Exercise 7
+
+Again starting with the app version from Demo 5 (code available in `exercises/ex7.R`) use bslib to add a theme to the Shiny app using `bs_theme()`.
+
+* Try changing the bootstrap version (3, 4, and 5) and see what happens.
+
+* Try picking out a couple of bootswatch themes and try applying them to the app.
+
+
+## Demo 12 - Interactive theming
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo12.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|17|49"
+#| file: "../demos/demo12.R"
+```
+
+## Demo 13 - Dynamic theming
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo13.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|15-16,20|53-56"
+#| file: "../demos/demo13.R"
+```
+
+## thematic
+
+> Simplified theming of ggplot2, lattice, and {base} R graphics. In addition to providing a centralized approach to styling R graphics, thematic also enables automatic styling of R plots in Shiny, R Markdown, and RStudio.
+
+In the case of our Shiny app, all we need to do is to include a call to `thematic_shiny()` before the app is loaded. Using the value `"auto"` will attempt to resolve the `bg`, `fg`, `accent`, or `font` values at plot time.
+
+## Demo 14 - thematic
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo14.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|16"
+#| file: "../demos/demo14.R"
 ```
