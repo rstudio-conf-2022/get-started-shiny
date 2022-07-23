@@ -1,5 +1,6 @@
 theme: jekyll-theme-minimal
 exclude:
-- 01-Welcome/01-Welcome.qmd
-- 02-Day_1/02-Day_1.qmd
-- 03-Day_2/03-Day_2.qmd
+- slides/01-Welcome.qmd
+- slides/02-Day_1.qmd
+- slides/03-Day_2.qmd
+- slides/widgets/widgets.qmd

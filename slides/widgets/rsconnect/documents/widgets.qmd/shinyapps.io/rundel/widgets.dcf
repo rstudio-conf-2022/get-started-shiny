@@ -1,0 +1,15 @@
+name: widgets
+title: widgets
+username:
+account: rundel
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6681222
+bundleId: 6125368
+url: https://rundel.shinyapps.io/widgets/
+when: 1658550631.10696
+lastSyncTime: 1658550631.10696
+quarto_version: 1.1.3
+quarto_engines: knitr
+asMultiple: FALSE
+asStatic: FALSE
