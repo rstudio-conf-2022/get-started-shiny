@@ -31,7 +31,7 @@ This workshop will be a hands-on introduction to designing, implementing and dep
 
 ## Schedule
 
-### Day 1
+### Day 1 - Slides: [📓 Welcome](https://rstudio-conf-2022.github.io/get-started-shiny/slides/01-Welcome.html), [📓 Day 1](https://rstudio-conf-2022.github.io/get-started-shiny/slides/02-Day_1.html)
 
 | Time          | Activity         |
 | :------------ | :--------------- |
@@ -44,7 +44,7 @@ This workshop will be a hands-on introduction to designing, implementing and dep
 | 15:00 - 15:30 | *Coffee break*   |
 | 15:30 - 17:00 | Downloads        |
 
-### Day 2
+### Day 2 - Slides: [📓 Day 2](https://rstudio-conf-2022.github.io/get-started-shiny/slides/03-Day_2.html)
 
 | Time          | Activity         |
 | :------------ | :--------------- |
