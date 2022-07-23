@@ -863,7 +863,371 @@
 <p>Again starting with the app version from Demo 5 (code available in <code>exercises/ex6.R</code>) convert the app to use shinydashboard instead of <code>fluidPage()</code> and <code>sidebarLayout()</code>.</p>
 <p>The specifics of the design are up to you, but think about where it makes the most sense to include the various UI elements.</p>
 <p>See the documentation of <code>box()</code> and the other building blocks for guidance on how to use them, the examples <a href="http://rstudio.github.io/shinydashboard/structure.html#boxes">here</a> may also be useful.</p>
-<p><countdown time="600"> 
+<p>If you finish early try adding a <code>valueBox()</code> or <code>infoBox()</code> (or two).</p>
+<p><countdown time="600"></countdown></p>
+</section>
+<section id="demo-10---dynamic-boxes" class="slide level2">
+<h2>Demo 10 - Dynamic boxes</h2>
+<div class="code-file sourceCode cell-code">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg> <code>demos/demo10.R</code></p>
+</div>
+<div class="cell" data-file="../demos/demo10.R">
+<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="|9|12,18-20|13,22-24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="fu">library</span>(shinydashboard)</span>
+<span id="cb9-4"><a href="#cb9-4"></a>d <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/weather.csv"</span>))</span>
+<span id="cb9-5"><a href="#cb9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a>d_vars <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a>  <span class="fu">names</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a>  {<span class="fu">setNames</span>(</span>
+<span id="cb9-10"><a href="#cb9-10"></a>    .,</span>
+<span id="cb9-11"><a href="#cb9-11"></a>    <span class="fu">str_replace_all</span>(., <span class="st">"([A-Z])"</span>, <span class="st">" </span><span class="sc">\\</span><span class="st">1"</span>) <span class="sc">%&gt;%</span> <span class="fu">str_to_title</span>()</span>
+<span id="cb9-12"><a href="#cb9-12"></a>  )}</span>
+<span id="cb9-13"><a href="#cb9-13"></a></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="fu">shinyApp</span>(</span>
+<span id="cb9-15"><a href="#cb9-15"></a>  <span class="at">ui =</span> <span class="fu">dashboardPage</span>(</span>
+<span id="cb9-16"><a href="#cb9-16"></a>    <span class="fu">dashboardHeader</span>(</span>
+<span id="cb9-17"><a href="#cb9-17"></a>      <span class="at">title =</span><span class="st">"Weather Forecasts"</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a>    ),</span>
+<span id="cb9-19"><a href="#cb9-19"></a>    <span class="fu">dashboardSidebar</span>(</span>
+<span id="cb9-20"><a href="#cb9-20"></a>      <span class="fu">selectInput</span>(</span>
+<span id="cb9-21"><a href="#cb9-21"></a>        <span class="st">"state"</span>, <span class="st">"Select a state"</span>,</span>
+<span id="cb9-22"><a href="#cb9-22"></a>        <span class="at">choices =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(d<span class="sc">$</span>state))</span>
+<span id="cb9-23"><a href="#cb9-23"></a>      ),</span>
+<span id="cb9-24"><a href="#cb9-24"></a>      <span class="fu">selectInput</span>(</span>
+<span id="cb9-25"><a href="#cb9-25"></a>        <span class="st">"city"</span>, <span class="st">"Select a city"</span>,</span>
+<span id="cb9-26"><a href="#cb9-26"></a>        <span class="at">choices =</span> <span class="fu">c</span>(),</span>
+<span id="cb9-27"><a href="#cb9-27"></a>        <span class="at">multiple =</span> <span class="cn">TRUE</span></span>
+<span id="cb9-28"><a href="#cb9-28"></a>      )</span>
+<span id="cb9-29"><a href="#cb9-29"></a>      </span>
+<span id="cb9-30"><a href="#cb9-30"></a>    ),</span>
+<span id="cb9-31"><a href="#cb9-31"></a>    <span class="fu">dashboardBody</span>( </span>
+<span id="cb9-32"><a href="#cb9-32"></a>      <span class="fu">fluidRow</span>(</span>
+<span id="cb9-33"><a href="#cb9-33"></a>        <span class="fu">box</span>(</span>
+<span id="cb9-34"><a href="#cb9-34"></a>          <span class="at">title =</span> <span class="st">"Forecast"</span>, <span class="at">width =</span> <span class="dv">12</span>,</span>
+<span id="cb9-35"><a href="#cb9-35"></a>          <span class="at">solidHeader =</span> <span class="cn">TRUE</span>, <span class="at">status =</span> <span class="st">"primary"</span>,</span>
+<span id="cb9-36"><a href="#cb9-36"></a>          <span class="fu">selectInput</span>(</span>
+<span id="cb9-37"><a href="#cb9-37"></a>            <span class="st">"var"</span>, <span class="st">"Select a variable"</span>,</span>
+<span id="cb9-38"><a href="#cb9-38"></a>            <span class="at">choices =</span> d_vars, <span class="at">selected =</span> <span class="st">"temperature"</span></span>
+<span id="cb9-39"><a href="#cb9-39"></a>          ),</span>
+<span id="cb9-40"><a href="#cb9-40"></a>          <span class="fu">plotOutput</span>(<span class="st">"plot"</span>)</span>
+<span id="cb9-41"><a href="#cb9-41"></a>        )</span>
+<span id="cb9-42"><a href="#cb9-42"></a>      ),</span>
+<span id="cb9-43"><a href="#cb9-43"></a>      <span class="fu">fluidRow</span>(</span>
+<span id="cb9-44"><a href="#cb9-44"></a>        <span class="fu">infoBoxOutput</span>(<span class="st">"min_temp"</span>),</span>
+<span id="cb9-45"><a href="#cb9-45"></a>        <span class="fu">infoBoxOutput</span>(<span class="st">"max_temp"</span>),</span>
+<span id="cb9-46"><a href="#cb9-46"></a>        <span class="fu">infoBoxOutput</span>(<span class="st">"avg_wind"</span>)</span>
+<span id="cb9-47"><a href="#cb9-47"></a>      )</span>
+<span id="cb9-48"><a href="#cb9-48"></a>    )</span>
+<span id="cb9-49"><a href="#cb9-49"></a>  ),</span>
+<span id="cb9-50"><a href="#cb9-50"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb9-51"><a href="#cb9-51"></a>    </span>
+<span id="cb9-52"><a href="#cb9-52"></a>    output<span class="sc">$</span>min_temp <span class="ot">=</span> <span class="fu">renderInfoBox</span>({</span>
+<span id="cb9-53"><a href="#cb9-53"></a>      min_temp <span class="ot">=</span> <span class="fu">min</span>(<span class="fu">d_city</span>()<span class="sc">$</span>temperature)</span>
+<span id="cb9-54"><a href="#cb9-54"></a>      min_temp_time <span class="ot">=</span> <span class="fu">d_city</span>()<span class="sc">$</span>time[<span class="fu">d_city</span>()<span class="sc">$</span>temperature <span class="sc">==</span> min_temp]</span>
+<span id="cb9-55"><a href="#cb9-55"></a>      </span>
+<span id="cb9-56"><a href="#cb9-56"></a>      <span class="fu">infoBox</span>(</span>
+<span id="cb9-57"><a href="#cb9-57"></a>        <span class="at">title =</span> <span class="st">"Min temp"</span>,</span>
+<span id="cb9-58"><a href="#cb9-58"></a>        <span class="at">value =</span> min_temp,</span>
+<span id="cb9-59"><a href="#cb9-59"></a>        <span class="at">subtitle =</span> <span class="fu">format</span>(min_temp_time, <span class="at">format=</span><span class="st">"%a, %b %d</span><span class="sc">\n</span><span class="st">%I:%M %p"</span>),</span>
+<span id="cb9-60"><a href="#cb9-60"></a>        <span class="at">color =</span> <span class="st">"blue"</span>,</span>
+<span id="cb9-61"><a href="#cb9-61"></a>        <span class="at">icon =</span> <span class="fu">icon</span>(<span class="st">"temperature-low"</span>)</span>
+<span id="cb9-62"><a href="#cb9-62"></a>      )</span>
+<span id="cb9-63"><a href="#cb9-63"></a>    })</span>
+<span id="cb9-64"><a href="#cb9-64"></a>    </span>
+<span id="cb9-65"><a href="#cb9-65"></a>    output<span class="sc">$</span>max_temp <span class="ot">=</span> <span class="fu">renderInfoBox</span>({</span>
+<span id="cb9-66"><a href="#cb9-66"></a>      max_temp <span class="ot">=</span> <span class="fu">max</span>(<span class="fu">d_city</span>()<span class="sc">$</span>temperature)</span>
+<span id="cb9-67"><a href="#cb9-67"></a>      max_temp_time <span class="ot">=</span> <span class="fu">d_city</span>()<span class="sc">$</span>time[<span class="fu">d_city</span>()<span class="sc">$</span>temperature <span class="sc">==</span> max_temp]</span>
+<span id="cb9-68"><a href="#cb9-68"></a>      </span>
+<span id="cb9-69"><a href="#cb9-69"></a>      <span class="fu">infoBox</span>(</span>
+<span id="cb9-70"><a href="#cb9-70"></a>        <span class="at">title =</span> <span class="st">"Max temp"</span>,</span>
+<span id="cb9-71"><a href="#cb9-71"></a>        <span class="at">value =</span> max_temp,</span>
+<span id="cb9-72"><a href="#cb9-72"></a>        <span class="at">subtitle =</span> <span class="fu">format</span>(max_temp_time, <span class="at">format=</span><span class="st">"%a, %b %d</span><span class="sc">\n</span><span class="st">%I:%M %p"</span>),</span>
+<span id="cb9-73"><a href="#cb9-73"></a>        <span class="at">color =</span> <span class="st">"red"</span>,</span>
+<span id="cb9-74"><a href="#cb9-74"></a>        <span class="at">icon =</span> <span class="fu">icon</span>(<span class="st">"temperature-high"</span>)</span>
+<span id="cb9-75"><a href="#cb9-75"></a>      )</span>
+<span id="cb9-76"><a href="#cb9-76"></a>    })</span>
+<span id="cb9-77"><a href="#cb9-77"></a>    </span>
+<span id="cb9-78"><a href="#cb9-78"></a>    output<span class="sc">$</span>avg_wind <span class="ot">=</span> <span class="fu">renderInfoBox</span>({</span>
+<span id="cb9-79"><a href="#cb9-79"></a>      avg_wind <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">d_city</span>()<span class="sc">$</span>windSpeed)</span>
+<span id="cb9-80"><a href="#cb9-80"></a>      </span>
+<span id="cb9-81"><a href="#cb9-81"></a>      <span class="fu">infoBox</span>(</span>
+<span id="cb9-82"><a href="#cb9-82"></a>        <span class="at">title =</span> <span class="st">"Avg wind speed"</span>,</span>
+<span id="cb9-83"><a href="#cb9-83"></a>        <span class="at">value =</span> <span class="fu">round</span>(avg_wind,<span class="dv">2</span>),</span>
+<span id="cb9-84"><a href="#cb9-84"></a>        <span class="at">color =</span> <span class="st">"green"</span>,</span>
+<span id="cb9-85"><a href="#cb9-85"></a>        <span class="at">icon =</span> <span class="fu">icon</span>(<span class="st">"wind"</span>)</span>
+<span id="cb9-86"><a href="#cb9-86"></a>      )</span>
+<span id="cb9-87"><a href="#cb9-87"></a>    })</span>
+<span id="cb9-88"><a href="#cb9-88"></a>    </span>
+<span id="cb9-89"><a href="#cb9-89"></a>    </span>
+<span id="cb9-90"><a href="#cb9-90"></a>    d_city <span class="ot">=</span> <span class="fu">reactive</span>({</span>
+<span id="cb9-91"><a href="#cb9-91"></a>      <span class="fu">req</span>(input<span class="sc">$</span>city)</span>
+<span id="cb9-92"><a href="#cb9-92"></a>      d <span class="sc">%&gt;%</span></span>
+<span id="cb9-93"><a href="#cb9-93"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city)</span>
+<span id="cb9-94"><a href="#cb9-94"></a>    })</span>
+<span id="cb9-95"><a href="#cb9-95"></a>    </span>
+<span id="cb9-96"><a href="#cb9-96"></a>    <span class="fu">observe</span>({</span>
+<span id="cb9-97"><a href="#cb9-97"></a>      cities <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb9-98"><a href="#cb9-98"></a>        <span class="fu">filter</span>(state <span class="sc">%in%</span> input<span class="sc">$</span>state) <span class="sc">%&gt;%</span></span>
+<span id="cb9-99"><a href="#cb9-99"></a>        <span class="fu">pull</span>(city) <span class="sc">%&gt;%</span></span>
+<span id="cb9-100"><a href="#cb9-100"></a>        <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-101"><a href="#cb9-101"></a>        <span class="fu">sort</span>()</span>
+<span id="cb9-102"><a href="#cb9-102"></a>      </span>
+<span id="cb9-103"><a href="#cb9-103"></a>      <span class="fu">updateSelectInput</span>(</span>
+<span id="cb9-104"><a href="#cb9-104"></a>        <span class="at">inputId =</span> <span class="st">"city"</span>, </span>
+<span id="cb9-105"><a href="#cb9-105"></a>        <span class="at">choices =</span> cities</span>
+<span id="cb9-106"><a href="#cb9-106"></a>      )</span>
+<span id="cb9-107"><a href="#cb9-107"></a>    })</span>
+<span id="cb9-108"><a href="#cb9-108"></a>    </span>
+<span id="cb9-109"><a href="#cb9-109"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb9-110"><a href="#cb9-110"></a>      <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-111"><a href="#cb9-111"></a>        <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>.data[[input<span class="sc">$</span>var]], <span class="at">color=</span>city)) <span class="sc">+</span></span>
+<span id="cb9-112"><a href="#cb9-112"></a>        <span class="fu">ggtitle</span>(<span class="fu">names</span>(d_vars)[d_vars <span class="sc">==</span> input<span class="sc">$</span>var]) <span class="sc">+</span></span>
+<span id="cb9-113"><a href="#cb9-113"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb9-114"><a href="#cb9-114"></a>        <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb9-115"><a href="#cb9-115"></a>        <span class="fu">theme_minimal</span>()</span>
+<span id="cb9-116"><a href="#cb9-116"></a>    })</span>
+<span id="cb9-117"><a href="#cb9-117"></a>  }</span>
+<span id="cb9-118"><a href="#cb9-118"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section></section>
+<section>
+<section id="shiny-modules" class="title-slide slide level1 center">
+<h1>Shiny Modules</h1>
+
+</section>
+<section id="dry-again" class="slide level2">
+<h2>DRY again</h2>
+<p>With the last demo you may have noticed that all three of the infoBoxes had nearly identical code.</p>
+<p>As mentioned before this is something we would like to avoid / minimize wherever possible.</p>
+<p>Previously we were able to use a <code>reactive()</code> to remove duplicate code, but that is not possible here since we need three distinct widgets + related server code.</p>
+</section>
+<section id="modularizing-shiny-code" class="slide level2">
+<h2>Modularizing Shiny code</h2>
+<p>The general solution to this kind of problem is to use functions to abstract our code.</p>
+<p>Within Shiny there are two issues we need to address,</p>
+<ul>
+<li><p>Our code occurs in both the UI and the server - so we will need to write one function for each</p></li>
+<li><p>Shiny inputs and outputs each share a global namespace so when reusing components we need to make sure these names do not collide.</p></li>
+</ul>
+</section>
+<section id="ui-module" class="slide level2">
+<h2>UI module</h2>
+<p>Creation of a UI module is straightforward,</p>
+<ul>
+<li><p>Create a function that takes <code>id</code> as an argument, additional arguments are optional</p></li>
+<li><p>The function should return a <code>list()</code> or <code>tagList()</code> of UI elements</p></li>
+<li><p>All <code>input*()</code> and <code>*Output()</code> functions must use <code>NS(id)</code> to mangle their <code>inputId</code> or <code>outputId</code>s respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>id <span class="ot">=</span> <span class="st">"widget1"</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>ns <span class="ot">=</span> <span class="fu">NS</span>(id)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="fu">ns</span>(<span class="st">"button"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "widget1-button"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">NS</span>(<span class="st">"widget2"</span>, <span class="at">id =</span> <span class="st">"textout"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "widget2-textout"</code></pre>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="server-module" class="slide level2">
+<h2>Server module</h2>
+<p>Again start with a function that takes <code>id</code> as an argument, additional arguments are optional.</p>
+<ul>
+<li><p>Module’s server function is implemented using</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">moduleServer</span>(</span>
+<span id="cb14-2"><a href="#cb14-2"></a>  id,</span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb14-4"><a href="#cb14-4"></a>    ...</span>
+<span id="cb14-5"><a href="#cb14-5"></a>  }</span>
+<span id="cb14-6"><a href="#cb14-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Namespace mangling will be taken care of automatically (except for <code>uiOutput</code>/<code>renderUI</code> in which case the current namespace can be accessed with <code>session$ns</code>)</p></li>
+</ul>
+</section>
+<section id="a-counting-button" class="slide level2">
+<h2>A counting button</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>countButtonUI <span class="ot">=</span> <span class="cf">function</span>(id, <span class="at">text =</span> <span class="st">"Initializing"</span>) {</span>
+<span id="cb15-2"><a href="#cb15-2"></a>  ns <span class="ot">=</span> <span class="fu">NS</span>(id)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">tagList</span>(</span>
+<span id="cb15-4"><a href="#cb15-4"></a>    <span class="fu">actionButton</span>(<span class="fu">ns</span>(<span class="st">"button"</span>), <span class="at">label =</span> text, <span class="at">class =</span> <span class="st">"primary"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5"></a>  )</span>
+<span id="cb15-6"><a href="#cb15-6"></a>}</span>
+<span id="cb15-7"><a href="#cb15-7"></a></span>
+<span id="cb15-8"><a href="#cb15-8"></a>countButtonServer <span class="ot">=</span> <span class="cf">function</span>(id, <span class="at">prefix =</span> <span class="st">"Clicked: "</span>) {</span>
+<span id="cb15-9"><a href="#cb15-9"></a>  <span class="fu">moduleServer</span>(</span>
+<span id="cb15-10"><a href="#cb15-10"></a>    id,</span>
+<span id="cb15-11"><a href="#cb15-11"></a>    <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb15-12"><a href="#cb15-12"></a>      count <span class="ot">=</span> <span class="fu">reactiveVal</span>(<span class="dv">0</span>)</span>
+<span id="cb15-13"><a href="#cb15-13"></a>      <span class="fu">observe</span>({</span>
+<span id="cb15-14"><a href="#cb15-14"></a>        <span class="fu">count</span>(<span class="fu">count</span>() <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb15-15"><a href="#cb15-15"></a>      }) <span class="sc">%&gt;%</span></span>
+<span id="cb15-16"><a href="#cb15-16"></a>      <span class="fu">bindEvent</span>(input<span class="sc">$</span>button)</span>
+<span id="cb15-17"><a href="#cb15-17"></a>      </span>
+<span id="cb15-18"><a href="#cb15-18"></a>      <span class="fu">observe</span>({</span>
+<span id="cb15-19"><a href="#cb15-19"></a>        <span class="fu">updateActionButton</span>(</span>
+<span id="cb15-20"><a href="#cb15-20"></a>          <span class="at">inputId =</span> <span class="st">"button"</span>, <span class="at">label =</span> <span class="fu">paste0</span>(prefix, <span class="fu">count</span>()),</span>
+<span id="cb15-21"><a href="#cb15-21"></a>        )</span>
+<span id="cb15-22"><a href="#cb15-22"></a>      })</span>
+<span id="cb15-23"><a href="#cb15-23"></a>    }</span>
+<span id="cb15-24"><a href="#cb15-24"></a>  )</span>
+<span id="cb15-25"><a href="#cb15-25"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="putting-it-together" class="slide level2">
+<h2>Putting it together</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">shinyApp</span>(</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="at">ui =</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb16-3"><a href="#cb16-3"></a>    <span class="fu">countButtonUI</span>(<span class="st">"count1"</span>),</span>
+<span id="cb16-4"><a href="#cb16-4"></a>    <span class="fu">countButtonUI</span>(<span class="st">"count2"</span>),</span>
+<span id="cb16-5"><a href="#cb16-5"></a>    <span class="fu">countButtonUI</span>(<span class="st">"count3"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6"></a>  ),</span>
+<span id="cb16-7"><a href="#cb16-7"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb16-8"><a href="#cb16-8"></a>    <span class="fu">countButtonServer</span>(<span class="st">"count1"</span>)</span>
+<span id="cb16-9"><a href="#cb16-9"></a>    <span class="fu">countButtonServer</span>(<span class="st">"count2"</span>)</span>
+<span id="cb16-10"><a href="#cb16-10"></a>    <span class="fu">countButtonServer</span>(<span class="st">"count3"</span>)</span>
+<span id="cb16-11"><a href="#cb16-11"></a>  }</span>
+<span id="cb16-12"><a href="#cb16-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="demo-11---dynamic-box-module" class="slide level2">
+<h2>Demo 11 - Dynamic box module</h2>
+<div class="code-file sourceCode cell-code">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg> <code>demos/demo11.R</code></p>
+</div>
+<div class="cell" data-file="../demos/demo11.R">
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="|9|12,18-20|13,22-24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="fu">library</span>(shinydashboard)</span>
+<span id="cb17-4"><a href="#cb17-4"></a>d <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/weather.csv"</span>))</span>
+<span id="cb17-5"><a href="#cb17-5"></a></span>
+<span id="cb17-6"><a href="#cb17-6"></a>d_vars <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a>  <span class="fu">names</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>  {<span class="fu">setNames</span>(</span>
+<span id="cb17-10"><a href="#cb17-10"></a>    .,</span>
+<span id="cb17-11"><a href="#cb17-11"></a>    <span class="fu">str_replace_all</span>(., <span class="st">"([A-Z])"</span>, <span class="st">" </span><span class="sc">\\</span><span class="st">1"</span>) <span class="sc">%&gt;%</span> <span class="fu">str_to_title</span>()</span>
+<span id="cb17-12"><a href="#cb17-12"></a>  )}</span>
+<span id="cb17-13"><a href="#cb17-13"></a></span>
+<span id="cb17-14"><a href="#cb17-14"></a>weatherBoxUI <span class="ot">=</span> <span class="cf">function</span>(id) {</span>
+<span id="cb17-15"><a href="#cb17-15"></a>  <span class="fu">infoBoxOutput</span>(<span class="fu">NS</span>(id, <span class="st">"info"</span>))</span>
+<span id="cb17-16"><a href="#cb17-16"></a>}</span>
+<span id="cb17-17"><a href="#cb17-17"></a></span>
+<span id="cb17-18"><a href="#cb17-18"></a>weatherBoxServer <span class="ot">=</span> <span class="cf">function</span>(id, data, var, func, text, color, icon, <span class="at">show_time =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb17-19"><a href="#cb17-19"></a>  </span>
+<span id="cb17-20"><a href="#cb17-20"></a>  <span class="fu">moduleServer</span>(</span>
+<span id="cb17-21"><a href="#cb17-21"></a>    id,</span>
+<span id="cb17-22"><a href="#cb17-22"></a>    <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb17-23"><a href="#cb17-23"></a>      output<span class="sc">$</span>info <span class="ot">=</span> <span class="fu">renderInfoBox</span>({</span>
+<span id="cb17-24"><a href="#cb17-24"></a>        val <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">func</span>(<span class="fu">data</span>()[[var]]),<span class="dv">2</span>)</span>
+<span id="cb17-25"><a href="#cb17-25"></a>        time <span class="ot">=</span> <span class="cf">if</span> (show_time) {</span>
+<span id="cb17-26"><a href="#cb17-26"></a>          <span class="fu">data</span>()<span class="sc">$</span>time[<span class="fu">data</span>()[[var]] <span class="sc">==</span> val] <span class="sc">%&gt;%</span></span>
+<span id="cb17-27"><a href="#cb17-27"></a>            <span class="fu">format</span>(<span class="at">format=</span><span class="st">"%a, %b %d</span><span class="sc">\n</span><span class="st">%I:%M %p"</span>)</span>
+<span id="cb17-28"><a href="#cb17-28"></a>        } <span class="cf">else</span> {</span>
+<span id="cb17-29"><a href="#cb17-29"></a>          <span class="st">""</span></span>
+<span id="cb17-30"><a href="#cb17-30"></a>        }</span>
+<span id="cb17-31"><a href="#cb17-31"></a>        </span>
+<span id="cb17-32"><a href="#cb17-32"></a>        <span class="fu">infoBox</span>(</span>
+<span id="cb17-33"><a href="#cb17-33"></a>          <span class="at">title =</span> text, <span class="at">value =</span> val, <span class="at">subtitle =</span> time,</span>
+<span id="cb17-34"><a href="#cb17-34"></a>          <span class="at">color =</span> color, <span class="at">icon =</span> icon</span>
+<span id="cb17-35"><a href="#cb17-35"></a>        )</span>
+<span id="cb17-36"><a href="#cb17-36"></a>      })</span>
+<span id="cb17-37"><a href="#cb17-37"></a>    }</span>
+<span id="cb17-38"><a href="#cb17-38"></a>  )</span>
+<span id="cb17-39"><a href="#cb17-39"></a>}</span>
+<span id="cb17-40"><a href="#cb17-40"></a></span>
+<span id="cb17-41"><a href="#cb17-41"></a></span>
+<span id="cb17-42"><a href="#cb17-42"></a><span class="fu">shinyApp</span>(</span>
+<span id="cb17-43"><a href="#cb17-43"></a>  <span class="at">ui =</span> <span class="fu">dashboardPage</span>(</span>
+<span id="cb17-44"><a href="#cb17-44"></a>    <span class="fu">dashboardHeader</span>(</span>
+<span id="cb17-45"><a href="#cb17-45"></a>      <span class="at">title =</span><span class="st">"Weather Forecasts"</span></span>
+<span id="cb17-46"><a href="#cb17-46"></a>    ),</span>
+<span id="cb17-47"><a href="#cb17-47"></a>    <span class="fu">dashboardSidebar</span>(</span>
+<span id="cb17-48"><a href="#cb17-48"></a>      <span class="fu">selectInput</span>(</span>
+<span id="cb17-49"><a href="#cb17-49"></a>        <span class="st">"state"</span>, <span class="st">"Select a state"</span>,</span>
+<span id="cb17-50"><a href="#cb17-50"></a>        <span class="at">choices =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(d<span class="sc">$</span>state))</span>
+<span id="cb17-51"><a href="#cb17-51"></a>      ),</span>
+<span id="cb17-52"><a href="#cb17-52"></a>      <span class="fu">selectInput</span>(</span>
+<span id="cb17-53"><a href="#cb17-53"></a>        <span class="st">"city"</span>, <span class="st">"Select a city"</span>,</span>
+<span id="cb17-54"><a href="#cb17-54"></a>        <span class="at">choices =</span> <span class="fu">c</span>(),</span>
+<span id="cb17-55"><a href="#cb17-55"></a>        <span class="at">multiple =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-56"><a href="#cb17-56"></a>      )</span>
+<span id="cb17-57"><a href="#cb17-57"></a>      </span>
+<span id="cb17-58"><a href="#cb17-58"></a>    ),</span>
+<span id="cb17-59"><a href="#cb17-59"></a>    <span class="fu">dashboardBody</span>( </span>
+<span id="cb17-60"><a href="#cb17-60"></a>      <span class="fu">fluidRow</span>(</span>
+<span id="cb17-61"><a href="#cb17-61"></a>        <span class="fu">box</span>(</span>
+<span id="cb17-62"><a href="#cb17-62"></a>          <span class="at">title =</span> <span class="st">"Forecast"</span>, <span class="at">width =</span> <span class="dv">12</span>,</span>
+<span id="cb17-63"><a href="#cb17-63"></a>          <span class="at">solidHeader =</span> <span class="cn">TRUE</span>, <span class="at">status =</span> <span class="st">"primary"</span>,</span>
+<span id="cb17-64"><a href="#cb17-64"></a>          <span class="fu">selectInput</span>(</span>
+<span id="cb17-65"><a href="#cb17-65"></a>            <span class="st">"var"</span>, <span class="st">"Select a variable"</span>,</span>
+<span id="cb17-66"><a href="#cb17-66"></a>            <span class="at">choices =</span> d_vars, <span class="at">selected =</span> <span class="st">"temperature"</span></span>
+<span id="cb17-67"><a href="#cb17-67"></a>          ),</span>
+<span id="cb17-68"><a href="#cb17-68"></a>          <span class="fu">plotOutput</span>(<span class="st">"plot"</span>)</span>
+<span id="cb17-69"><a href="#cb17-69"></a>        )</span>
+<span id="cb17-70"><a href="#cb17-70"></a>      ),</span>
+<span id="cb17-71"><a href="#cb17-71"></a>      <span class="fu">fluidRow</span>(</span>
+<span id="cb17-72"><a href="#cb17-72"></a>        <span class="fu">weatherBoxUI</span>(<span class="st">"min_temp"</span>),</span>
+<span id="cb17-73"><a href="#cb17-73"></a>        <span class="fu">weatherBoxUI</span>(<span class="st">"max_temp"</span>),</span>
+<span id="cb17-74"><a href="#cb17-74"></a>        <span class="fu">weatherBoxUI</span>(<span class="st">"avg_wind"</span>)</span>
+<span id="cb17-75"><a href="#cb17-75"></a>      )</span>
+<span id="cb17-76"><a href="#cb17-76"></a>    )</span>
+<span id="cb17-77"><a href="#cb17-77"></a>  ),</span>
+<span id="cb17-78"><a href="#cb17-78"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb17-79"><a href="#cb17-79"></a>    </span>
+<span id="cb17-80"><a href="#cb17-80"></a>    <span class="fu">weatherBoxServer</span>(</span>
+<span id="cb17-81"><a href="#cb17-81"></a>      <span class="st">"min_temp"</span>, <span class="at">data =</span> d_city, <span class="at">var =</span> <span class="st">"temperature"</span>, <span class="at">func =</span> min, </span>
+<span id="cb17-82"><a href="#cb17-82"></a>      <span class="at">text =</span> <span class="st">"Min temp"</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">icon =</span> <span class="fu">icon</span>(<span class="st">"temperature-low"</span>),</span>
+<span id="cb17-83"><a href="#cb17-83"></a>      <span class="at">show_time =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-84"><a href="#cb17-84"></a>    )</span>
+<span id="cb17-85"><a href="#cb17-85"></a>    </span>
+<span id="cb17-86"><a href="#cb17-86"></a>    <span class="fu">weatherBoxServer</span>(</span>
+<span id="cb17-87"><a href="#cb17-87"></a>      <span class="st">"max_temp"</span>, <span class="at">data =</span> d_city , <span class="at">var =</span> <span class="st">"temperature"</span>, <span class="at">func =</span> max, </span>
+<span id="cb17-88"><a href="#cb17-88"></a>      <span class="at">text =</span> <span class="st">"Max temp"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">icon =</span> <span class="fu">icon</span>(<span class="st">"temperature-high"</span>),</span>
+<span id="cb17-89"><a href="#cb17-89"></a>      <span class="at">show_time =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-90"><a href="#cb17-90"></a>    )</span>
+<span id="cb17-91"><a href="#cb17-91"></a>    </span>
+<span id="cb17-92"><a href="#cb17-92"></a>    <span class="fu">weatherBoxServer</span>(</span>
+<span id="cb17-93"><a href="#cb17-93"></a>      <span class="st">"avg_wind"</span>, <span class="at">data =</span> d_city, <span class="at">var =</span> <span class="st">"windSpeed"</span>, <span class="at">func =</span> mean, </span>
+<span id="cb17-94"><a href="#cb17-94"></a>      <span class="at">text =</span> <span class="st">"Avg wind"</span>, <span class="at">color =</span> <span class="st">"green"</span>, <span class="at">icon =</span> <span class="fu">icon</span>(<span class="st">"wind"</span>),</span>
+<span id="cb17-95"><a href="#cb17-95"></a>      <span class="at">show_time =</span> <span class="cn">FALSE</span></span>
+<span id="cb17-96"><a href="#cb17-96"></a>    )</span>
+<span id="cb17-97"><a href="#cb17-97"></a>    </span>
+<span id="cb17-98"><a href="#cb17-98"></a>    d_city <span class="ot">=</span> <span class="fu">reactive</span>({</span>
+<span id="cb17-99"><a href="#cb17-99"></a>      <span class="fu">req</span>(input<span class="sc">$</span>city)</span>
+<span id="cb17-100"><a href="#cb17-100"></a>      d <span class="sc">%&gt;%</span></span>
+<span id="cb17-101"><a href="#cb17-101"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city)</span>
+<span id="cb17-102"><a href="#cb17-102"></a>    })</span>
+<span id="cb17-103"><a href="#cb17-103"></a>    </span>
+<span id="cb17-104"><a href="#cb17-104"></a>    <span class="fu">observe</span>({</span>
+<span id="cb17-105"><a href="#cb17-105"></a>      cities <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb17-106"><a href="#cb17-106"></a>        <span class="fu">filter</span>(state <span class="sc">%in%</span> input<span class="sc">$</span>state) <span class="sc">%&gt;%</span></span>
+<span id="cb17-107"><a href="#cb17-107"></a>        <span class="fu">pull</span>(city) <span class="sc">%&gt;%</span></span>
+<span id="cb17-108"><a href="#cb17-108"></a>        <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-109"><a href="#cb17-109"></a>        <span class="fu">sort</span>()</span>
+<span id="cb17-110"><a href="#cb17-110"></a>      </span>
+<span id="cb17-111"><a href="#cb17-111"></a>      <span class="fu">updateSelectInput</span>(</span>
+<span id="cb17-112"><a href="#cb17-112"></a>        <span class="at">inputId =</span> <span class="st">"city"</span>, </span>
+<span id="cb17-113"><a href="#cb17-113"></a>        <span class="at">choices =</span> cities</span>
+<span id="cb17-114"><a href="#cb17-114"></a>      )</span>
+<span id="cb17-115"><a href="#cb17-115"></a>    })</span>
+<span id="cb17-116"><a href="#cb17-116"></a>    </span>
+<span id="cb17-117"><a href="#cb17-117"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb17-118"><a href="#cb17-118"></a>      <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-119"><a href="#cb17-119"></a>        <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>.data[[input<span class="sc">$</span>var]], <span class="at">color=</span>city)) <span class="sc">+</span></span>
+<span id="cb17-120"><a href="#cb17-120"></a>        <span class="fu">ggtitle</span>(<span class="fu">names</span>(d_vars)[d_vars <span class="sc">==</span> input<span class="sc">$</span>var]) <span class="sc">+</span></span>
+<span id="cb17-121"><a href="#cb17-121"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb17-122"><a href="#cb17-122"></a>        <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb17-123"><a href="#cb17-123"></a>        <span class="fu">theme_minimal</span>()</span>
+<span id="cb17-124"><a href="#cb17-124"></a>    })</span>
+<span id="cb17-125"><a href="#cb17-125"></a>  }</span>
+<span id="cb17-126"><a href="#cb17-126"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>
 <script type="application/shiny-prerendered" data-context="server-start">
 library(shiny)
 </script>
@@ -894,7 +1258,7 @@ ojs_define <- function(..., .session = shiny::getDefaultReactiveDomain()) {
   invisible()
 }
 </script>
-</countdown></p>
+</p>
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="dependencies">
 {"type":"list","attributes":{},"value":[]}

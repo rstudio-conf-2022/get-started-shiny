@@ -228,3 +228,124 @@ If you finish early try adding a `valueBox()` or `infoBox()` (or two).
 #| code-line-numbers: "|9|12,18-20|13,22-24"
 #| file: "../demos/demo10.R"
 ```
+
+
+# Shiny Modules
+
+## DRY again
+
+With the last demo you may have noticed that all three of the infoBoxes had nearly identical code.
+
+As mentioned before this is something we would like to avoid / minimize wherever possible.
+
+Previously we were able to use a `reactive()` to remove duplicate code, but that is not possible here since we need three distinct widgets + related server code.
+
+
+## Modularizing Shiny code
+
+The general solution to this kind of problem is to use functions to abstract our code.
+
+Within Shiny there are two issues we need to address,
+
+- Our code occurs in both the UI and the server - so we will need to write one function for each
+
+- Shiny inputs and outputs each share a global namespace so when reusing components we need to make sure these names do not collide.
+
+
+## UI module
+
+Creation of a UI module is straightforward, 
+
+- Create a function that takes `id` as an argument, additional arguments are optional
+
+- The function should return a `list()` or `tagList()` of UI elements
+
+- All `input*()` and `*Output()` functions must use `NS(id)` to mangle their `inputId` or `outputId`s respectively.
+
+  ```{r}
+  id = "widget1"
+  ns = NS(id)
+  ns("button")
+  
+  NS("widget2", id = "textout")
+  ```
+
+
+## Server module 
+
+Again start with a function that takes `id` as an argument, additional arguments are optional.
+
+- Module's server function is implemented using
+  
+  ```r
+  moduleServer(
+    id,
+    function(input, output, session) {
+      ...
+    }
+  )
+  ```  
+
+- Namespace mangling will be taken care of automatically (except for `uiOutput`/`renderUI` in which case the current namespace can be accessed with `session$ns`)
+
+
+## A counting button
+
+```{r}
+#| eval: false
+countButtonUI = function(id, text = "Initializing") {
+  ns = NS(id)
+  tagList(
+    actionButton(ns("button"), label = text, class = "primary")
+  )
+}
+
+countButtonServer = function(id, prefix = "Clicked: ") {
+  moduleServer(
+    id,
+    function(input, output, session) {
+      count = reactiveVal(0)
+      observe({
+        count(count() + 1)
+      }) %>%
+      bindEvent(input$button)
+      
+      observe({
+        updateActionButton(
+          inputId = "button", label = paste0(prefix, count()),
+        )
+      })
+    }
+  )
+}
+```
+
+## Putting it together
+
+```{r}
+#| eval: false
+
+shinyApp(
+  ui = fluidPage(
+    countButtonUI("count1"),
+    countButtonUI("count2"),
+    countButtonUI("count3")
+  ),
+  server = function(input, output, session) {
+    countButtonServer("count1")
+    countButtonServer("count2")
+    countButtonServer("count3")
+  }
+)
+```
+
+## Demo 11 - Dynamic box module
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo11.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|9|12,18-20|13,22-24"
+#| file: "../demos/demo11.R"
+```
