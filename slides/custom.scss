@@ -106,3 +106,12 @@ element.style {
 .reveal .larger {
   font-size: 150%;
 }
+
+.reveal table.details {
+  margin-top: 7.5%;
+}
+
+.reveal table.details td {
+  border-bottom: none;
+  padding: .5em .5em .5em .5em;
+}

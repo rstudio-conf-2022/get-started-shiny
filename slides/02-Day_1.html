@@ -464,7 +464,7 @@
 <span id="cb2-15"><a href="#cb2-15"></a>      <span class="fu">mainPanel</span>( <span class="fu">plotOutput</span>(<span class="st">"plot"</span>) )</span>
 <span id="cb2-16"><a href="#cb2-16"></a>    )</span>
 <span id="cb2-17"><a href="#cb2-17"></a>  ),</span>
-<span id="cb2-18"><a href="#cb2-18"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb2-18"><a href="#cb2-18"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb2-19"><a href="#cb2-19"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
 <span id="cb2-20"><a href="#cb2-20"></a>      d <span class="sc">%&gt;%</span></span>
 <span id="cb2-21"><a href="#cb2-21"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city) <span class="sc">%&gt;%</span></span>
@@ -591,7 +591,7 @@
 <span id="cb3-15"><a href="#cb3-15"></a>      <span class="fu">mainPanel</span>( <span class="fu">plotOutput</span>(<span class="st">"plot"</span>) )</span>
 <span id="cb3-16"><a href="#cb3-16"></a>    )</span>
 <span id="cb3-17"><a href="#cb3-17"></a>  ),</span>
-<span id="cb3-18"><a href="#cb3-18"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb3-18"><a href="#cb3-18"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb3-19"><a href="#cb3-19"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
 <span id="cb3-20"><a href="#cb3-20"></a>      d <span class="sc">%&gt;%</span></span>
 <span id="cb3-21"><a href="#cb3-21"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city) <span class="sc">%&gt;%</span></span>
@@ -647,7 +647,7 @@
 <span id="cb4-15"><a href="#cb4-15"></a>      <span class="fu">mainPanel</span>( <span class="fu">plotOutput</span>(<span class="st">"plot"</span>) )</span>
 <span id="cb4-16"><a href="#cb4-16"></a>    )</span>
 <span id="cb4-17"><a href="#cb4-17"></a>  ),</span>
-<span id="cb4-18"><a href="#cb4-18"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb4-18"><a href="#cb4-18"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb4-19"><a href="#cb4-19"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
 <span id="cb4-20"><a href="#cb4-20"></a>      d <span class="sc">%&gt;%</span></span>
 <span id="cb4-21"><a href="#cb4-21"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city) <span class="sc">%&gt;%</span></span>
@@ -704,7 +704,7 @@
 <span id="cb5-16"><a href="#cb5-16"></a>      <span class="fu">mainPanel</span>( <span class="fu">plotOutput</span>(<span class="st">"plot"</span>) )</span>
 <span id="cb5-17"><a href="#cb5-17"></a>    )</span>
 <span id="cb5-18"><a href="#cb5-18"></a>  ),</span>
-<span id="cb5-19"><a href="#cb5-19"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb5-19"><a href="#cb5-19"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb5-20"><a href="#cb5-20"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
 <span id="cb5-21"><a href="#cb5-21"></a>      g <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
 <span id="cb5-22"><a href="#cb5-22"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city) <span class="sc">%&gt;%</span></span>
@@ -871,7 +871,7 @@
 <span id="cb7-30"><a href="#cb7-30"></a>      )</span>
 <span id="cb7-31"><a href="#cb7-31"></a>    )</span>
 <span id="cb7-32"><a href="#cb7-32"></a>  ),</span>
-<span id="cb7-33"><a href="#cb7-33"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb7-33"><a href="#cb7-33"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb7-34"><a href="#cb7-34"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
 <span id="cb7-35"><a href="#cb7-35"></a>      d <span class="sc">%&gt;%</span></span>
 <span id="cb7-36"><a href="#cb7-36"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city) <span class="sc">%&gt;%</span></span>
@@ -952,7 +952,7 @@
 <span id="cb8-30"><a href="#cb8-30"></a>      )</span>
 <span id="cb8-31"><a href="#cb8-31"></a>    )</span>
 <span id="cb8-32"><a href="#cb8-32"></a>  ),</span>
-<span id="cb8-33"><a href="#cb8-33"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb8-33"><a href="#cb8-33"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb8-34"><a href="#cb8-34"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
 <span id="cb8-35"><a href="#cb8-35"></a>      d <span class="sc">%&gt;%</span></span>
 <span id="cb8-36"><a href="#cb8-36"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city) <span class="sc">%&gt;%</span></span>
@@ -1017,7 +1017,7 @@
 <span id="cb9-30"><a href="#cb9-30"></a>      )</span>
 <span id="cb9-31"><a href="#cb9-31"></a>    )</span>
 <span id="cb9-32"><a href="#cb9-32"></a>  ),</span>
-<span id="cb9-33"><a href="#cb9-33"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb9-33"><a href="#cb9-33"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb9-34"><a href="#cb9-34"></a>    </span>
 <span id="cb9-35"><a href="#cb9-35"></a>    d_city <span class="ot">=</span> <span class="fu">reactive</span>({</span>
 <span id="cb9-36"><a href="#cb9-36"></a>      d <span class="sc">%&gt;%</span></span>
@@ -1151,7 +1151,7 @@
 <span id="cb12-35"><a href="#cb12-35"></a>      )</span>
 <span id="cb12-36"><a href="#cb12-36"></a>    )</span>
 <span id="cb12-37"><a href="#cb12-37"></a>  ),</span>
-<span id="cb12-38"><a href="#cb12-38"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb12-38"><a href="#cb12-38"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb12-39"><a href="#cb12-39"></a>    </span>
 <span id="cb12-40"><a href="#cb12-40"></a>    d_city <span class="ot">=</span> <span class="fu">reactive</span>({</span>
 <span id="cb12-41"><a href="#cb12-41"></a>      <span class="fu">req</span>(input<span class="sc">$</span>city)</span>
@@ -1311,7 +1311,7 @@
 <span id="cb15-36"><a href="#cb15-36"></a>      )</span>
 <span id="cb15-37"><a href="#cb15-37"></a>    )</span>
 <span id="cb15-38"><a href="#cb15-38"></a>  ),</span>
-<span id="cb15-39"><a href="#cb15-39"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb15-39"><a href="#cb15-39"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb15-40"><a href="#cb15-40"></a>    </span>
 <span id="cb15-41"><a href="#cb15-41"></a>    output<span class="sc">$</span>download <span class="ot">&lt;-</span> <span class="fu">downloadHandler</span>(</span>
 <span id="cb15-42"><a href="#cb15-42"></a>      <span class="at">filename =</span> <span class="cf">function</span>() {</span>
@@ -1417,7 +1417,7 @@
 <span id="cb16-35"><a href="#cb16-35"></a>      )</span>
 <span id="cb16-36"><a href="#cb16-36"></a>    )</span>
 <span id="cb16-37"><a href="#cb16-37"></a>  ),</span>
-<span id="cb16-38"><a href="#cb16-38"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb16-38"><a href="#cb16-38"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb16-39"><a href="#cb16-39"></a>    </span>
 <span id="cb16-40"><a href="#cb16-40"></a>    <span class="fu">observe</span>({</span>
 <span id="cb16-41"><a href="#cb16-41"></a>      <span class="fu">showModal</span>(<span class="fu">modalDialog</span>(</span>

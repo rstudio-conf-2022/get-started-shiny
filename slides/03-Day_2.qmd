@@ -444,3 +444,46 @@ In the case of our Shiny app, all we need to do is to include a call to `themati
 #| code-line-numbers: "|16"
 #| file: "../demos/demo14.R"
 ```
+
+# Odds & Ends
+
+
+# Q&A 
+
+
+## Workshop Survey
+
+<br/><br/><br/><br/>
+
+::: {.larger style="text-align: center;"}
+[rstd.io/conf-workshop-survey](http://rstd.io/conf-workshop-survey)
+:::
+
+
+## Thank you!
+
+<table class="details">
+  <tr>
+    <td style="text-align:center">&nbsp;`r fontawesome::fa("link")`</td>
+    <td>[rstd.io/start-shiny](https://rstd.io/start-shiny)</td>
+  </tr>
+  <tr>
+    <td style="text-align:center">&nbsp;`r fontawesome::fa("file")`</td>
+    <td>[rstudio-conf-2022/get-started-shiny/](https://github.com/rstudio-conf-2022/get-started-shiny/)</td>
+  </tr>
+  <tr>
+    <td style="text-align:center">&nbsp;`r fontawesome::fa("envelope")`</td>
+    <td>
+    <a href="mailto:rundel@gmail.com">rundel@gmail.com</a><br/>
+    <a href="mailto:colin.rundel@duke.edu">colin.rundel@duke.edu</a>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align:center">&nbsp;`r fontawesome::fa("github")`</td>
+    <td><a href="https://github.com/rundel">rundel</a></td>
+  </tr>
+  <tr>
+    <td style="text-align:center">&nbsp;`r fontawesome::fa("twitter")`</td>
+    <td><a href="https://twitter.com/rundel">@rundel</a></td>
+  </tr>
+</table>
