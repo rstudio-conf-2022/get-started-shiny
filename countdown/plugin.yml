@@ -1,0 +1,3 @@
+# from https://github.com/christer79/reveal_countdown
+name: RevealCountDown
+script: countdown.js
