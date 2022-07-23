@@ -5,3 +5,4 @@
 .DS_Store
 ref/
 org
+widgets/rsconnect/*
