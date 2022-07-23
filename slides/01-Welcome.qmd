@@ -59,9 +59,16 @@ library(shiny)
 
 ## Workshop materials
 
-https://github.com/rstudio-conf-2022/get-started-shiny/
+<br/><br/>
 
-https://rstudio-conf-2022.github.io/get-started-shiny/
+::: {.larger style="text-align: center;"}
+[github.com/rstudio-conf-2022/get-started-shiny/](https://github.com/rstudio-conf-2022/get-started-shiny/)
+
+<br/>
+
+[rstd.io/start-shiny](https://rstd.io/start-shiny)
+:::
+
 
 ## Schedule
 
@@ -206,6 +213,17 @@ If everything is working you should see something very close to the following,
 
 
 ## File organization
+
+Project root:
+* `slides/` - all slides and related materials
+
+* `demos/` - sample code for each demo
+
+* `exercises/` -  starter code for each exercise
+
+* `exercises/solutions/` - sample solution code for each exercise 
+
+* `data/` - example data sets used in demos and exercises
 
 
 
