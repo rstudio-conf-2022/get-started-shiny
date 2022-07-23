@@ -24,6 +24,8 @@ title-slide-attributes:
 library(shiny)
 ```
 
+# Introduction to Shiny
+
 ## Shiny
 
 > Shiny is an R package that makes it easy to build interactive web apps straight from R. You can host standalone apps on a webpage or embed them in R Markdown documents or build dashboards. You can also extend your Shiny apps with CSS themes, htmlwidgets, and JavaScript actions.
@@ -893,6 +895,18 @@ Similar effects can be achieved via `observeEvent()` / `eventReactive()` but the
 
 
 # Downloading from Shiny
+
+## `downloadButton()` & `downloadHandler()`
+
+These are the UI and server components needed for downloading a file from your Shiny app. The downloaded file can be of any arbitrary type and content.
+
+`downloadButton()` is a special case of an `actionButton()` with specialized server syntax. Specifically, within the server definition the `downloadHandler()` is attached using `output`, e.g.
+```r
+output$download_id = downloadHandler(...)
+```
+
+The handler then defines the `filename` function for generating a default filename and `content` function for writing the download file's content to a temporary file, which can then be served by Shiny for downloading.
+
 
 ## Demo 6 - A download button
 
