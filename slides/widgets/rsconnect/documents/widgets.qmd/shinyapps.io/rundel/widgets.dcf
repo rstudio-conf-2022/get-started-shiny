@@ -5,11 +5,11 @@ account: rundel
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6681222
-bundleId: 6125368
+bundleId: 6128345
 url: https://rundel.shinyapps.io/widgets/
-when: 1658550631.10696
-lastSyncTime: 1658550631.10696
-quarto_version: 1.1.3
+when: 1658692807.08712
+lastSyncTime: 1658692807.08713
+quarto_version: 1.0.36
 quarto_engines: knitr
 asMultiple: FALSE
 asStatic: FALSE

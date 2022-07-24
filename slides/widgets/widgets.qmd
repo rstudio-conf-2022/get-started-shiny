@@ -408,3 +408,92 @@ output$actionlink_out = renderPrint({
 ```
 :::
 :::
+
+
+## Date inputs
+
+```{r}
+#| eval: false
+dateRangeInput(
+  inputId="date", label="When did you arrive?",
+  value = Sys.Date(),
+  min = Sys.Date()-14,
+  max = Sys.Date(),
+  daysofweekdisabled = c(0,6)
+)
+```
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: false
+dateInput(
+  inputId="date", label="When did you arrive?",
+  value = Sys.Date(),
+  min = Sys.Date()-14,
+  max = Sys.Date(),
+  daysofweekdisabled = c(0,6)
+)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+verbatimTextOutput("date_out")
+```
+
+```{r}
+#| echo: false
+#| context: server
+output$date_out = renderPrint({
+  input$date
+})
+```
+:::
+:::
+
+<br/>
+
+```{r}
+#| eval: false
+dateRangeInput(
+  inputId = "daterange", 
+  label = "How long will you be in DC?",
+  start = "2022/07/25",
+  end = "2022/07/28",
+  min = Sys.Date()-14,
+  max = Sys.Date()+14
+)
+```
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: false
+dateRangeInput(
+  inputId = "daterange", 
+  label = "How long will you be in DC?",
+  start = "2022/07/25",
+  end = "2022/07/28",
+  min = Sys.Date()-14,
+  max = Sys.Date()+14
+)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+verbatimTextOutput("daterange_out")
+```
+
+```{r}
+#| echo: false
+#| context: server
+output$daterange_out = renderPrint({
+  input$daterange
+})
+```
+:::
+:::
