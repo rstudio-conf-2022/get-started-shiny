@@ -181,7 +181,7 @@ What happens if you use an input capable of selecting multiple values
 
 # Basic Reactivity
 
-## Reactive Elements
+## Reactive elements
 
 ::: {.code-file .sourceCode .cell-code}
 `r fontawesome::fa("file")` `demos/demo1.R`
@@ -251,19 +251,6 @@ The "reactive" logic is defined by our `server` function - shiny takes care of f
 
 With these additions, what should our reactive graph look like now?
 
-::: {.fragment}
-```{mermaid}
-flowchart TB
-  subgraph outputs
-  out1[plot]
-  end
-  subgraph inputs
-  in1([city]) 
-  in2([forecast]) 
-  end
-```
-:::
-
 ## Reactive graph
 
 With these additions, what should our reactive graph look like now?
@@ -287,7 +274,7 @@ Starting with the demo 2 code in `exercises/ex3.R` add a `tableOutput()` to the 
 
 Once you have done that you should then add logic to the `server` function to render a table that shows the daily min and max temperature for each day of the week.
 
-- You will need to use `renderTable()` instead of `renderPlot()`
+- You will need to use `renderTable()`
 - `lubridate::wday()` is likely to be useful along with `group_by()` & `summarize()`
 
 <countdown time="600"/>

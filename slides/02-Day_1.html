@@ -7,7 +7,7 @@
 <link href="02-Day_1_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="02-Day_1_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="02-Day_1_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.1.3">
+  <meta name="generator" content="quarto-1.0.36">
 
   <meta name="author" content="Colin Rundel">
   <title>Getting Started with Shiny Day 1</title>
@@ -568,7 +568,7 @@
 
 </section>
 <section id="reactive-elements" class="slide level2">
-<h2>Reactive Elements</h2>
+<h2>Reactive elements</h2>
 <div class="code-file sourceCode cell-code">
 <p><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg> <code>demos/demo1.R</code></p>
 </div>
@@ -732,28 +732,6 @@
 <section id="reactive-graph" class="slide level2">
 <h2>Reactive graph</h2>
 <p>With these additions, what should our reactive graph look like now?</p>
-<div class="fragment">
-<div class="cell" data-reveal="true">
-<div class="cell-output-display">
-<div>
-<p>
-</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-3">flowchart TB
-  subgraph outputs
-  out1[plot]
-  end
-  subgraph inputs
-  in1([city]) 
-  in2([forecast]) 
-  end
-</pre>
-<div id="mermaid-tooltip-3" class="mermaidTooltip">
-
-</div>
-<p></p>
-</div>
-</div>
-</div>
-</div>
 </section>
 <section id="reactive-graph-1" class="slide level2">
 <h2>Reactive graph</h2>
@@ -762,7 +740,7 @@
 <div class="cell-output-display">
 <div>
 <p>
-</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-4">flowchart LR
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-3">flowchart LR
   subgraph outputs
   out1[plot]
   end
@@ -772,7 +750,7 @@
   end
   in1 &amp; in2 --&gt; out1
 </pre>
-<div id="mermaid-tooltip-4" class="mermaidTooltip">
+<div id="mermaid-tooltip-3" class="mermaidTooltip">
 
 </div>
 <p></p>
@@ -785,7 +763,7 @@
 <p>Starting with the demo 2 code in <code>exercises/ex3.R</code> add a <code>tableOutput()</code> to the app’s <code>mainPanel()</code>.</p>
 <p>Once you have done that you should then add logic to the <code>server</code> function to render a table that shows the daily min and max temperature for each day of the week.</p>
 <ul>
-<li>You will need to use <code>renderTable()</code> instead of <code>renderPlot()</code></li>
+<li>You will need to use <code>renderTable()</code></li>
 <li><code>lubridate::wday()</code> is likely to be useful along with <code>group_by()</code> &amp; <code>summarize()</code></li>
 </ul>
 <p><countdown time="600"></countdown></p>
@@ -796,7 +774,7 @@
 <div class="cell-output-display">
 <div>
 <p>
-</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-5">flowchart LR
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-4">flowchart LR
   subgraph outputs
   out1[plot]
   out2[minmax]
@@ -808,7 +786,7 @@
   in1 &amp; in2 --&gt; out1
   in1 --&gt; out2
 </pre>
-<div id="mermaid-tooltip-5" class="mermaidTooltip">
+<div id="mermaid-tooltip-4" class="mermaidTooltip">
 
 </div>
 <p></p>
@@ -1078,7 +1056,7 @@
 <div class="cell-output-display">
 <div>
 <p>
-</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-6">flowchart LR
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-5">flowchart LR
   subgraph outputs
   out1[plot]
   out2[minmax]
@@ -1094,7 +1072,7 @@
   react1 --&gt; out1 &amp; out2
   in2 --&gt; out1 &amp; out2
 </pre>
-<div id="mermaid-tooltip-6" class="mermaidTooltip">
+<div id="mermaid-tooltip-5" class="mermaidTooltip">
 
 </div>
 <p></p>
@@ -1202,7 +1180,7 @@
 <div class="cell-output-display">
 <div>
 <p>
-</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-7">flowchart LR
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-6">flowchart LR
   subgraph outputs
   out1[plot]
   out2[minmax]
@@ -1224,7 +1202,7 @@
   react1 --&gt; out1 &amp; out2
   in2 --&gt; out1 &amp; out2
 </pre>
-<div id="mermaid-tooltip-7" class="mermaidTooltip">
+<div id="mermaid-tooltip-6" class="mermaidTooltip">
 
 </div>
 <p></p>
