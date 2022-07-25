@@ -1,6 +1,7 @@
 library(tidyverse)
 library(shiny)
 library(shinydashboard)
+
 d = readr::read_csv(here::here("data/weather.csv"))
 
 d_vars = d %>%

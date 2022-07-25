@@ -94,7 +94,7 @@ The issue here is that the new data may contain some subset of the existing colu
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|33-44|58-87|87|66-77|79-85"
+#| code-line-numbers: "|29-40|54-83|83|62-73|75-81"
 #| file: "../demos/demo9_part1.R"
 ```
 
@@ -105,7 +105,7 @@ The issue here is that the new data may contain some subset of the existing colu
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|89-93|95-127"
+#| code-line-numbers: "|87-91|93-119"
 #| file: "../demos/demo9_part2.R"
 ```
 
@@ -227,7 +227,7 @@ If you finish early try adding a `valueBox()` or `infoBox()` (or two).
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|9|12,18-20|13,22-24"
+#| code-line-numbers: "|29-39|33-36,37|40-44|49-60|62-73|75-84"
 #| file: "../demos/demo10.R"
 ```
 
@@ -295,7 +295,7 @@ Again start with a function that takes `id` as an argument, additional arguments
 
 ```{r}
 #| eval: false
-#| code-line-numbers: "|1-6|2,4|8-25"
+#| code-line-numbers: "|1-6|2,4|8-25|9-24|11-23"
 countButtonUI = function(id, text = "Initializing") {
   ns = NS(id)
   tagList(
@@ -311,7 +311,7 @@ countButtonServer = function(id, prefix = "Clicked: ") {
       observe({
         count(count() + 1)
       }) %>%
-      bindEvent(input$button)
+        bindEvent(input$button)
       
       observe({
         updateActionButton(
@@ -349,7 +349,7 @@ shinyApp(
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|9|12,18-20|13,22-24"
+#| code-line-numbers: "|11-13|15-35|76-80|82-86|88-92"
 #| file: "../demos/demo11.R"
 ```
 
@@ -419,7 +419,7 @@ Again starting with the app version from Demo 5 (code available in `exercises/ex
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|17|49"
+#| code-line-numbers: "|13|45"
 #| file: "../demos/demo12.R"
 ```
 
@@ -430,7 +430,7 @@ Again starting with the app version from Demo 5 (code available in `exercises/ex
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|15-16,20|53-56"
+#| code-line-numbers: "|11,12|16|49-52"
 #| file: "../demos/demo13.R"
 ```
 
@@ -438,7 +438,9 @@ Again starting with the app version from Demo 5 (code available in `exercises/ex
 
 > Simplified theming of ggplot2, lattice, and {base} R graphics. In addition to providing a centralized approach to styling R graphics, thematic also enables automatic styling of R plots in Shiny, R Markdown, and RStudio.
 
-In the case of our Shiny app, all we need to do is to include a call to `thematic_shiny()` before the app is loaded. Using the value `"auto"` will attempt to resolve the `bg`, `fg`, `accent`, or `font` values at plot time.
+In the case of our Shiny app, all we need to do is to include a call to `thematic_shiny()` before the app is loaded. 
+
+- Using the value `"auto"` will attempt to resolve the `bg`, `fg`, `accent`, or `font` values at plot time.
 
 ## Demo 14 - thematic
 
@@ -447,7 +449,7 @@ In the case of our Shiny app, all we need to do is to include a call to `themati
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|16"
+#| code-line-numbers: "|12"
 #| file: "../demos/demo14.R"
 ```
 

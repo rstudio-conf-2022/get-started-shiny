@@ -1,6 +1,7 @@
 library(tidyverse)
 library(shiny)
 library(shinydashboard)
+
 d = readr::read_csv(here::here("data/weather.csv"))
 
 d_vars = d %>%
@@ -12,7 +13,6 @@ weatherBoxUI = function(id) {
 }
 
 weatherBoxServer = function(id, data, var, func, text, color, icon, show_time = FALSE) {
-  
   moduleServer(
     id,
     function(input, output, session) {
