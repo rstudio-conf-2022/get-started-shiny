@@ -96,7 +96,7 @@ shinyApp(
 
 ## Your turn - Exercise 1
 
-Copy the code from the previous slide (or open `exercises/ex1.R` in the git repository) and try running it in your console.
+Copy the code from the previous slide (or open `exercises/ex1.R) and try running it in your console.
 
 Check that you are able successfully run the shiny app and are able to interact with it. 
 
@@ -150,7 +150,7 @@ From [Mastering Shiny](https://mastering-shiny.org/action-layout.html#multi-row)
 ## Shiny Widgets Gallery
 
 ::: {style="text-align: center"}
-[https://shiny.rstudio.com/gallery/widget-gallery.html]()
+[shiny.rstudio.com/gallery/widget-gallery.html](https://shiny.rstudio.com/gallery/widget-gallery.html)
 :::
 
 <iframe data-src="https://shiny.rstudio.com/gallery/widget-gallery.html" width="100%" height="500px" style="border:1px solid;border-radius: 5px;">
@@ -210,8 +210,8 @@ flowchart TD
   end
 ```
 
-::: {style="width:100%; text-align: center;"}
-::: {style="width:40%; display: inline-block; text-align: center;"}
+::: {style="width:100%; height: 22%; text-align: center;"}
+::: {style="width:30%; display: inline-block; text-align: center;"}
 ![](images/mermaid1.png){fig-align="center" width="100%"}
 :::
 :::
@@ -244,8 +244,8 @@ flowchart LR
   n1 --> n2
 ```
 
-::: {style="width:100%; text-align: center;"}
-::: {style="width:40%; display: inline-block; text-align: center;"}
+::: {style="width:100%; height: 22%; text-align: center;"}
+::: {style="width:30%; display: inline-block; text-align: center;"}
 ![](images/mermaid2.png){fig-align="center" width="100%"}
 :::
 :::
@@ -354,7 +354,7 @@ shiny::reactlogShow()
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|5-11|22-25|34-40|42-55"
+#| code-line-numbers: "|5-7|18-21|30-36|38-51"
 #| file: ../demos/demo3.R
 ```
 
@@ -379,18 +379,18 @@ For more details see the rlang [.data and .env pronouns](https://rlang.r-lib.org
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "35-36,43-44"
+#| code-line-numbers: "31-32,39-40"
 #| file: ../demos/demo3.R
 ```
 
-## Demo 4 - Add a reactive
+## Demo 4 - Use a reactive
 
 ::: {.code-file .sourceCode .cell-code}
 `r fontawesome::fa("file")` `demos/demo4.R`
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|35-38|41,48"
+#| code-line-numbers: "|31-35|37,44"
 #| file: ../demos/demo4.R
 ```
 
@@ -471,7 +471,7 @@ These are constructed in the same way as a `reactive()` however an observer does
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "18-26|46-57|41"
+#| code-line-numbers: "14-22|42-53|37"
 #| file: ../demos/demo5.R
 ```
 
@@ -571,7 +571,7 @@ The handler then defines the `filename` function for generating a default filena
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|31|41-51|42-47|48-50"
+#| code-line-numbers: "|27|37-47|38-43|44-46"
 #| file: ../demos/demo6.R
 ```
 
@@ -590,6 +590,6 @@ They differ from other UI elements we've seen so far as they are usually defined
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|30|40-53|55-69"
+#| code-line-numbers: "|26|36-49|51-65"
 #| file: ../demos/demo7.R
 ```
