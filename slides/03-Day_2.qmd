@@ -23,60 +23,6 @@ title-slide-attributes:
 library(shiny)
 ```
 
-# Uploading data
-
-## Demo 8 - Using `fileInput()`
-
-::: {.code-file .sourceCode .cell-code}
-`r fontawesome::fa("file")` `demos/demo8.R`
-:::
-```{r}
-#| eval: false
-#| code-line-numbers: "|9|12,18-20|13,22-24"
-#| file: "../demos/demo8.R"
-```
-
-
-## `fileInput()` widget
-
-This widget behaves a bit differently than the others we have seen - once a file is uploaded it returns a data frame with one row per file and the columns,
-
-* `name` - the original filename (from the client's system)
-
-* `size` - file size in bytes
-
-* `type` - file [mime type](https://en.wikipedia.org/wiki/Media_type), usually determined by the file extension
-
-* `datapath` - location of the *temporary* file on the server
-
-
-Given this data frame your app's server code is responsible for the actual process of reading in the uploaded file.
-
-
-## `fileInput()` hints
-
-* `input$upload` will default to `NULL` when the app is loaded, using `req(input$upload)` for downstream consumers is a good idea
-
-* Files in `datapath` are temporary and should be treated as ephemeral 
-
-  * additional uploads can result in the previous files being deleted
-
-* `type` is at best a guess - validate uploaded files and write defensive code
-
-* The `accept` argument helps to limit file types but cannot prevent bad uploads
-
-
-## Your turn - Exercise 5
-
-Starting with the app version from Demo 5 (code available in `exercises/ex5.R`) replace the preloading of the weather data (`d` and `d_vars`) with reactive versions that are populated via a `fileInput()` widget. 
-
-You should then be able to get the same app behavior as before once `data/weather.csv` is uploaded. You can also check that your app works with the `data/sedona.csv` and `data/gayload.csv` datasets as well.
-
-*Hint* - remember that anywhere that uses either `d` or `d_vars` will now need to use `d()` and `d_vars()` instead.
-
-<countdown time="900"/>
-
-
 # Dynamic UIs
 
 ## `uiOutput()`

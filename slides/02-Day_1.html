@@ -1365,6 +1365,75 @@
 <span id="cb16-106"><a href="#cb16-106"></a>  }</span>
 <span id="cb16-107"><a href="#cb16-107"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section></section>
+<section>
+<section id="uploading-data" class="title-slide slide level1 center">
+<h1>Uploading data</h1>
+
+</section>
+<section id="demo-8---using-fileinput" class="slide level2">
+<h2>Demo 8 - Using <code>fileInput()</code></h2>
+<div class="code-file sourceCode cell-code">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg> <code>demos/demo8.R</code></p>
+</div>
+<div class="cell" data-file="../demos/demo8.R">
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="|9|12,18-20|13,22-24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb17-3"><a href="#cb17-3"></a></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="fu">shinyApp</span>(</span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="at">ui =</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb17-6"><a href="#cb17-6"></a>    <span class="fu">titlePanel</span>(<span class="st">"Temperature Forecasts"</span>),</span>
+<span id="cb17-7"><a href="#cb17-7"></a>    <span class="fu">sidebarLayout</span>(</span>
+<span id="cb17-8"><a href="#cb17-8"></a>      <span class="fu">sidebarPanel</span>(</span>
+<span id="cb17-9"><a href="#cb17-9"></a>        <span class="fu">fileInput</span>(<span class="st">"upload"</span>, <span class="st">"Upload a file"</span>)</span>
+<span id="cb17-10"><a href="#cb17-10"></a>      ),</span>
+<span id="cb17-11"><a href="#cb17-11"></a>      <span class="fu">mainPanel</span>( </span>
+<span id="cb17-12"><a href="#cb17-12"></a>        <span class="fu">tableOutput</span>(<span class="st">"widget"</span>),</span>
+<span id="cb17-13"><a href="#cb17-13"></a>        <span class="fu">tableOutput</span>(<span class="st">"data"</span>)</span>
+<span id="cb17-14"><a href="#cb17-14"></a>      )</span>
+<span id="cb17-15"><a href="#cb17-15"></a>    )</span>
+<span id="cb17-16"><a href="#cb17-16"></a>  ),</span>
+<span id="cb17-17"><a href="#cb17-17"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb17-18"><a href="#cb17-18"></a>    output<span class="sc">$</span>widget <span class="ot">=</span> <span class="fu">renderTable</span>({</span>
+<span id="cb17-19"><a href="#cb17-19"></a>      input<span class="sc">$</span>upload</span>
+<span id="cb17-20"><a href="#cb17-20"></a>    })</span>
+<span id="cb17-21"><a href="#cb17-21"></a>    </span>
+<span id="cb17-22"><a href="#cb17-22"></a>    output<span class="sc">$</span>data <span class="ot">=</span> <span class="fu">renderTable</span>({</span>
+<span id="cb17-23"><a href="#cb17-23"></a>      readr<span class="sc">::</span><span class="fu">read_csv</span>(input<span class="sc">$</span>upload<span class="sc">$</span>datapath)</span>
+<span id="cb17-24"><a href="#cb17-24"></a>    })</span>
+<span id="cb17-25"><a href="#cb17-25"></a>  }</span>
+<span id="cb17-26"><a href="#cb17-26"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fileinput-widget" class="slide level2">
+<h2><code>fileInput()</code> widget</h2>
+<p>This widget behaves a bit differently than the others we have seen - once a file is uploaded it returns a data frame with one row per file and the columns,</p>
+<ul>
+<li><p><code>name</code> - the original filename (from the client’s system)</p></li>
+<li><p><code>size</code> - file size in bytes</p></li>
+<li><p><code>type</code> - file <a href="https://en.wikipedia.org/wiki/Media_type">mime type</a>, usually determined by the file extension</p></li>
+<li><p><code>datapath</code> - location of the <em>temporary</em> file on the server</p></li>
+</ul>
+<p>Given this data frame your app’s server code is responsible for the actual process of reading in the uploaded file.</p>
+</section>
+<section id="fileinput-hints" class="slide level2">
+<h2><code>fileInput()</code> hints</h2>
+<ul>
+<li><p><code>input$upload</code> will default to <code>NULL</code> when the app is loaded, using <code>req(input$upload)</code> for downstream consumers is a good idea</p></li>
+<li><p>Files in <code>datapath</code> are temporary and should be treated as ephemeral</p>
+<ul>
+<li>additional uploads can result in the previous files being deleted</li>
+</ul></li>
+<li><p><code>type</code> is at best a guess - validate uploaded files and write defensive code</p></li>
+<li><p>The <code>accept</code> argument helps to limit file types but cannot prevent bad uploads</p></li>
+</ul>
+</section>
+<section id="your-turn---exercise-5" class="slide level2">
+<h2>Your turn - Exercise 5</h2>
+<p>Starting with the app version from Demo 5 (code available in <code>exercises/ex5.R</code>) replace the preloading of the weather data (<code>d</code> and <code>d_vars</code>) with reactive versions that are populated via a <code>fileInput()</code> widget.</p>
+<p>You should then be able to get the same app behavior as before once <code>data/weather.csv</code> is uploaded. You can also check that your app works with the <code>data/sedona.csv</code> and <code>data/gayload.csv</code> datasets as well.</p>
+<p><em>Hint</em> - remember that anywhere that uses either <code>d</code> or <code>d_vars</code> will now need to use <code>d()</code> and <code>d_vars()</code> instead.</p>
+<p><countdown time="900"></countdown></p>
 
 <img src="images/shiny.png" class="slide-logo r-stretch"><div class="footer footer-default">
 <p>RStudioConf 2022 - Getting Started with Shiny</p>
