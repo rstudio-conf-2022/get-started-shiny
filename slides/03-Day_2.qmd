@@ -39,7 +39,7 @@ library(shiny)
 
 ## `fileInput()` widget
 
-This widget behaves a bit differently than the others we have seen - once a file is uploaded it returns a data frame with:
+This widget behaves a bit differently than the others we have seen - once a file is uploaded it returns a data frame with one row per file and the columns,
 
 * `name` - the original filename (from the client's system)
 
@@ -50,18 +50,20 @@ This widget behaves a bit differently than the others we have seen - once a file
 * `datapath` - location of the *temporary* file on the server
 
 
-Your app is responsible for the actual process of reading in the uploaded file.
+Given this data frame your app's server code is responsible for the actual process of reading in the uploaded file.
 
 
 ## `fileInput()` hints
 
 * `input$upload` will default to `NULL` when the app is loaded, using `req(input$upload)` for downstream consumers is a good idea
 
-* Files in `datapath` are temporary and should be treated as ephemeral (additional uploads can result in the previous files being deleted)
+* Files in `datapath` are temporary and should be treated as ephemeral 
+
+  * additional uploads can result in the previous files being deleted
 
 * `type` is at best a guess - validate uploaded files and write defensive code
 
-* The `accept` argument helps to limit file types but cannot prevent bad files
+* The `accept` argument helps to limit file types but cannot prevent bad uploads
 
 
 ## Your turn - Exercise 5
@@ -72,7 +74,7 @@ You should then be able to get the same app behavior as before once `data/weathe
 
 *Hint* - remember that anywhere that uses either `d` or `d_vars` will now need to use `d()` and `d_vars()` instead.
 
-<countdown time="600"/>
+<countdown time="900"/>
 
 
 # Dynamic UIs
@@ -124,6 +126,7 @@ The core of the package is a common dashboard layout and a number of specialized
 
 ```{r}
 #| eval: false
+#| code-line-numbers: "|5-12|5|6-9|10|11"
 library(shiny)
 library(shinydashboard)
 
@@ -202,7 +205,7 @@ shinydashboard:::validColors
 
 ![](images/layout-fluidrow.png){fig-align="center" width="60%"}
 
-*Note* - Bootstrap defines a page to have a width of 12 units, a `column()`s `width` is given in these units.
+*Note* - Bootstrap defines a page to have a width of 12 units, a `column()`'s `width` is given in these units.
 
 ## Your turn - Exercise 6
 
@@ -292,6 +295,7 @@ Again start with a function that takes `id` as an argument, additional arguments
 
 ```{r}
 #| eval: false
+#| code-line-numbers: "|1-6|2,4|8-25"
 countButtonUI = function(id, text = "Initializing") {
   ns = NS(id)
   tagList(
@@ -405,6 +409,8 @@ Again starting with the app version from Demo 5 (code available in `exercises/ex
 
 * Try picking out a couple of bootswatch themes and try applying them to the app.
 
+<countdown time="450"/>
+
 
 ## Demo 12 - Interactive theming
 
@@ -444,6 +450,12 @@ In the case of our Shiny app, all we need to do is to include a call to `themati
 #| code-line-numbers: "|16"
 #| file: "../demos/demo14.R"
 ```
+
+# Deploying Shiny apps
+
+## Organizing your app
+
+
 
 # Odds & Ends
 
