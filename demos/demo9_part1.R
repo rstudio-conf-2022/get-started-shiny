@@ -4,11 +4,7 @@ d_orig = readr::read_csv(here::here("data/weather.csv"))
 
 d_vars = d_orig %>%
   select(where(is.numeric)) %>%
-  names() %>%
-  {setNames(
-    .,
-    str_replace_all(., "([A-Z])", " \\1") %>% str_to_title()
-  )}
+  names()
 
 shinyApp(
   ui = fluidPage(
@@ -103,7 +99,7 @@ shinyApp(
     output$plot = renderPlot({
       d_city() %>%
         ggplot(aes(x=time, y=.data[[input$var]], color=city)) +
-        ggtitle(names(d_vars)[d_vars == input$var]) +
+        ggtitle(input$var) +
         geom_line()
     })
     
