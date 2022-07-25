@@ -34,7 +34,7 @@ shinyApp(
   ),
   server = function(input, output, session) {
     
-    output$download <- downloadHandler(
+    output$download = downloadHandler(
       filename = function() {
         paste0(
           paste(input$city,collapse="_"), 

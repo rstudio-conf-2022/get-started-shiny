@@ -48,7 +48,7 @@ shinyApp(
     }) %>%
       bindEvent(input$download_modal)
     
-    output$download <- downloadHandler(
+    output$download = downloadHandler(
       filename = function() {
         paste0(
           paste(input$city,collapse="_"), 
