@@ -57,6 +57,22 @@ library(shiny)
 -   Garrick Aden-Buie - RStudio
 -   Carson Sievert - RStudio
 
+## Introduce yourself
+
+We wont go around the room, but take the next couple of minutes to introduce yourself to your neighbors.
+
+Some suggested topics,
+
+* Name
+
+* Where you are coming from
+
+* Why you are interested in learning Shiny
+
+
+<countdown time="300"/>
+
+
 ## Workshop materials
 
 <br/><br/>
@@ -205,8 +221,10 @@ This is a great place to ask questions, post resources, memes, or most anything 
 You can use the following link to join the workshops RStudio cloud space,
 
 ::: {style="text-align: center;"}
-https://rstudio.cloud/spaces/233624/join?access_code=FIXME
+[bit.ly/conf2020_shiny_cloud](https://bit.ly/conf2020_shiny_cloud)
 :::
+
+
 
 <br/>
 
