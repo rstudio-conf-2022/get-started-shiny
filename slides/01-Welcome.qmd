@@ -52,7 +52,7 @@ library(shiny)
 
 ## Teaching Assistants
 
--   Shel Kariuki - UN DESA
+-   Shel Kariuki - STC WorldBank
 -   Stephanie Zimmer - Abt Associates
 -   Garrick Aden-Buie - RStudio
 -   Carson Sievert - RStudio
