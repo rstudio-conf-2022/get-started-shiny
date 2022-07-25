@@ -98,7 +98,11 @@ shinyApp(
 
 Copy the code from the previous slide (or open `exercises/ex1.R` in the git repository) and try running it in your console.
 
-Check that you are able successfully run the shiny app and are able to interact with it. If everything is working try modifying the code (e.g. try adding or removing a city from `radioButtons()`).
+Check that you are able successfully run the shiny app and are able to interact with it. 
+
+* If everything is working try modifying the code (e.g. try adding or removing a city from `radioButtons()`).
+
+* What happens if you add a city that is not in the `weather.csv` data set?
 
 <countdown time="300"/>
 
@@ -196,6 +200,7 @@ What happens if you use an input capable of selecting multiple values
 
 
 ```{mermaid}
+#| include: false
 flowchart TD
   subgraph outputs
   n2[plot]
@@ -204,6 +209,12 @@ flowchart TD
   n1([city]) 
   end
 ```
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:40%; display: inline-block; text-align: center;"}
+![](images/mermaid1.png){fig-align="center" width="100%"}
+:::
+:::
 
 Our inputs and outputs are defined by our `ui` elements.
 
@@ -222,6 +233,7 @@ Our inputs and outputs are defined by our `ui` elements.
 :::
 
 ```{mermaid}
+#| include: false
 flowchart LR
   subgraph outputs
   n2[plot]
@@ -231,6 +243,12 @@ flowchart LR
   end
   n1 --> n2
 ```
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:40%; display: inline-block; text-align: center;"}
+![](images/mermaid2.png){fig-align="center" width="100%"}
+:::
+:::
 
 The "reactive" logic is defined by our `server` function - shiny takes care of figuring out what depends on what.
 
@@ -256,6 +274,7 @@ With these additions, what should our reactive graph look like now?
 With these additions, what should our reactive graph look like now?
 
 ```{mermaid}
+#| include: false
 flowchart LR
   subgraph outputs
   out1[plot]
@@ -266,6 +285,12 @@ flowchart LR
   end
   in1 & in2 --> out1
 ```
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:40%; display: inline-block; text-align: center;"}
+![](images/mermaid3.png){fig-align="center" width="100%"}
+:::
+:::
 
 
 ## Your turn - Exercise 3
@@ -283,6 +308,7 @@ Once you have done that you should then add logic to the `server` function to re
 ## Reactive graph (again)
 
 ```{mermaid}
+#| include: false
 flowchart LR
   subgraph outputs
   out1[plot]
@@ -295,6 +321,14 @@ flowchart LR
   in1 & in2 --> out1
   in1 --> out2
 ```
+
+<br/><br/>
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:40%; display: inline-block; text-align: center;"}
+![](images/mermaid4.png){fig-align="center" width="100%"}
+:::
+:::
 
 ## reactlog
 
@@ -356,7 +390,7 @@ For more details see the rlang [.data and .env pronouns](https://rlang.r-lib.org
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "35-38,41,48"
+#| code-line-numbers: "|35-38|41,48"
 #| file: ../demos/demo4.R
 ```
 
@@ -369,22 +403,25 @@ As such a `reactive()` depends on various upstream inputs and can be used to gen
 Their primary use is similar to a function in an R script, they help to
 
 - avoid repeating yourself
+
 - decompose complex computations into smaller / more modular steps
+
+- can improve computational efficiency by breaking up / simplifying reactive dependencies
 
 ## `reactive()` tips
 
-- Code composed similarly to `render*()` functions
+- Code written similarly to `render*()` functions
 
 - If `react_obj = reactive({...})` then any consumer 
-  must access value using `react_obj()` and not `react_obj`
-    - think of `reactive()` as function that returns the current value
-    - You will see,
+  must access value using `react_obj()` and *not* `react_obj`
+    - think of `react_obj` as a function that returns the current value
+    - Common cause of ~~everyone's~~ my favorite R error ,
       
       ``` 
       ## Error: object of type 'closure' is not subsettable`
       ```
 
-- Like `input`s reactive expressions may only used within a reactive context (e.g. `render*()`, `reactive()`, `observer()`, etc.)
+- Like `input`s reactive expressions may only be used within a reactive context (e.g. `render*()`, `reactive()`, `observer()`, etc.)
   
   ```
   ## Error: Operation not allowed without an active reactive context. (You tried to do something that can only be done from inside a reactive expression or observer.)
@@ -393,6 +430,7 @@ Their primary use is similar to a function in an R script, they help to
 ## Reactive graph
 
 ```{mermaid}
+#| include: false
 flowchart LR
   subgraph outputs
   out1[plot]
@@ -410,13 +448,21 @@ flowchart LR
   in2 --> out1 & out2
 ```
 
+<br/><br/>
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:80%; display: inline-block; text-align: center;"}
+![](images/mermaid5.png){fig-align="center" width="100%"}
+:::
+:::
+
 ## `observer()`
 
 These are constructed in the same way as a `reactive()` however an observer does not return a value, as such they are used for their side effects.
 
-The side effects in most cases involve sending data to the client broswer.
+* The side effects in most cases involve sending data to the client broswer, e.g. updating a UI element
 
-While not obvious given their syntax - the results of the `render*()` functions are observers.
+* While not obvious given their syntax - the results of the `render*()` functions are observers.
 
 ## Demo 5 - Cities AND states
 
@@ -432,6 +478,7 @@ While not obvious given their syntax - the results of the `render*()` functions 
 ## Reactive graph
 
 ```{mermaid}
+#| include: false
 flowchart LR
   subgraph outputs
   out1[plot]
@@ -455,6 +502,14 @@ flowchart LR
   in2 --> out1 & out2
 ```
 
+<br/><br/>
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:90%; display: inline-block; text-align: center;"}
+![](images/mermaid6.png){fig-align="center" width="100%"}
+:::
+:::
+
 
 ## Using `req()`
 
@@ -473,13 +528,13 @@ More detailed validation and error reporting is possible with [`validate()`](htt
 
 ## Your turn - Exercise 4
 
-Using the code from demo 4 as a starting point add another observer to the app that updates the `var` `selectInput()` such that any variables that are constant (0 variance), for the currrently selected cities, are removed.
+Using the code from demo 4 as a starting point add another observer to the app that updates the `selectInput()` for `var` such that any variables that are constant (0 variance), for the currently selected cities, are removed.
 
-For example, many cities (e.g. Mesa, AZ) will report a visibility of 10 miles for every hour of the forecast - therefore this variable should **not** be selectable from this input.
+For example, many cities (e.g. Mesa, AZ) will report a visibility of 10 miles for every hour of the forecast - therefore this variable should **not** be selectable from the `var` input.
 
 *Hint* - think about what inputs / reactives would make the most sense to use for this.
 
-<countdown time="600"/>
+<countdown time="900"/>
 
 
 ## `bindEvent()`
@@ -499,9 +554,11 @@ Similar effects can be achieved via `observeEvent()` / `eventReactive()` but the
 
 These are the UI and server components needed for downloading a file from your Shiny app. The downloaded file can be of any arbitrary type and content.
 
-`downloadButton()` is a special case of an `actionButton()` with specialized server syntax. Specifically, within the server definition the `downloadHandler()` is attached using `output`, e.g.
+`downloadButton()` is a special case of an `actionButton()` with specialized server syntax. 
+
+Specifically, within the server definition the `downloadHandler()` is attached to the button's id via `output`, e.g.
 ```r
-output$download_id = downloadHandler(...)
+output$download_btn = downloadHandler(...)
 ```
 
 The handler then defines the `filename` function for generating a default filename and `content` function for writing the download file's content to a temporary file, which can then be served by Shiny for downloading.
@@ -522,9 +579,9 @@ The handler then defines the `filename` function for generating a default filena
 
 These are a popup window element that allow us to present important messages (e.g. warnings or errors) or other UI elements in a way that does not permanently clutter up the main UI of an app.
 
-The modal dialog consists of a number of Shiny UI elements (static or dynamic) and only displays when it is triggered (usually by something like an action button).
+The modal dialog consists of a number of Shiny UI elements (static or dynamic) and only displays when it is triggered (usually by something like an action button or link).
 
-They differ from other UI elements we've seen so far as everything is defined within the app's server component.
+They differ from other UI elements we've seen so far as they are usually defined within an app's server component not the ui.
 
 ## Demo 7 - A fancy download button
 
