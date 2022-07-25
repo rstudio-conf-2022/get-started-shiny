@@ -1121,6 +1121,26 @@
 <p>A good way to protect against this is to validate inputs - the simplest way is to use <code>req()</code> which checks if a value is <a href="https://shiny.rstudio.com/reference/shiny/latest/isTruthy.html">truthy</a>. Non-truthy values prevent further execution of the reactive code (and downstream consumer’s code).</p>
 <p>More detailed validation and error reporting is possible with <a href="https://shiny.rstudio.com/reference/shiny/1.7.0/validate.html"><code>validate()</code></a> and <a href="https://shiny.rstudio.com/reference/shiny/1.7.0/validate.html"><code>need()</code></a>.</p>
 </section>
+<section id="a-cautionary-example" class="slide level2">
+<h2>A cautionary example</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb14-2"><a href="#cb14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="fu">shinyApp</span>(</span>
+<span id="cb14-4"><a href="#cb14-4"></a>  ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb14-5"><a href="#cb14-5"></a>    <span class="fu">numericInput</span>(<span class="st">"n"</span>, <span class="st">"n"</span>, <span class="dv">0</span>)</span>
+<span id="cb14-6"><a href="#cb14-6"></a>  ),</span>
+<span id="cb14-7"><a href="#cb14-7"></a>  server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb14-8"><a href="#cb14-8"></a>    <span class="fu">observeEvent</span>(input<span class="sc">$</span>n,</span>
+<span id="cb14-9"><a href="#cb14-9"></a>      <span class="fu">updateNumericInput</span>(<span class="at">inputId =</span> <span class="st">"n"</span>, <span class="at">value =</span> input<span class="sc">$</span>n <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb14-10"><a href="#cb14-10"></a>    )</span>
+<span id="cb14-11"><a href="#cb14-11"></a>  }</span>
+<span id="cb14-12"><a href="#cb14-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+<aside><div>
+<p>From <a href="https://mastering-shiny.org/action-dynamic.html#circular-references">Mastering Shiny</a></p>
+</div></aside></section>
 <section id="your-turn---exercise-4" class="slide level2">
 <h2>Your turn - Exercise 4</h2>
 <p>Using the code from demo 4 as a starting point add another observer to the app that updates the <code>selectInput()</code> for <code>var</code> such that any variables that are constant (0 variance), for the currently selected cities, are removed.</p>
@@ -1145,7 +1165,7 @@
 <p>These are the UI and server components needed for downloading a file from your Shiny app. The downloaded file can be of any arbitrary type and content.</p>
 <p><code>downloadButton()</code> is a special case of an <code>actionButton()</code> with specialized server syntax.</p>
 <p>Specifically, within the server definition the <code>downloadHandler()</code> is attached to the button’s id via <code>output</code>, e.g.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>output<span class="sc">$</span>download_btn <span class="ot">=</span> <span class="fu">downloadHandler</span>(...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>output<span class="sc">$</span>download_btn <span class="ot">=</span> <span class="fu">downloadHandler</span>(...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The handler then defines the <code>filename</code> function for generating a default filename and <code>content</code> function for writing the download file’s content to a temporary file, which can then be served by Shiny for downloading.</p>
 </section>
 <section id="demo-6---a-download-button" class="slide level2">
@@ -1154,95 +1174,95 @@
 <p><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg> <code>demos/demo6.R</code></p>
 </div>
 <div class="cell" data-file="../demos/demo6.R">
-<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="|27|37-47|38-43|44-46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">library</span>(shiny)</span>
-<span id="cb15-3"><a href="#cb15-3"></a>d <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/weather.csv"</span>))</span>
-<span id="cb15-4"><a href="#cb15-4"></a></span>
-<span id="cb15-5"><a href="#cb15-5"></a>d_vars <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a>  <span class="fu">names</span>()</span>
-<span id="cb15-8"><a href="#cb15-8"></a></span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="fu">shinyApp</span>(</span>
-<span id="cb15-10"><a href="#cb15-10"></a>  <span class="at">ui =</span> <span class="fu">fluidPage</span>(</span>
-<span id="cb15-11"><a href="#cb15-11"></a>    <span class="fu">titlePanel</span>(<span class="st">"Weather Forecasts"</span>),</span>
-<span id="cb15-12"><a href="#cb15-12"></a>    <span class="fu">sidebarLayout</span>(</span>
-<span id="cb15-13"><a href="#cb15-13"></a>      <span class="fu">sidebarPanel</span>(</span>
-<span id="cb15-14"><a href="#cb15-14"></a>        <span class="fu">selectInput</span>(</span>
-<span id="cb15-15"><a href="#cb15-15"></a>          <span class="st">"state"</span>, <span class="st">"Select a state"</span>,</span>
-<span id="cb15-16"><a href="#cb15-16"></a>          <span class="at">choices =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(d<span class="sc">$</span>state))</span>
-<span id="cb15-17"><a href="#cb15-17"></a>        ),</span>
-<span id="cb15-18"><a href="#cb15-18"></a>        <span class="fu">selectInput</span>(</span>
-<span id="cb15-19"><a href="#cb15-19"></a>          <span class="st">"city"</span>, <span class="st">"Select a city"</span>,</span>
-<span id="cb15-20"><a href="#cb15-20"></a>          <span class="at">choices =</span> <span class="fu">c</span>(),</span>
-<span id="cb15-21"><a href="#cb15-21"></a>          <span class="at">multiple =</span> <span class="cn">TRUE</span></span>
-<span id="cb15-22"><a href="#cb15-22"></a>        ),</span>
-<span id="cb15-23"><a href="#cb15-23"></a>        <span class="fu">selectInput</span>(</span>
-<span id="cb15-24"><a href="#cb15-24"></a>          <span class="st">"var"</span>, <span class="st">"Select a variable"</span>,</span>
-<span id="cb15-25"><a href="#cb15-25"></a>          <span class="at">choices =</span> d_vars, <span class="at">selected =</span> <span class="st">"temperature"</span></span>
-<span id="cb15-26"><a href="#cb15-26"></a>        ),</span>
-<span id="cb15-27"><a href="#cb15-27"></a>        <span class="fu">downloadButton</span>(<span class="st">"download"</span>)</span>
-<span id="cb15-28"><a href="#cb15-28"></a>      ),</span>
-<span id="cb15-29"><a href="#cb15-29"></a>      <span class="fu">mainPanel</span>( </span>
-<span id="cb15-30"><a href="#cb15-30"></a>        <span class="fu">plotOutput</span>(<span class="st">"plot"</span>),</span>
-<span id="cb15-31"><a href="#cb15-31"></a>        <span class="fu">tableOutput</span>(<span class="st">"minmax"</span>)</span>
-<span id="cb15-32"><a href="#cb15-32"></a>      )</span>
-<span id="cb15-33"><a href="#cb15-33"></a>    )</span>
-<span id="cb15-34"><a href="#cb15-34"></a>  ),</span>
-<span id="cb15-35"><a href="#cb15-35"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
-<span id="cb15-36"><a href="#cb15-36"></a>    </span>
-<span id="cb15-37"><a href="#cb15-37"></a>    output<span class="sc">$</span>download <span class="ot">=</span> <span class="fu">downloadHandler</span>(</span>
-<span id="cb15-38"><a href="#cb15-38"></a>      <span class="at">filename =</span> <span class="cf">function</span>() {</span>
-<span id="cb15-39"><a href="#cb15-39"></a>        <span class="fu">paste0</span>(</span>
-<span id="cb15-40"><a href="#cb15-40"></a>          <span class="fu">paste</span>(input<span class="sc">$</span>city,<span class="at">collapse=</span><span class="st">"_"</span>), </span>
-<span id="cb15-41"><a href="#cb15-41"></a>          <span class="st">".csv"</span></span>
-<span id="cb15-42"><a href="#cb15-42"></a>        )</span>
-<span id="cb15-43"><a href="#cb15-43"></a>      },</span>
-<span id="cb15-44"><a href="#cb15-44"></a>      <span class="at">content =</span> <span class="cf">function</span>(file) {</span>
-<span id="cb15-45"><a href="#cb15-45"></a>        readr<span class="sc">::</span><span class="fu">write_csv</span>(<span class="fu">d_city</span>(), file)</span>
-<span id="cb15-46"><a href="#cb15-46"></a>      }</span>
-<span id="cb15-47"><a href="#cb15-47"></a>    )</span>
-<span id="cb15-48"><a href="#cb15-48"></a>    </span>
-<span id="cb15-49"><a href="#cb15-49"></a>    d_city <span class="ot">=</span> <span class="fu">reactive</span>({</span>
-<span id="cb15-50"><a href="#cb15-50"></a>      <span class="fu">req</span>(input<span class="sc">$</span>city)</span>
-<span id="cb15-51"><a href="#cb15-51"></a>      d <span class="sc">%&gt;%</span></span>
-<span id="cb15-52"><a href="#cb15-52"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city)</span>
-<span id="cb15-53"><a href="#cb15-53"></a>    })</span>
-<span id="cb15-54"><a href="#cb15-54"></a>    </span>
-<span id="cb15-55"><a href="#cb15-55"></a>    <span class="fu">observe</span>({</span>
-<span id="cb15-56"><a href="#cb15-56"></a>      cities <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
-<span id="cb15-57"><a href="#cb15-57"></a>        <span class="fu">filter</span>(state <span class="sc">%in%</span> input<span class="sc">$</span>state) <span class="sc">%&gt;%</span></span>
-<span id="cb15-58"><a href="#cb15-58"></a>        <span class="fu">pull</span>(city) <span class="sc">%&gt;%</span></span>
-<span id="cb15-59"><a href="#cb15-59"></a>        <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb15-60"><a href="#cb15-60"></a>        <span class="fu">sort</span>()</span>
-<span id="cb15-61"><a href="#cb15-61"></a>      </span>
-<span id="cb15-62"><a href="#cb15-62"></a>      <span class="fu">updateSelectInput</span>(</span>
-<span id="cb15-63"><a href="#cb15-63"></a>        <span class="at">inputId =</span> <span class="st">"city"</span>, </span>
-<span id="cb15-64"><a href="#cb15-64"></a>        <span class="at">choices =</span> cities</span>
-<span id="cb15-65"><a href="#cb15-65"></a>      )</span>
-<span id="cb15-66"><a href="#cb15-66"></a>    })</span>
-<span id="cb15-67"><a href="#cb15-67"></a>    </span>
-<span id="cb15-68"><a href="#cb15-68"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
-<span id="cb15-69"><a href="#cb15-69"></a>      <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb15-70"><a href="#cb15-70"></a>        <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>.data[[input<span class="sc">$</span>var]], <span class="at">color=</span>city)) <span class="sc">+</span></span>
-<span id="cb15-71"><a href="#cb15-71"></a>        <span class="fu">ggtitle</span>(input<span class="sc">$</span>var) <span class="sc">+</span></span>
-<span id="cb15-72"><a href="#cb15-72"></a>        <span class="fu">geom_line</span>()</span>
-<span id="cb15-73"><a href="#cb15-73"></a>    })</span>
-<span id="cb15-74"><a href="#cb15-74"></a>    </span>
-<span id="cb15-75"><a href="#cb15-75"></a>    output<span class="sc">$</span>minmax <span class="ot">=</span> <span class="fu">renderTable</span>({</span>
-<span id="cb15-76"><a href="#cb15-76"></a>      <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb15-77"><a href="#cb15-77"></a>        <span class="fu">mutate</span>(</span>
-<span id="cb15-78"><a href="#cb15-78"></a>          <span class="at">day =</span> lubridate<span class="sc">::</span><span class="fu">wday</span>(time, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">FALSE</span>),</span>
-<span id="cb15-79"><a href="#cb15-79"></a>          <span class="at">date =</span> <span class="fu">as.character</span>(lubridate<span class="sc">::</span><span class="fu">date</span>(time))</span>
-<span id="cb15-80"><a href="#cb15-80"></a>        ) <span class="sc">%&gt;%</span></span>
-<span id="cb15-81"><a href="#cb15-81"></a>        <span class="fu">group_by</span>(date, day) <span class="sc">%&gt;%</span></span>
-<span id="cb15-82"><a href="#cb15-82"></a>        <span class="fu">summarize</span>(</span>
-<span id="cb15-83"><a href="#cb15-83"></a>          <span class="st">`</span><span class="at">min</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">min</span>(.data[[input<span class="sc">$</span>var]]),</span>
-<span id="cb15-84"><a href="#cb15-84"></a>          <span class="st">`</span><span class="at">max</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">max</span>(.data[[input<span class="sc">$</span>var]]),</span>
-<span id="cb15-85"><a href="#cb15-85"></a>          <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb15-86"><a href="#cb15-86"></a>        )</span>
-<span id="cb15-87"><a href="#cb15-87"></a>    })</span>
-<span id="cb15-88"><a href="#cb15-88"></a>  }</span>
-<span id="cb15-89"><a href="#cb15-89"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="|27|37-47|38-43|44-46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>d <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/weather.csv"</span>))</span>
+<span id="cb16-4"><a href="#cb16-4"></a></span>
+<span id="cb16-5"><a href="#cb16-5"></a>d_vars <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a>  <span class="fu">names</span>()</span>
+<span id="cb16-8"><a href="#cb16-8"></a></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="fu">shinyApp</span>(</span>
+<span id="cb16-10"><a href="#cb16-10"></a>  <span class="at">ui =</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb16-11"><a href="#cb16-11"></a>    <span class="fu">titlePanel</span>(<span class="st">"Weather Forecasts"</span>),</span>
+<span id="cb16-12"><a href="#cb16-12"></a>    <span class="fu">sidebarLayout</span>(</span>
+<span id="cb16-13"><a href="#cb16-13"></a>      <span class="fu">sidebarPanel</span>(</span>
+<span id="cb16-14"><a href="#cb16-14"></a>        <span class="fu">selectInput</span>(</span>
+<span id="cb16-15"><a href="#cb16-15"></a>          <span class="st">"state"</span>, <span class="st">"Select a state"</span>,</span>
+<span id="cb16-16"><a href="#cb16-16"></a>          <span class="at">choices =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(d<span class="sc">$</span>state))</span>
+<span id="cb16-17"><a href="#cb16-17"></a>        ),</span>
+<span id="cb16-18"><a href="#cb16-18"></a>        <span class="fu">selectInput</span>(</span>
+<span id="cb16-19"><a href="#cb16-19"></a>          <span class="st">"city"</span>, <span class="st">"Select a city"</span>,</span>
+<span id="cb16-20"><a href="#cb16-20"></a>          <span class="at">choices =</span> <span class="fu">c</span>(),</span>
+<span id="cb16-21"><a href="#cb16-21"></a>          <span class="at">multiple =</span> <span class="cn">TRUE</span></span>
+<span id="cb16-22"><a href="#cb16-22"></a>        ),</span>
+<span id="cb16-23"><a href="#cb16-23"></a>        <span class="fu">selectInput</span>(</span>
+<span id="cb16-24"><a href="#cb16-24"></a>          <span class="st">"var"</span>, <span class="st">"Select a variable"</span>,</span>
+<span id="cb16-25"><a href="#cb16-25"></a>          <span class="at">choices =</span> d_vars, <span class="at">selected =</span> <span class="st">"temperature"</span></span>
+<span id="cb16-26"><a href="#cb16-26"></a>        ),</span>
+<span id="cb16-27"><a href="#cb16-27"></a>        <span class="fu">downloadButton</span>(<span class="st">"download"</span>)</span>
+<span id="cb16-28"><a href="#cb16-28"></a>      ),</span>
+<span id="cb16-29"><a href="#cb16-29"></a>      <span class="fu">mainPanel</span>( </span>
+<span id="cb16-30"><a href="#cb16-30"></a>        <span class="fu">plotOutput</span>(<span class="st">"plot"</span>),</span>
+<span id="cb16-31"><a href="#cb16-31"></a>        <span class="fu">tableOutput</span>(<span class="st">"minmax"</span>)</span>
+<span id="cb16-32"><a href="#cb16-32"></a>      )</span>
+<span id="cb16-33"><a href="#cb16-33"></a>    )</span>
+<span id="cb16-34"><a href="#cb16-34"></a>  ),</span>
+<span id="cb16-35"><a href="#cb16-35"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb16-36"><a href="#cb16-36"></a>    </span>
+<span id="cb16-37"><a href="#cb16-37"></a>    output<span class="sc">$</span>download <span class="ot">=</span> <span class="fu">downloadHandler</span>(</span>
+<span id="cb16-38"><a href="#cb16-38"></a>      <span class="at">filename =</span> <span class="cf">function</span>() {</span>
+<span id="cb16-39"><a href="#cb16-39"></a>        <span class="fu">paste0</span>(</span>
+<span id="cb16-40"><a href="#cb16-40"></a>          <span class="fu">paste</span>(input<span class="sc">$</span>city,<span class="at">collapse=</span><span class="st">"_"</span>), </span>
+<span id="cb16-41"><a href="#cb16-41"></a>          <span class="st">".csv"</span></span>
+<span id="cb16-42"><a href="#cb16-42"></a>        )</span>
+<span id="cb16-43"><a href="#cb16-43"></a>      },</span>
+<span id="cb16-44"><a href="#cb16-44"></a>      <span class="at">content =</span> <span class="cf">function</span>(file) {</span>
+<span id="cb16-45"><a href="#cb16-45"></a>        readr<span class="sc">::</span><span class="fu">write_csv</span>(<span class="fu">d_city</span>(), file)</span>
+<span id="cb16-46"><a href="#cb16-46"></a>      }</span>
+<span id="cb16-47"><a href="#cb16-47"></a>    )</span>
+<span id="cb16-48"><a href="#cb16-48"></a>    </span>
+<span id="cb16-49"><a href="#cb16-49"></a>    d_city <span class="ot">=</span> <span class="fu">reactive</span>({</span>
+<span id="cb16-50"><a href="#cb16-50"></a>      <span class="fu">req</span>(input<span class="sc">$</span>city)</span>
+<span id="cb16-51"><a href="#cb16-51"></a>      d <span class="sc">%&gt;%</span></span>
+<span id="cb16-52"><a href="#cb16-52"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city)</span>
+<span id="cb16-53"><a href="#cb16-53"></a>    })</span>
+<span id="cb16-54"><a href="#cb16-54"></a>    </span>
+<span id="cb16-55"><a href="#cb16-55"></a>    <span class="fu">observe</span>({</span>
+<span id="cb16-56"><a href="#cb16-56"></a>      cities <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb16-57"><a href="#cb16-57"></a>        <span class="fu">filter</span>(state <span class="sc">%in%</span> input<span class="sc">$</span>state) <span class="sc">%&gt;%</span></span>
+<span id="cb16-58"><a href="#cb16-58"></a>        <span class="fu">pull</span>(city) <span class="sc">%&gt;%</span></span>
+<span id="cb16-59"><a href="#cb16-59"></a>        <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb16-60"><a href="#cb16-60"></a>        <span class="fu">sort</span>()</span>
+<span id="cb16-61"><a href="#cb16-61"></a>      </span>
+<span id="cb16-62"><a href="#cb16-62"></a>      <span class="fu">updateSelectInput</span>(</span>
+<span id="cb16-63"><a href="#cb16-63"></a>        <span class="at">inputId =</span> <span class="st">"city"</span>, </span>
+<span id="cb16-64"><a href="#cb16-64"></a>        <span class="at">choices =</span> cities</span>
+<span id="cb16-65"><a href="#cb16-65"></a>      )</span>
+<span id="cb16-66"><a href="#cb16-66"></a>    })</span>
+<span id="cb16-67"><a href="#cb16-67"></a>    </span>
+<span id="cb16-68"><a href="#cb16-68"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb16-69"><a href="#cb16-69"></a>      <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb16-70"><a href="#cb16-70"></a>        <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>.data[[input<span class="sc">$</span>var]], <span class="at">color=</span>city)) <span class="sc">+</span></span>
+<span id="cb16-71"><a href="#cb16-71"></a>        <span class="fu">ggtitle</span>(input<span class="sc">$</span>var) <span class="sc">+</span></span>
+<span id="cb16-72"><a href="#cb16-72"></a>        <span class="fu">geom_line</span>()</span>
+<span id="cb16-73"><a href="#cb16-73"></a>    })</span>
+<span id="cb16-74"><a href="#cb16-74"></a>    </span>
+<span id="cb16-75"><a href="#cb16-75"></a>    output<span class="sc">$</span>minmax <span class="ot">=</span> <span class="fu">renderTable</span>({</span>
+<span id="cb16-76"><a href="#cb16-76"></a>      <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb16-77"><a href="#cb16-77"></a>        <span class="fu">mutate</span>(</span>
+<span id="cb16-78"><a href="#cb16-78"></a>          <span class="at">day =</span> lubridate<span class="sc">::</span><span class="fu">wday</span>(time, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb16-79"><a href="#cb16-79"></a>          <span class="at">date =</span> <span class="fu">as.character</span>(lubridate<span class="sc">::</span><span class="fu">date</span>(time))</span>
+<span id="cb16-80"><a href="#cb16-80"></a>        ) <span class="sc">%&gt;%</span></span>
+<span id="cb16-81"><a href="#cb16-81"></a>        <span class="fu">group_by</span>(date, day) <span class="sc">%&gt;%</span></span>
+<span id="cb16-82"><a href="#cb16-82"></a>        <span class="fu">summarize</span>(</span>
+<span id="cb16-83"><a href="#cb16-83"></a>          <span class="st">`</span><span class="at">min</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">min</span>(.data[[input<span class="sc">$</span>var]]),</span>
+<span id="cb16-84"><a href="#cb16-84"></a>          <span class="st">`</span><span class="at">max</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">max</span>(.data[[input<span class="sc">$</span>var]]),</span>
+<span id="cb16-85"><a href="#cb16-85"></a>          <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb16-86"><a href="#cb16-86"></a>        )</span>
+<span id="cb16-87"><a href="#cb16-87"></a>    })</span>
+<span id="cb16-88"><a href="#cb16-88"></a>  }</span>
+<span id="cb16-89"><a href="#cb16-89"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="modal-dialogs" class="slide level2">
@@ -1257,113 +1277,113 @@
 <p><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg> <code>demos/demo7.R</code></p>
 </div>
 <div class="cell" data-file="../demos/demo7.R">
-<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="|26|36-49|51-65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">library</span>(shiny)</span>
-<span id="cb16-3"><a href="#cb16-3"></a>d <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/weather.csv"</span>))</span>
-<span id="cb16-4"><a href="#cb16-4"></a>d_vars <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-6"><a href="#cb16-6"></a>  <span class="fu">names</span>()</span>
-<span id="cb16-7"><a href="#cb16-7"></a></span>
-<span id="cb16-8"><a href="#cb16-8"></a><span class="fu">shinyApp</span>(</span>
-<span id="cb16-9"><a href="#cb16-9"></a>  <span class="at">ui =</span> <span class="fu">fluidPage</span>(</span>
-<span id="cb16-10"><a href="#cb16-10"></a>    <span class="fu">titlePanel</span>(<span class="st">"Weather Forecasts"</span>),</span>
-<span id="cb16-11"><a href="#cb16-11"></a>    <span class="fu">sidebarLayout</span>(</span>
-<span id="cb16-12"><a href="#cb16-12"></a>      <span class="fu">sidebarPanel</span>(</span>
-<span id="cb16-13"><a href="#cb16-13"></a>        <span class="fu">selectInput</span>(</span>
-<span id="cb16-14"><a href="#cb16-14"></a>          <span class="st">"state"</span>, <span class="st">"Select a state"</span>,</span>
-<span id="cb16-15"><a href="#cb16-15"></a>          <span class="at">choices =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(d<span class="sc">$</span>state))</span>
-<span id="cb16-16"><a href="#cb16-16"></a>        ),</span>
-<span id="cb16-17"><a href="#cb16-17"></a>        <span class="fu">selectInput</span>(</span>
-<span id="cb16-18"><a href="#cb16-18"></a>          <span class="st">"city"</span>, <span class="st">"Select a city"</span>,</span>
-<span id="cb16-19"><a href="#cb16-19"></a>          <span class="at">choices =</span> <span class="fu">c</span>(),</span>
-<span id="cb16-20"><a href="#cb16-20"></a>          <span class="at">multiple =</span> <span class="cn">TRUE</span></span>
-<span id="cb16-21"><a href="#cb16-21"></a>        ),</span>
-<span id="cb16-22"><a href="#cb16-22"></a>        <span class="fu">selectInput</span>(</span>
-<span id="cb16-23"><a href="#cb16-23"></a>          <span class="st">"var"</span>, <span class="st">"Select a variable"</span>,</span>
-<span id="cb16-24"><a href="#cb16-24"></a>          <span class="at">choices =</span> d_vars, <span class="at">selected =</span> <span class="st">"temperature"</span></span>
-<span id="cb16-25"><a href="#cb16-25"></a>        ),</span>
-<span id="cb16-26"><a href="#cb16-26"></a>        <span class="fu">actionButton</span>(<span class="st">"download_modal"</span>, <span class="st">"Download"</span>)</span>
-<span id="cb16-27"><a href="#cb16-27"></a>      ),</span>
-<span id="cb16-28"><a href="#cb16-28"></a>      <span class="fu">mainPanel</span>( </span>
-<span id="cb16-29"><a href="#cb16-29"></a>        <span class="fu">plotOutput</span>(<span class="st">"plot"</span>),</span>
-<span id="cb16-30"><a href="#cb16-30"></a>        <span class="fu">tableOutput</span>(<span class="st">"minmax"</span>)</span>
-<span id="cb16-31"><a href="#cb16-31"></a>      )</span>
-<span id="cb16-32"><a href="#cb16-32"></a>    )</span>
-<span id="cb16-33"><a href="#cb16-33"></a>  ),</span>
-<span id="cb16-34"><a href="#cb16-34"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
-<span id="cb16-35"><a href="#cb16-35"></a>    </span>
-<span id="cb16-36"><a href="#cb16-36"></a>    <span class="fu">observe</span>({</span>
-<span id="cb16-37"><a href="#cb16-37"></a>      <span class="fu">showModal</span>(<span class="fu">modalDialog</span>(</span>
-<span id="cb16-38"><a href="#cb16-38"></a>        <span class="at">title =</span> <span class="st">"Download data"</span>,</span>
-<span id="cb16-39"><a href="#cb16-39"></a>        <span class="fu">checkboxGroupInput</span>(</span>
-<span id="cb16-40"><a href="#cb16-40"></a>          <span class="st">"dl_vars"</span>, <span class="st">"Select variables to download"</span>,</span>
-<span id="cb16-41"><a href="#cb16-41"></a>          <span class="at">choices =</span> <span class="fu">names</span>(d), <span class="at">selected =</span> <span class="fu">names</span>(d), <span class="at">inline =</span> <span class="cn">TRUE</span></span>
-<span id="cb16-42"><a href="#cb16-42"></a>        ),</span>
-<span id="cb16-43"><a href="#cb16-43"></a>        <span class="at">footer =</span> <span class="fu">list</span>(</span>
-<span id="cb16-44"><a href="#cb16-44"></a>          <span class="fu">downloadButton</span>(<span class="st">"download"</span>),</span>
-<span id="cb16-45"><a href="#cb16-45"></a>          <span class="fu">modalButton</span>(<span class="st">"Cancel"</span>)</span>
-<span id="cb16-46"><a href="#cb16-46"></a>        )</span>
-<span id="cb16-47"><a href="#cb16-47"></a>      ))</span>
-<span id="cb16-48"><a href="#cb16-48"></a>    }) <span class="sc">%&gt;%</span></span>
-<span id="cb16-49"><a href="#cb16-49"></a>      <span class="fu">bindEvent</span>(input<span class="sc">$</span>download_modal)</span>
-<span id="cb16-50"><a href="#cb16-50"></a>    </span>
-<span id="cb16-51"><a href="#cb16-51"></a>    output<span class="sc">$</span>download <span class="ot">=</span> <span class="fu">downloadHandler</span>(</span>
-<span id="cb16-52"><a href="#cb16-52"></a>      <span class="at">filename =</span> <span class="cf">function</span>() {</span>
-<span id="cb16-53"><a href="#cb16-53"></a>        <span class="fu">paste0</span>(</span>
-<span id="cb16-54"><a href="#cb16-54"></a>          <span class="fu">paste</span>(input<span class="sc">$</span>city,<span class="at">collapse=</span><span class="st">"_"</span>), </span>
-<span id="cb16-55"><a href="#cb16-55"></a>          <span class="st">".csv"</span></span>
-<span id="cb16-56"><a href="#cb16-56"></a>        )</span>
-<span id="cb16-57"><a href="#cb16-57"></a>      },</span>
-<span id="cb16-58"><a href="#cb16-58"></a>      <span class="at">content =</span> <span class="cf">function</span>(file) {</span>
-<span id="cb16-59"><a href="#cb16-59"></a>        readr<span class="sc">::</span><span class="fu">write_csv</span>(</span>
-<span id="cb16-60"><a href="#cb16-60"></a>          <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb16-61"><a href="#cb16-61"></a>            <span class="fu">select</span>(input<span class="sc">$</span>dl_vars), </span>
-<span id="cb16-62"><a href="#cb16-62"></a>          file</span>
-<span id="cb16-63"><a href="#cb16-63"></a>        )</span>
-<span id="cb16-64"><a href="#cb16-64"></a>      }</span>
-<span id="cb16-65"><a href="#cb16-65"></a>    )</span>
-<span id="cb16-66"><a href="#cb16-66"></a>    </span>
-<span id="cb16-67"><a href="#cb16-67"></a>    d_city <span class="ot">=</span> <span class="fu">reactive</span>({</span>
-<span id="cb16-68"><a href="#cb16-68"></a>      <span class="fu">req</span>(input<span class="sc">$</span>city)</span>
-<span id="cb16-69"><a href="#cb16-69"></a>      d <span class="sc">%&gt;%</span></span>
-<span id="cb16-70"><a href="#cb16-70"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city)</span>
-<span id="cb16-71"><a href="#cb16-71"></a>    })</span>
-<span id="cb16-72"><a href="#cb16-72"></a>    </span>
-<span id="cb16-73"><a href="#cb16-73"></a>    <span class="fu">observe</span>({</span>
-<span id="cb16-74"><a href="#cb16-74"></a>      cities <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
-<span id="cb16-75"><a href="#cb16-75"></a>        <span class="fu">filter</span>(state <span class="sc">%in%</span> input<span class="sc">$</span>state) <span class="sc">%&gt;%</span></span>
-<span id="cb16-76"><a href="#cb16-76"></a>        <span class="fu">pull</span>(city) <span class="sc">%&gt;%</span></span>
-<span id="cb16-77"><a href="#cb16-77"></a>        <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb16-78"><a href="#cb16-78"></a>        <span class="fu">sort</span>()</span>
-<span id="cb16-79"><a href="#cb16-79"></a>      </span>
-<span id="cb16-80"><a href="#cb16-80"></a>      <span class="fu">updateSelectInput</span>(</span>
-<span id="cb16-81"><a href="#cb16-81"></a>        <span class="at">inputId =</span> <span class="st">"city"</span>, </span>
-<span id="cb16-82"><a href="#cb16-82"></a>        <span class="at">choices =</span> cities</span>
-<span id="cb16-83"><a href="#cb16-83"></a>      )</span>
-<span id="cb16-84"><a href="#cb16-84"></a>    })</span>
-<span id="cb16-85"><a href="#cb16-85"></a>    </span>
-<span id="cb16-86"><a href="#cb16-86"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
-<span id="cb16-87"><a href="#cb16-87"></a>      <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb16-88"><a href="#cb16-88"></a>        <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>.data[[input<span class="sc">$</span>var]], <span class="at">color=</span>city)) <span class="sc">+</span></span>
-<span id="cb16-89"><a href="#cb16-89"></a>        <span class="fu">ggtitle</span>(input<span class="sc">$</span>var) <span class="sc">+</span></span>
-<span id="cb16-90"><a href="#cb16-90"></a>        <span class="fu">geom_line</span>()</span>
-<span id="cb16-91"><a href="#cb16-91"></a>    })</span>
-<span id="cb16-92"><a href="#cb16-92"></a>    </span>
-<span id="cb16-93"><a href="#cb16-93"></a>    output<span class="sc">$</span>minmax <span class="ot">=</span> <span class="fu">renderTable</span>({</span>
-<span id="cb16-94"><a href="#cb16-94"></a>      <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb16-95"><a href="#cb16-95"></a>        <span class="fu">mutate</span>(</span>
-<span id="cb16-96"><a href="#cb16-96"></a>          <span class="at">day =</span> lubridate<span class="sc">::</span><span class="fu">wday</span>(time, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">FALSE</span>),</span>
-<span id="cb16-97"><a href="#cb16-97"></a>          <span class="at">date =</span> <span class="fu">as.character</span>(lubridate<span class="sc">::</span><span class="fu">date</span>(time))</span>
-<span id="cb16-98"><a href="#cb16-98"></a>        ) <span class="sc">%&gt;%</span></span>
-<span id="cb16-99"><a href="#cb16-99"></a>        <span class="fu">group_by</span>(date, day) <span class="sc">%&gt;%</span></span>
-<span id="cb16-100"><a href="#cb16-100"></a>        <span class="fu">summarize</span>(</span>
-<span id="cb16-101"><a href="#cb16-101"></a>          <span class="st">`</span><span class="at">min</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">min</span>(.data[[input<span class="sc">$</span>var]]),</span>
-<span id="cb16-102"><a href="#cb16-102"></a>          <span class="st">`</span><span class="at">max</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">max</span>(.data[[input<span class="sc">$</span>var]]),</span>
-<span id="cb16-103"><a href="#cb16-103"></a>          <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb16-104"><a href="#cb16-104"></a>        )</span>
-<span id="cb16-105"><a href="#cb16-105"></a>    })</span>
-<span id="cb16-106"><a href="#cb16-106"></a>  }</span>
-<span id="cb16-107"><a href="#cb16-107"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="|26|36-49|51-65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>d <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/weather.csv"</span>))</span>
+<span id="cb17-4"><a href="#cb17-4"></a>d_vars <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">names</span>()</span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="fu">shinyApp</span>(</span>
+<span id="cb17-9"><a href="#cb17-9"></a>  <span class="at">ui =</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb17-10"><a href="#cb17-10"></a>    <span class="fu">titlePanel</span>(<span class="st">"Weather Forecasts"</span>),</span>
+<span id="cb17-11"><a href="#cb17-11"></a>    <span class="fu">sidebarLayout</span>(</span>
+<span id="cb17-12"><a href="#cb17-12"></a>      <span class="fu">sidebarPanel</span>(</span>
+<span id="cb17-13"><a href="#cb17-13"></a>        <span class="fu">selectInput</span>(</span>
+<span id="cb17-14"><a href="#cb17-14"></a>          <span class="st">"state"</span>, <span class="st">"Select a state"</span>,</span>
+<span id="cb17-15"><a href="#cb17-15"></a>          <span class="at">choices =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(d<span class="sc">$</span>state))</span>
+<span id="cb17-16"><a href="#cb17-16"></a>        ),</span>
+<span id="cb17-17"><a href="#cb17-17"></a>        <span class="fu">selectInput</span>(</span>
+<span id="cb17-18"><a href="#cb17-18"></a>          <span class="st">"city"</span>, <span class="st">"Select a city"</span>,</span>
+<span id="cb17-19"><a href="#cb17-19"></a>          <span class="at">choices =</span> <span class="fu">c</span>(),</span>
+<span id="cb17-20"><a href="#cb17-20"></a>          <span class="at">multiple =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-21"><a href="#cb17-21"></a>        ),</span>
+<span id="cb17-22"><a href="#cb17-22"></a>        <span class="fu">selectInput</span>(</span>
+<span id="cb17-23"><a href="#cb17-23"></a>          <span class="st">"var"</span>, <span class="st">"Select a variable"</span>,</span>
+<span id="cb17-24"><a href="#cb17-24"></a>          <span class="at">choices =</span> d_vars, <span class="at">selected =</span> <span class="st">"temperature"</span></span>
+<span id="cb17-25"><a href="#cb17-25"></a>        ),</span>
+<span id="cb17-26"><a href="#cb17-26"></a>        <span class="fu">actionButton</span>(<span class="st">"download_modal"</span>, <span class="st">"Download"</span>)</span>
+<span id="cb17-27"><a href="#cb17-27"></a>      ),</span>
+<span id="cb17-28"><a href="#cb17-28"></a>      <span class="fu">mainPanel</span>( </span>
+<span id="cb17-29"><a href="#cb17-29"></a>        <span class="fu">plotOutput</span>(<span class="st">"plot"</span>),</span>
+<span id="cb17-30"><a href="#cb17-30"></a>        <span class="fu">tableOutput</span>(<span class="st">"minmax"</span>)</span>
+<span id="cb17-31"><a href="#cb17-31"></a>      )</span>
+<span id="cb17-32"><a href="#cb17-32"></a>    )</span>
+<span id="cb17-33"><a href="#cb17-33"></a>  ),</span>
+<span id="cb17-34"><a href="#cb17-34"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb17-35"><a href="#cb17-35"></a>    </span>
+<span id="cb17-36"><a href="#cb17-36"></a>    <span class="fu">observe</span>({</span>
+<span id="cb17-37"><a href="#cb17-37"></a>      <span class="fu">showModal</span>(<span class="fu">modalDialog</span>(</span>
+<span id="cb17-38"><a href="#cb17-38"></a>        <span class="at">title =</span> <span class="st">"Download data"</span>,</span>
+<span id="cb17-39"><a href="#cb17-39"></a>        <span class="fu">checkboxGroupInput</span>(</span>
+<span id="cb17-40"><a href="#cb17-40"></a>          <span class="st">"dl_vars"</span>, <span class="st">"Select variables to download"</span>,</span>
+<span id="cb17-41"><a href="#cb17-41"></a>          <span class="at">choices =</span> <span class="fu">names</span>(d), <span class="at">selected =</span> <span class="fu">names</span>(d), <span class="at">inline =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-42"><a href="#cb17-42"></a>        ),</span>
+<span id="cb17-43"><a href="#cb17-43"></a>        <span class="at">footer =</span> <span class="fu">list</span>(</span>
+<span id="cb17-44"><a href="#cb17-44"></a>          <span class="fu">downloadButton</span>(<span class="st">"download"</span>),</span>
+<span id="cb17-45"><a href="#cb17-45"></a>          <span class="fu">modalButton</span>(<span class="st">"Cancel"</span>)</span>
+<span id="cb17-46"><a href="#cb17-46"></a>        )</span>
+<span id="cb17-47"><a href="#cb17-47"></a>      ))</span>
+<span id="cb17-48"><a href="#cb17-48"></a>    }) <span class="sc">%&gt;%</span></span>
+<span id="cb17-49"><a href="#cb17-49"></a>      <span class="fu">bindEvent</span>(input<span class="sc">$</span>download_modal)</span>
+<span id="cb17-50"><a href="#cb17-50"></a>    </span>
+<span id="cb17-51"><a href="#cb17-51"></a>    output<span class="sc">$</span>download <span class="ot">=</span> <span class="fu">downloadHandler</span>(</span>
+<span id="cb17-52"><a href="#cb17-52"></a>      <span class="at">filename =</span> <span class="cf">function</span>() {</span>
+<span id="cb17-53"><a href="#cb17-53"></a>        <span class="fu">paste0</span>(</span>
+<span id="cb17-54"><a href="#cb17-54"></a>          <span class="fu">paste</span>(input<span class="sc">$</span>city,<span class="at">collapse=</span><span class="st">"_"</span>), </span>
+<span id="cb17-55"><a href="#cb17-55"></a>          <span class="st">".csv"</span></span>
+<span id="cb17-56"><a href="#cb17-56"></a>        )</span>
+<span id="cb17-57"><a href="#cb17-57"></a>      },</span>
+<span id="cb17-58"><a href="#cb17-58"></a>      <span class="at">content =</span> <span class="cf">function</span>(file) {</span>
+<span id="cb17-59"><a href="#cb17-59"></a>        readr<span class="sc">::</span><span class="fu">write_csv</span>(</span>
+<span id="cb17-60"><a href="#cb17-60"></a>          <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-61"><a href="#cb17-61"></a>            <span class="fu">select</span>(input<span class="sc">$</span>dl_vars), </span>
+<span id="cb17-62"><a href="#cb17-62"></a>          file</span>
+<span id="cb17-63"><a href="#cb17-63"></a>        )</span>
+<span id="cb17-64"><a href="#cb17-64"></a>      }</span>
+<span id="cb17-65"><a href="#cb17-65"></a>    )</span>
+<span id="cb17-66"><a href="#cb17-66"></a>    </span>
+<span id="cb17-67"><a href="#cb17-67"></a>    d_city <span class="ot">=</span> <span class="fu">reactive</span>({</span>
+<span id="cb17-68"><a href="#cb17-68"></a>      <span class="fu">req</span>(input<span class="sc">$</span>city)</span>
+<span id="cb17-69"><a href="#cb17-69"></a>      d <span class="sc">%&gt;%</span></span>
+<span id="cb17-70"><a href="#cb17-70"></a>        <span class="fu">filter</span>(city <span class="sc">%in%</span> input<span class="sc">$</span>city)</span>
+<span id="cb17-71"><a href="#cb17-71"></a>    })</span>
+<span id="cb17-72"><a href="#cb17-72"></a>    </span>
+<span id="cb17-73"><a href="#cb17-73"></a>    <span class="fu">observe</span>({</span>
+<span id="cb17-74"><a href="#cb17-74"></a>      cities <span class="ot">=</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb17-75"><a href="#cb17-75"></a>        <span class="fu">filter</span>(state <span class="sc">%in%</span> input<span class="sc">$</span>state) <span class="sc">%&gt;%</span></span>
+<span id="cb17-76"><a href="#cb17-76"></a>        <span class="fu">pull</span>(city) <span class="sc">%&gt;%</span></span>
+<span id="cb17-77"><a href="#cb17-77"></a>        <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-78"><a href="#cb17-78"></a>        <span class="fu">sort</span>()</span>
+<span id="cb17-79"><a href="#cb17-79"></a>      </span>
+<span id="cb17-80"><a href="#cb17-80"></a>      <span class="fu">updateSelectInput</span>(</span>
+<span id="cb17-81"><a href="#cb17-81"></a>        <span class="at">inputId =</span> <span class="st">"city"</span>, </span>
+<span id="cb17-82"><a href="#cb17-82"></a>        <span class="at">choices =</span> cities</span>
+<span id="cb17-83"><a href="#cb17-83"></a>      )</span>
+<span id="cb17-84"><a href="#cb17-84"></a>    })</span>
+<span id="cb17-85"><a href="#cb17-85"></a>    </span>
+<span id="cb17-86"><a href="#cb17-86"></a>    output<span class="sc">$</span>plot <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb17-87"><a href="#cb17-87"></a>      <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-88"><a href="#cb17-88"></a>        <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>time, <span class="at">y=</span>.data[[input<span class="sc">$</span>var]], <span class="at">color=</span>city)) <span class="sc">+</span></span>
+<span id="cb17-89"><a href="#cb17-89"></a>        <span class="fu">ggtitle</span>(input<span class="sc">$</span>var) <span class="sc">+</span></span>
+<span id="cb17-90"><a href="#cb17-90"></a>        <span class="fu">geom_line</span>()</span>
+<span id="cb17-91"><a href="#cb17-91"></a>    })</span>
+<span id="cb17-92"><a href="#cb17-92"></a>    </span>
+<span id="cb17-93"><a href="#cb17-93"></a>    output<span class="sc">$</span>minmax <span class="ot">=</span> <span class="fu">renderTable</span>({</span>
+<span id="cb17-94"><a href="#cb17-94"></a>      <span class="fu">d_city</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-95"><a href="#cb17-95"></a>        <span class="fu">mutate</span>(</span>
+<span id="cb17-96"><a href="#cb17-96"></a>          <span class="at">day =</span> lubridate<span class="sc">::</span><span class="fu">wday</span>(time, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb17-97"><a href="#cb17-97"></a>          <span class="at">date =</span> <span class="fu">as.character</span>(lubridate<span class="sc">::</span><span class="fu">date</span>(time))</span>
+<span id="cb17-98"><a href="#cb17-98"></a>        ) <span class="sc">%&gt;%</span></span>
+<span id="cb17-99"><a href="#cb17-99"></a>        <span class="fu">group_by</span>(date, day) <span class="sc">%&gt;%</span></span>
+<span id="cb17-100"><a href="#cb17-100"></a>        <span class="fu">summarize</span>(</span>
+<span id="cb17-101"><a href="#cb17-101"></a>          <span class="st">`</span><span class="at">min</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">min</span>(.data[[input<span class="sc">$</span>var]]),</span>
+<span id="cb17-102"><a href="#cb17-102"></a>          <span class="st">`</span><span class="at">max</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">max</span>(.data[[input<span class="sc">$</span>var]]),</span>
+<span id="cb17-103"><a href="#cb17-103"></a>          <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb17-104"><a href="#cb17-104"></a>        )</span>
+<span id="cb17-105"><a href="#cb17-105"></a>    })</span>
+<span id="cb17-106"><a href="#cb17-106"></a>  }</span>
+<span id="cb17-107"><a href="#cb17-107"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
 <section>
@@ -1377,32 +1397,32 @@
 <p><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg> <code>demos/demo8.R</code></p>
 </div>
 <div class="cell" data-file="../demos/demo8.R">
-<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="|9|12,18-20|13,22-24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">library</span>(shiny)</span>
-<span id="cb17-3"><a href="#cb17-3"></a></span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="fu">shinyApp</span>(</span>
-<span id="cb17-5"><a href="#cb17-5"></a>  <span class="at">ui =</span> <span class="fu">fluidPage</span>(</span>
-<span id="cb17-6"><a href="#cb17-6"></a>    <span class="fu">titlePanel</span>(<span class="st">"Temperature Forecasts"</span>),</span>
-<span id="cb17-7"><a href="#cb17-7"></a>    <span class="fu">sidebarLayout</span>(</span>
-<span id="cb17-8"><a href="#cb17-8"></a>      <span class="fu">sidebarPanel</span>(</span>
-<span id="cb17-9"><a href="#cb17-9"></a>        <span class="fu">fileInput</span>(<span class="st">"upload"</span>, <span class="st">"Upload a file"</span>)</span>
-<span id="cb17-10"><a href="#cb17-10"></a>      ),</span>
-<span id="cb17-11"><a href="#cb17-11"></a>      <span class="fu">mainPanel</span>( </span>
-<span id="cb17-12"><a href="#cb17-12"></a>        <span class="fu">tableOutput</span>(<span class="st">"widget"</span>),</span>
-<span id="cb17-13"><a href="#cb17-13"></a>        <span class="fu">tableOutput</span>(<span class="st">"data"</span>)</span>
-<span id="cb17-14"><a href="#cb17-14"></a>      )</span>
-<span id="cb17-15"><a href="#cb17-15"></a>    )</span>
-<span id="cb17-16"><a href="#cb17-16"></a>  ),</span>
-<span id="cb17-17"><a href="#cb17-17"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
-<span id="cb17-18"><a href="#cb17-18"></a>    output<span class="sc">$</span>widget <span class="ot">=</span> <span class="fu">renderTable</span>({</span>
-<span id="cb17-19"><a href="#cb17-19"></a>      input<span class="sc">$</span>upload</span>
-<span id="cb17-20"><a href="#cb17-20"></a>    })</span>
-<span id="cb17-21"><a href="#cb17-21"></a>    </span>
-<span id="cb17-22"><a href="#cb17-22"></a>    output<span class="sc">$</span>data <span class="ot">=</span> <span class="fu">renderTable</span>({</span>
-<span id="cb17-23"><a href="#cb17-23"></a>      readr<span class="sc">::</span><span class="fu">read_csv</span>(input<span class="sc">$</span>upload<span class="sc">$</span>datapath)</span>
-<span id="cb17-24"><a href="#cb17-24"></a>    })</span>
-<span id="cb17-25"><a href="#cb17-25"></a>  }</span>
-<span id="cb17-26"><a href="#cb17-26"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="|9|12,18-20|13,22-24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">library</span>(shiny)</span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="fu">shinyApp</span>(</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  <span class="at">ui =</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb18-6"><a href="#cb18-6"></a>    <span class="fu">titlePanel</span>(<span class="st">"Temperature Forecasts"</span>),</span>
+<span id="cb18-7"><a href="#cb18-7"></a>    <span class="fu">sidebarLayout</span>(</span>
+<span id="cb18-8"><a href="#cb18-8"></a>      <span class="fu">sidebarPanel</span>(</span>
+<span id="cb18-9"><a href="#cb18-9"></a>        <span class="fu">fileInput</span>(<span class="st">"upload"</span>, <span class="st">"Upload a file"</span>)</span>
+<span id="cb18-10"><a href="#cb18-10"></a>      ),</span>
+<span id="cb18-11"><a href="#cb18-11"></a>      <span class="fu">mainPanel</span>( </span>
+<span id="cb18-12"><a href="#cb18-12"></a>        <span class="fu">tableOutput</span>(<span class="st">"widget"</span>),</span>
+<span id="cb18-13"><a href="#cb18-13"></a>        <span class="fu">tableOutput</span>(<span class="st">"data"</span>)</span>
+<span id="cb18-14"><a href="#cb18-14"></a>      )</span>
+<span id="cb18-15"><a href="#cb18-15"></a>    )</span>
+<span id="cb18-16"><a href="#cb18-16"></a>  ),</span>
+<span id="cb18-17"><a href="#cb18-17"></a>  <span class="at">server =</span> <span class="cf">function</span>(input, output, session) {</span>
+<span id="cb18-18"><a href="#cb18-18"></a>    output<span class="sc">$</span>widget <span class="ot">=</span> <span class="fu">renderTable</span>({</span>
+<span id="cb18-19"><a href="#cb18-19"></a>      input<span class="sc">$</span>upload</span>
+<span id="cb18-20"><a href="#cb18-20"></a>    })</span>
+<span id="cb18-21"><a href="#cb18-21"></a>    </span>
+<span id="cb18-22"><a href="#cb18-22"></a>    output<span class="sc">$</span>data <span class="ot">=</span> <span class="fu">renderTable</span>({</span>
+<span id="cb18-23"><a href="#cb18-23"></a>      readr<span class="sc">::</span><span class="fu">read_csv</span>(input<span class="sc">$</span>upload<span class="sc">$</span>datapath)</span>
+<span id="cb18-24"><a href="#cb18-24"></a>    })</span>
+<span id="cb18-25"><a href="#cb18-25"></a>  }</span>
+<span id="cb18-26"><a href="#cb18-26"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="fileinput-widget" class="slide level2">

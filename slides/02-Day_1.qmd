@@ -526,6 +526,28 @@ A good way to protect against this is to validate inputs - the simplest way is t
 
 More detailed validation and error reporting is possible with [`validate()`](https://shiny.rstudio.com/reference/shiny/1.7.0/validate.html) and [`need()`](https://shiny.rstudio.com/reference/shiny/1.7.0/validate.html).
 
+## A cautionary example
+
+```{r}
+#| eval: false
+library(shiny)
+
+shinyApp(
+  ui <- fluidPage(
+    numericInput("n", "n", 0)
+  ),
+  server <- function(input, output, session) {
+    observeEvent(input$n,
+      updateNumericInput(inputId = "n", value = input$n + 1)
+    )
+  }
+)
+```
+
+::: {.aside}
+From [Mastering Shiny](https://mastering-shiny.org/action-dynamic.html#circular-references)
+:::
+
 ## Your turn - Exercise 4
 
 Using the code from demo 4 as a starting point add another observer to the app that updates the `selectInput()` for `var` such that any variables that are constant (0 variance), for the currently selected cities, are removed.
