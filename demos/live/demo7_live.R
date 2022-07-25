@@ -11,14 +11,20 @@ shinyApp(
     titlePanel("Weather Forecasts"),
     sidebarLayout(
       sidebarPanel(
-        radioButtons(
+        selectInput(
+          "state", "Select a state",
+          choices = sort(unique(d$state))
+        ),
+        selectInput(
           "city", "Select a city",
-          choices = c("Washington", "New York", "Los Angeles", "Chicago")
+          choices = c(),
+          multiple = TRUE
         ),
         selectInput(
           "var", "Select a variable",
           choices = d_vars, selected = "temperature"
-        )
+        ),
+        actionButton("download_modal", "Download", icon = icon("download"))
       ),
       mainPanel( 
         plotOutput("plot"),
@@ -29,8 +35,53 @@ shinyApp(
   server = function(input, output, session) {
     
     d_city = reactive({
+      req(input$city)
       d %>%
         filter(city %in% input$city)
+    })
+    
+    observe({
+      showModal( modalDialog(
+        checkboxGroupInput(
+          "dl_vars", "Select variables (columns) to download",
+          choices = names(d), selected = c("state", "city", "time", input$var), inline = TRUE
+        ),
+        title = "Download Data",
+        footer = list(
+          downloadButton("download"),
+          modalButton("Cancel")
+        ),
+        easyClose = TRUE
+      ) )
+      
+    output$download = downloadHandler(
+      filename = function() {
+        paste0(
+          paste(input$city, collapse="_"),
+          ".csv"
+        )
+      },
+      content = function(file) {
+        d_city() %>%
+          select(input$dl_vars) %>%
+          write_csv(file)
+      }
+    )
+      
+    }) %>%
+      bindEvent(input$download_modal)
+    
+    observe({
+      cities = d %>%
+        filter(state %in% input$state) %>%
+        pull(city) %>%
+        unique() %>%
+        sort()
+      
+      updateSelectInput(
+        inputId = "city", 
+        choices = cities
+      )
     })
     
     output$plot = renderPlot({

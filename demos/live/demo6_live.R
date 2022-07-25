@@ -11,14 +11,20 @@ shinyApp(
     titlePanel("Weather Forecasts"),
     sidebarLayout(
       sidebarPanel(
-        radioButtons(
+        selectInput(
+          "state", "Select a state",
+          choices = sort(unique(d$state))
+        ),
+        selectInput(
           "city", "Select a city",
-          choices = c("Washington", "New York", "Los Angeles", "Chicago")
+          choices = c(),
+          multiple = TRUE
         ),
         selectInput(
           "var", "Select a variable",
           choices = d_vars, selected = "temperature"
-        )
+        ),
+        downloadButton("download", icon = icon("download"))
       ),
       mainPanel( 
         plotOutput("plot"),
@@ -28,9 +34,37 @@ shinyApp(
   ),
   server = function(input, output, session) {
     
+    output$download = downloadHandler(
+      filename = function() {
+        paste0(
+          paste(input$city, collapse="_"),
+          ".csv"
+        )
+      },
+      content = function(file) {
+        d_city() %>%
+          select(city, state, time, .data[[input$var]]) %>%
+          write_csv(file)
+      }
+    )
+    
     d_city = reactive({
+      req(input$city)
       d %>%
         filter(city %in% input$city)
+    })
+    
+    observe({
+      cities = d %>%
+        filter(state %in% input$state) %>%
+        pull(city) %>%
+        unique() %>%
+        sort()
+      
+      updateSelectInput(
+        inputId = "city", 
+        choices = cities
+      )
     })
     
     output$plot = renderPlot({

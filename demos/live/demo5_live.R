@@ -11,9 +11,13 @@ shinyApp(
     titlePanel("Weather Forecasts"),
     sidebarLayout(
       sidebarPanel(
-        radioButtons(
+        selectInput(
+          "state", "Select a state",
+          choices = sort(unique(d$state))
+        ),
+        selectInput(
           "city", "Select a city",
-          choices = c("Washington", "New York", "Los Angeles", "Chicago")
+          choices = c(), multiple = TRUE
         ),
         selectInput(
           "var", "Select a variable",
@@ -29,8 +33,25 @@ shinyApp(
   server = function(input, output, session) {
     
     d_city = reactive({
+      req(input$city)
+      
       d %>%
         filter(city %in% input$city)
+    })
+    
+    observe({
+      cities = d %>%
+        filter(state %in% input$state) %>%
+        pull(city) %>%
+        unique() %>%
+        sort()
+      
+        updateSelectInput(
+          inputId = "city",
+          label = paste0("Pick a city in ", input$state),
+          choices = cities,
+          selected = cities[1]
+        )
     })
     
     output$plot = renderPlot({
