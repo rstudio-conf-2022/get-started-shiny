@@ -47,8 +47,7 @@ library(shinydashboard)
 shinyApp(
   ui = dashboardPage(
     dashboardHeader(
-      title="Test", 
-      .list = list(div("hello"))
+      title="Test"
     ),
     dashboardSidebar(),
     dashboardBody()
