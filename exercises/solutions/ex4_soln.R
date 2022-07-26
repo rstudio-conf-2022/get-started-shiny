@@ -54,7 +54,7 @@ shinyApp(
     
     observe({
       zero_var = d_city() %>% 
-        select(setNames(d_vars,NULL)) %>%
+        select(d_vars) %>%
         map_dbl(var) %>%
         {. == 0}
       
