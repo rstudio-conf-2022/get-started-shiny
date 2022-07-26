@@ -268,7 +268,7 @@ shinyApp(
 
 
 
-# Themeing
+# Theming
 
 ## Shiny & bootstrap
 

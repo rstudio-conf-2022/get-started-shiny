@@ -70,6 +70,15 @@ server: shiny
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|29-39|33-36,37|40-44|49-60|62-73|75-84"
 #| file: "../demos/bonus/shiny_app.Rmd"
+```
+
+## Demo - Embedded App
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/bonus/shiny_widgets.Rmd`
+:::
+```{r}
+#| eval: false
+#| file: "../demos/bonus/shiny_widgets.Rmd"
 ```

@@ -396,6 +396,7 @@
 <h2>R Markdown and Quarto</h2>
 <p>For both of these document types (when using html) it is possible to embed Shiny widgets or even entire Shiny apps.</p>
 <p>These documents are inherently less portable (no longer possible to just share the html file) but they allow for interactivity.</p>
+<p>This is enable by including the following in the document’s YAML,</p>
 <div class="columns">
 <div class="column" style="width:47%;">
 <p>R Markdown</p>
@@ -412,6 +413,197 @@
 <span id="cb2-3"><a href="#cb2-3"></a><span class="fu">server</span><span class="kw">:</span><span class="at"> shiny</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
+</section>
+<section id="demo---embedded-app" class="slide level2">
+<h2>Demo - Embedded App</h2>
+<div class="code-file sourceCode cell-code">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg> <code>demos/bonus/shiny_app.Rmd</code></p>
+</div>
+<div class="cell" data-file="../demos/bonus/shiny_app.Rmd">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="sc">---</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>title<span class="sc">:</span> <span class="st">"Embedded Shiny App"</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>output<span class="sc">:</span> html_document</span>
+<span id="cb3-4"><a href="#cb3-4"></a>runtime<span class="sc">:</span> shiny</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="sc">---</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="st">```</span><span class="at">{r setup, include=FALSE}</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="at">library(tidyverse)</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="at">library(shiny)</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="at">d = readr::read_csv(here::here("data/weather.csv"))</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="at">d_vars = d %&gt;%</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="at">  select(where(is.numeric)) %&gt;%</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="at">  names()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="shiny-app" class="slide level2">
+<h2>Shiny App</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>#| echo: false</span>
+<span id="cb4-2"><a href="#cb4-2"></a>shinyApp(</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  ui = fluidPage(</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    titlePanel("Weather Forecasts"),</span>
+<span id="cb4-5"><a href="#cb4-5"></a>    sidebarLayout(</span>
+<span id="cb4-6"><a href="#cb4-6"></a>      sidebarPanel(</span>
+<span id="cb4-7"><a href="#cb4-7"></a>        selectInput(</span>
+<span id="cb4-8"><a href="#cb4-8"></a>          "state", "Select a state",</span>
+<span id="cb4-9"><a href="#cb4-9"></a>          choices = sort(unique(d$state))</span>
+<span id="cb4-10"><a href="#cb4-10"></a>        ),</span>
+<span id="cb4-11"><a href="#cb4-11"></a>        selectInput(</span>
+<span id="cb4-12"><a href="#cb4-12"></a>          "city", "Select a city",</span>
+<span id="cb4-13"><a href="#cb4-13"></a>          choices = c(),</span>
+<span id="cb4-14"><a href="#cb4-14"></a>          multiple = TRUE</span>
+<span id="cb4-15"><a href="#cb4-15"></a>        ),</span>
+<span id="cb4-16"><a href="#cb4-16"></a>        selectInput(</span>
+<span id="cb4-17"><a href="#cb4-17"></a>          "var", "Select a variable",</span>
+<span id="cb4-18"><a href="#cb4-18"></a>          choices = d_vars, selected = "temperature"</span>
+<span id="cb4-19"><a href="#cb4-19"></a>        )</span>
+<span id="cb4-20"><a href="#cb4-20"></a>      ),</span>
+<span id="cb4-21"><a href="#cb4-21"></a>      mainPanel( </span>
+<span id="cb4-22"><a href="#cb4-22"></a>        plotOutput("plot"),</span>
+<span id="cb4-23"><a href="#cb4-23"></a>        tableOutput("minmax")</span>
+<span id="cb4-24"><a href="#cb4-24"></a>      )</span>
+<span id="cb4-25"><a href="#cb4-25"></a>    )</span>
+<span id="cb4-26"><a href="#cb4-26"></a>  ),</span>
+<span id="cb4-27"><a href="#cb4-27"></a>  server = function(input, output, session) {</span>
+<span id="cb4-28"><a href="#cb4-28"></a>    </span>
+<span id="cb4-29"><a href="#cb4-29"></a>    d_city = reactive({</span>
+<span id="cb4-30"><a href="#cb4-30"></a>      req(input$city)</span>
+<span id="cb4-31"><a href="#cb4-31"></a>      d %&gt;%</span>
+<span id="cb4-32"><a href="#cb4-32"></a>        filter(city %in% input$city)</span>
+<span id="cb4-33"><a href="#cb4-33"></a>    })</span>
+<span id="cb4-34"><a href="#cb4-34"></a>    </span>
+<span id="cb4-35"><a href="#cb4-35"></a>    observe({</span>
+<span id="cb4-36"><a href="#cb4-36"></a>      cities = d %&gt;%</span>
+<span id="cb4-37"><a href="#cb4-37"></a>        filter(state %in% input$state) %&gt;%</span>
+<span id="cb4-38"><a href="#cb4-38"></a>        pull(city) %&gt;%</span>
+<span id="cb4-39"><a href="#cb4-39"></a>        unique() %&gt;%</span>
+<span id="cb4-40"><a href="#cb4-40"></a>        sort()</span>
+<span id="cb4-41"><a href="#cb4-41"></a>      </span>
+<span id="cb4-42"><a href="#cb4-42"></a>      updateSelectInput(</span>
+<span id="cb4-43"><a href="#cb4-43"></a>        inputId = "city", </span>
+<span id="cb4-44"><a href="#cb4-44"></a>        choices = cities</span>
+<span id="cb4-45"><a href="#cb4-45"></a>      )</span>
+<span id="cb4-46"><a href="#cb4-46"></a>    })</span>
+<span id="cb4-47"><a href="#cb4-47"></a>    </span>
+<span id="cb4-48"><a href="#cb4-48"></a>    output$plot = renderPlot({</span>
+<span id="cb4-49"><a href="#cb4-49"></a>      d_city() %&gt;%</span>
+<span id="cb4-50"><a href="#cb4-50"></a>        ggplot(aes(x=time, y=.data[[input$var]], color=city)) +</span>
+<span id="cb4-51"><a href="#cb4-51"></a>        ggtitle(input$var) +</span>
+<span id="cb4-52"><a href="#cb4-52"></a>        geom_line()</span>
+<span id="cb4-53"><a href="#cb4-53"></a>    })</span>
+<span id="cb4-54"><a href="#cb4-54"></a>    </span>
+<span id="cb4-55"><a href="#cb4-55"></a>    output$minmax = renderTable({</span>
+<span id="cb4-56"><a href="#cb4-56"></a>      d_city() %&gt;%</span>
+<span id="cb4-57"><a href="#cb4-57"></a>        mutate(</span>
+<span id="cb4-58"><a href="#cb4-58"></a>          day = lubridate::wday(time, label = TRUE, abbr = FALSE),</span>
+<span id="cb4-59"><a href="#cb4-59"></a>          date = as.character(lubridate::date(time))</span>
+<span id="cb4-60"><a href="#cb4-60"></a>        ) %&gt;%</span>
+<span id="cb4-61"><a href="#cb4-61"></a>        group_by(date, day) %&gt;%</span>
+<span id="cb4-62"><a href="#cb4-62"></a>        summarize(</span>
+<span id="cb4-63"><a href="#cb4-63"></a>          `min` = min(.data[[input$var]]),</span>
+<span id="cb4-64"><a href="#cb4-64"></a>          `max` = max(.data[[input$var]]),</span>
+<span id="cb4-65"><a href="#cb4-65"></a>          .groups = "drop"</span>
+<span id="cb4-66"><a href="#cb4-66"></a>        )</span>
+<span id="cb4-67"><a href="#cb4-67"></a>    })</span>
+<span id="cb4-68"><a href="#cb4-68"></a>  },</span>
+<span id="cb4-69"><a href="#cb4-69"></a>  options = list(height=700)</span>
+<span id="cb4-70"><a href="#cb4-70"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>:::
+
+
+## Demo - Embedded App
+
+::: {.code-file .sourceCode .cell-code}
+`&lt;svg aria-hidden="true" role="img" viewBox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"&gt;&lt;path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"/&gt;&lt;/svg&gt;`{=html} `demos/bonus/shiny_widgets.Rmd`
+:::
+
+::: {.cell file='../demos/bonus/shiny_widgets.Rmd'}
+
+```{.r .cell-code}
+---
+title: "Embedded Shiny App"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(shiny)
+d = readr::read_csv(here::here("data/weather.csv"))
+
+d_vars = d %&gt;%
+  select(where(is.numeric)) %&gt;%
+  names()</code></pre>
+</section>
+<section id="shiny-app-1" class="slide level2">
+<h2>Shiny App</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>#| echo: false</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>fluidRow(</span>
+<span id="cb6-4"><a href="#cb6-4"></a>  selectInput(</span>
+<span id="cb6-5"><a href="#cb6-5"></a>    "state", "Select a state",</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    choices = sort(unique(d$state))</span>
+<span id="cb6-7"><a href="#cb6-7"></a>  ),</span>
+<span id="cb6-8"><a href="#cb6-8"></a>  selectInput(</span>
+<span id="cb6-9"><a href="#cb6-9"></a>    "city", "Select a city",</span>
+<span id="cb6-10"><a href="#cb6-10"></a>    choices = c(),</span>
+<span id="cb6-11"><a href="#cb6-11"></a>    multiple = TRUE</span>
+<span id="cb6-12"><a href="#cb6-12"></a>  ),</span>
+<span id="cb6-13"><a href="#cb6-13"></a>  selectInput(</span>
+<span id="cb6-14"><a href="#cb6-14"></a>    "var", "Select a variable",</span>
+<span id="cb6-15"><a href="#cb6-15"></a>    choices = d_vars, selected = "temperature"</span>
+<span id="cb6-16"><a href="#cb6-16"></a>  )</span>
+<span id="cb6-17"><a href="#cb6-17"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h3 id="plot">Plot</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href="#cb7-1"></a>#| echo: false</span>
+<span id="cb7-2"><a href="#cb7-2"></a>plotOutput("plot")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h3 id="table">Table</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1"><a href="#cb8-1"></a>#| echo: false</span>
+<span id="cb8-2"><a href="#cb8-2"></a>tableOutput("minmax")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a href="#cb9-1"></a>#| echo: FALSE</span>
+<span id="cb9-2"><a href="#cb9-2"></a>#| context: server</span>
+<span id="cb9-3"><a href="#cb9-3"></a>d_city = reactive({</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  req(input$city)</span>
+<span id="cb9-5"><a href="#cb9-5"></a>  d %&gt;%</span>
+<span id="cb9-6"><a href="#cb9-6"></a>    filter(city %in% input$city)</span>
+<span id="cb9-7"><a href="#cb9-7"></a>})</span>
+<span id="cb9-8"><a href="#cb9-8"></a></span>
+<span id="cb9-9"><a href="#cb9-9"></a>observe({</span>
+<span id="cb9-10"><a href="#cb9-10"></a>  cities = d %&gt;%</span>
+<span id="cb9-11"><a href="#cb9-11"></a>    filter(state %in% input$state) %&gt;%</span>
+<span id="cb9-12"><a href="#cb9-12"></a>    pull(city) %&gt;%</span>
+<span id="cb9-13"><a href="#cb9-13"></a>    unique() %&gt;%</span>
+<span id="cb9-14"><a href="#cb9-14"></a>    sort()</span>
+<span id="cb9-15"><a href="#cb9-15"></a>  </span>
+<span id="cb9-16"><a href="#cb9-16"></a>  updateSelectInput(</span>
+<span id="cb9-17"><a href="#cb9-17"></a>    inputId = "city", </span>
+<span id="cb9-18"><a href="#cb9-18"></a>    choices = cities</span>
+<span id="cb9-19"><a href="#cb9-19"></a>  )</span>
+<span id="cb9-20"><a href="#cb9-20"></a>})</span>
+<span id="cb9-21"><a href="#cb9-21"></a></span>
+<span id="cb9-22"><a href="#cb9-22"></a>output$plot = renderPlot({</span>
+<span id="cb9-23"><a href="#cb9-23"></a>  d_city() %&gt;%</span>
+<span id="cb9-24"><a href="#cb9-24"></a>    ggplot(aes(x=time, y=.data[[input$var]], color=city)) +</span>
+<span id="cb9-25"><a href="#cb9-25"></a>    ggtitle(input$var) +</span>
+<span id="cb9-26"><a href="#cb9-26"></a>    geom_line()</span>
+<span id="cb9-27"><a href="#cb9-27"></a>})</span>
+<span id="cb9-28"><a href="#cb9-28"></a></span>
+<span id="cb9-29"><a href="#cb9-29"></a>output$minmax = renderTable({</span>
+<span id="cb9-30"><a href="#cb9-30"></a>  d_city() %&gt;%</span>
+<span id="cb9-31"><a href="#cb9-31"></a>    mutate(</span>
+<span id="cb9-32"><a href="#cb9-32"></a>      day = lubridate::wday(time, label = TRUE, abbr = FALSE),</span>
+<span id="cb9-33"><a href="#cb9-33"></a>      date = as.character(lubridate::date(time))</span>
+<span id="cb9-34"><a href="#cb9-34"></a>    ) %&gt;%</span>
+<span id="cb9-35"><a href="#cb9-35"></a>    group_by(date, day) %&gt;%</span>
+<span id="cb9-36"><a href="#cb9-36"></a>    summarize(</span>
+<span id="cb9-37"><a href="#cb9-37"></a>      `min` = min(.data[[input$var]]),</span>
+<span id="cb9-38"><a href="#cb9-38"></a>      `max` = max(.data[[input$var]]),</span>
+<span id="cb9-39"><a href="#cb9-39"></a>      .groups = "drop"</span>
+<span id="cb9-40"><a href="#cb9-40"></a>    )</span>
+<span id="cb9-41"><a href="#cb9-41"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>```</p>
+</section>
 </div>
 
 <img src="images/shiny.png" class="slide-logo r-stretch"><div class="footer footer-default">
