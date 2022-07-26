@@ -1,0 +1,75 @@
+---
+title: "Getting Started with Shiny<br/>Bonus Topics"
+author: "Colin Rundel"
+format: 
+  revealjs:
+    logo: images/shiny.png
+    footer: "RStudioConf 2022 - Getting Started with Shiny"
+    slide-number: true
+    highlight-style: a11y
+    theme: [default, custom.scss]
+    revealjs-plugins:
+    - countdown
+execute:
+  echo: true
+title-slide-attributes:
+    data-background-image: "images/hero-national-harbor.png"
+    data-background-size: cover
+    data-background-opacity: "0.5"
+---
+
+```{r setup}
+#| include: false
+library(shiny)
+```
+
+# Shiny runtime
+
+
+## R Markdown and Quarto
+
+
+For both of these document types (when using html) it is possible to embed Shiny widgets or even entire Shiny apps.
+
+These documents are inherently less portable (no longer possible to just share the html file) but they allow for interactivity.
+
+This is enable by including the following in the document's YAML,
+
+::: columns
+::: {.column width="47%"}
+R Markdown
+
+```yaml
+---
+output: html_document
+runtime: shiny
+---
+```
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="47%"}
+Quarto
+
+```yaml
+---
+format: html
+server: shiny
+---
+```
+:::
+:::
+
+
+## Demo - Embedded App
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/bonus/shiny_app.Rmd`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|29-39|33-36,37|40-44|49-60|62-73|75-84"
+#| file: "../demos/bonus/shiny_app.Rmd"
+```
