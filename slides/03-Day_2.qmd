@@ -23,38 +23,6 @@ title-slide-attributes:
 library(shiny)
 ```
 
-# Dynamic UIs
-
-## `uiOutput()`
-
-Occasionally with a Shiny app it is necessary to have a user interface that needs to adapt dynamically based on something that cannot be known before runtime.
-
-We will now work through an example where we allow a user to upload data for new cities which will be used to supplement the existing weather data.
-
-The issue here is that the new data may contain some subset of the existing columns (and they may have different names) so we will need to map between the two sets of columns and we don't want to hard code for every possible column.
-
-## Demo 9 - More weather (Part 1)
-
-::: {.code-file .sourceCode .cell-code}
-`r fontawesome::fa("file")` `demos/demo9_part1.R`
-:::
-```{r}
-#| eval: false
-#| code-line-numbers: "|29-40|54-83|83|62-73|75-81"
-#| file: "../demos/demo9_part1.R"
-```
-
-## Demo 9 - More weather (Part 2)
-
-::: {.code-file .sourceCode .cell-code}
-`r fontawesome::fa("file")` `demos/demo9_part2.R`
-:::
-```{r}
-#| eval: false
-#| code-line-numbers: "|87-91|93-119"
-#| file: "../demos/demo9_part2.R"
-```
-
 # shinydashboard
 
 ## shinydashboard
@@ -155,26 +123,26 @@ shinydashboard:::validColors
 
 ## Your turn - Exercise 6
 
-Again starting with the app version from Demo 5 (code available in `exercises/ex6.R`) convert the app to use shinydashboard instead of `fluidPage()` and `sidebarLayout()`. 
+Starting with the app from Demo 5 (code available in `exercises/ex6.R`) convert the app to use shinydashboard instead of `fluidPage()` and `sidebarLayout()`. 
 
 The specifics of the design are up to you, but think about where it makes the most sense to include the various UI elements.
 
 See the documentation of `box()` and the other building blocks for guidance on how to use them, the examples [here](http://rstudio.github.io/shinydashboard/structure.html#boxes) may also be useful.
 
-If you finish early try adding a `valueBox()` or `infoBox()` (or two).
+If you finish early try adding a `valueBox()` or `infoBox()` (static is fine for now).
 
 <countdown time="600"/>
 
 
-## Demo 10 - Dynamic boxes
+## Demo 9 - Dynamic boxes
 
 ::: {.code-file .sourceCode .cell-code}
-`r fontawesome::fa("file")` `demos/demo10.R`
+`r fontawesome::fa("file")` `demos/demo9.R`
 :::
 ```{r}
 #| eval: false
 #| code-line-numbers: "|29-39|33-36,37|40-44|49-60|62-73|75-84"
-#| file: "../demos/demo10.R"
+#| file: "../demos/demo9.R"
 ```
 
 
@@ -184,7 +152,7 @@ If you finish early try adding a `valueBox()` or `infoBox()` (or two).
 
 With the last demo you may have noticed that all three of the infoBoxes had nearly identical code.
 
-As mentioned before this is something we would like to avoid / minimize wherever possible.
+As we mentioned yesterday this is something we would like to avoid / minimize wherever possible.
 
 Previously we were able to use a `reactive()` to remove duplicate code, but that is not possible here since we need three distinct widgets + related server code.
 
@@ -197,7 +165,7 @@ Within Shiny there are two issues we need to address,
 
 - Our code occurs in both the UI and the server - so we will need to write one function for each
 
-- Shiny inputs and outputs each share a global namespace so when reusing components we need to make sure these names do not collide.
+- Shiny inputs and outputs each share a global namespace so when reusing components we need to make sure these ids do not collide.
 
 
 ## UI module
@@ -221,9 +189,9 @@ Creation of a UI module is straightforward,
 
 ## Server module 
 
-Again start with a function that takes `id` as an argument, additional arguments are optional.
+Again start with a function that takes `id` as an argument, additional arguments are optional and can be static variables or reactives.
 
-- Module's server function is implemented using
+- A module's server function is implemented using (which is returned by the function)
   
   ```r
   moduleServer(
@@ -288,30 +256,32 @@ shinyApp(
 )
 ```
 
-## Demo 11 - Dynamic box module
+## Demo 10 - Dynamic box module
 
 ::: {.code-file .sourceCode .cell-code}
-`r fontawesome::fa("file")` `demos/demo11.R`
+`r fontawesome::fa("file")` `demos/demo10.R`
 :::
 ```{r}
 #| eval: false
 #| code-line-numbers: "|11-13|15-35|76-80|82-86|88-92"
-#| file: "../demos/demo11.R"
+#| file: "../demos/demo10.R"
 ```
+
+
 
 # Themeing
 
 ## Shiny & bootstrap
 
-Most of the interface provided by Shiny is based on the html elements, styling, and javascript provided by the Bootstrap library.
+The interface provided by Shiny is based on the html elements, styling, and javascript provided by the [Bootstrap library](https://getbootstrap.com/).
 
 As we've seen so far, knowing the specifics of Bootstrap are not needed for working with Shiny - but understanding some of its conventions goes a long way to helping you customize the elements of your app (via custom CSS and other components).
 
-This is not the only place that Bootstrap shows up in the R ecosystem - both RMarkdown and Quarto html documents use Bootstrap for styling as well.
+This is not the only place that Bootstrap shows up in the R ecosystem - e.g. both RMarkdown and Quarto html documents use Bootstrap for styling as well.
 
 ## Bootswatch
 
-Due to the ubiquity of Bootstrap a large amount of community effort has gone into developing custom themes - a large free collection of this is avaiable at [bootswatch.com/](https://bootswatch.com/).
+Due to the ubiquity of Bootstrap a large amount of community effort has gone into developing custom themes - a large free collection of these are avaiable at [bootswatch.com/](https://bootswatch.com/).
 
 <iframe data-src="https://bootswatch.com/" width="100%" height="450px" style="border:1px solid;border-radius: 5px;">
 </iframe>
@@ -333,7 +303,7 @@ Due to the ubiquity of Bootstrap a large amount of community effort has gone int
 
 ## `bs_theme()`
 
-Provides a high level interface to adjusting the theme for an entire app,
+Provides a high level interface to adjusting the theme for an entire Shiny app,
 
 * Change bootstrap version via `version` argument
 
@@ -343,13 +313,15 @@ Provides a high level interface to adjusting the theme for an entire app,
 
 * Adjust fonts (`base_font`, `code_font`, `heading_font`, `font_scale`)
 
+* and more
 
-Resulting object is passed to the `theme` argument of `fluidPage()` and similar page UI elements.
+
+The object returned by `bs_theme()` can be passed to the `theme` argument of `fluidPage()` and similar page UI elements.
 
 
 ## Your turn - Exercise 7
 
-Again starting with the app version from Demo 5 (code available in `exercises/ex7.R`) use bslib to add a theme to the Shiny app using `bs_theme()`.
+Again starting with the app version from Demo 5 (code available in `exercises/ex7.R`) use bslib to add a theme to your Shiny app using `bs_theme()`.
 
 * Try changing the bootstrap version (3, 4, and 5) and see what happens.
 
@@ -358,26 +330,26 @@ Again starting with the app version from Demo 5 (code available in `exercises/ex
 <countdown time="450"/>
 
 
-## Demo 12 - Interactive theming
+## Demo 11 - Interactive theming
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo11.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|13|45"
+#| file: "../demos/demo11.R"
+```
+
+## Demo 12 - Dynamic theming
 
 ::: {.code-file .sourceCode .cell-code}
 `r fontawesome::fa("file")` `demos/demo12.R`
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|13|45"
-#| file: "../demos/demo12.R"
-```
-
-## Demo 13 - Dynamic theming
-
-::: {.code-file .sourceCode .cell-code}
-`r fontawesome::fa("file")` `demos/demo13.R`
-:::
-```{r}
-#| eval: false
 #| code-line-numbers: "|11,12|16|49-52"
-#| file: "../demos/demo13.R"
+#| file: "../demos/demo12.R"
 ```
 
 ## thematic
@@ -388,24 +360,334 @@ In the case of our Shiny app, all we need to do is to include a call to `themati
 
 - Using the value `"auto"` will attempt to resolve the `bg`, `fg`, `accent`, or `font` values at plot time.
 
-## Demo 14 - thematic
+## Demo 13 - thematic
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo13.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|12"
+#| file: "../demos/demo13.R"
+```
+
+
+
+# Deploying Shiny apps
+
+## Your turn - Exercise 8
+
+Go to [shinyapps.io](https://www.shinyapps.io/) and sign up for an account.
+
+* You can create a new account via email & a password
+
+* or via o-auth through Google or GitHub.
+
+If asked to pick a plan, use the Free option (more than sufficient for our needs here)
+
+
+<countdown time="300"/>
+
+
+## Organizing your app
+
+For deployment generally apps will be organized as a single folder that contains all the necessary components (R script, data files, other static content).
+
+* Pay attention to the nature of any paths used in your code 
+
+  * Absolute paths are almost certainly going to break
+  
+  * Relative paths should be to the root of the app folder
+  
+* Static files generally are placed in the `www/` subfolder
+
+* Script *does not* need to be named `app.R` or `ui.R`/`server.R`
+
+* Check / think about package dependencies
+
+
+## Your turn - Exercise 9
+
+Now we will publish one of the demo apps to shinyapps.io (you will need to have completed Exercise 8)
+
+1. Package up either `demo5.R` or `demo10.R` as an app in `exercises/ex9app` (you will need to create this folder)
+    - Don't forget the data
+  
+2. Open the script file in `exercises/ex9app` and click the Publish Document button in the upper right of the pane (look for the ![](images/publish_button.png) icon)
+    - You should be propted to "Connect Publishing Account", follow the instructions and select shinyapps.io when prompted
+    - When retrieving your token you may need to click `Dashboard` first and then your name (both in the upper right)
+
+## Your turn - Exercise 9 (cont.)
+
+3. Once authenticated you should be prompted to select which files to include - choose what you think is reasonable
+
+4. Your Shiny app should now be deploying and should open on shinyapps.io once live - check to see if everything works, if not go back and check Steps 1 and 3.
+
+
+<countdown time="900"/>
+
+
+
+# Dynamic UIs
+
+## The goal
+
+Occasionally with a Shiny app it is necessary to have a user interface that needs to adapt dynamically based on something that cannot be known before runtime.
+
+We will now work towards an example where we allow a user to upload data for new cities which will be used to supplement the existing weather data.
+
+The issue here is that the new data may contain some subset of the existing columns (and they may have different names) so we will need to map between the two sets of columns and we don't want to hard code for every possible column.
+
+## `uiOutput()` & `renderUI()`
+
+These function as any other `*Output()` and `render*()` pair with the exception that the latter expects to return a UI element or a list of UI elements (static or reactive).
+
+This allows for the introduction of new inputs and outputs dynamically and in a way they can then depend on the reactive elements (e.g. create one select input for each column in the new data for that task described above).
+
+## A quick example
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|7,10|15-20"
+library(shiny)
+
+shinyApp(
+  ui = fluidPage(
+    sidebarLayout(
+      sidebarPanel(
+        sliderInput("n", "# of buttons", min=0, max=10, value=3)
+      ),
+      mainPanel(
+        uiOutput("buttons")
+      )
+    )
+  ),
+  server = function(input, output, session) {
+    output$buttons = renderUI({
+      purrr::map(
+        seq_len(input$n),
+        ~ actionButton(paste0("btn", .x), paste("Button", .x))
+      ) 
+    })
+  }
+)
+```
+
+## Your turn - Exercise 10
+
+Assume  that you have the full data set (`d`) and a new data set (`d_new`) that you would like to append.
+
+As stated before, there is no guarantee that the two data sets have matching columns (but they are likely to be similar). As such we would like to create a UI which will present one select input for each column in `d_new` where the choices are the columns in `d` (allowing us to map between the two data sets).
+
+Using the scaffolded code in `exercies/ex10.R` add the necessary code to `renderUI()` to create the needed select inputs.
+
+<countdown time="720"/>
+
+
+## Demo 14 - Partial matching
 
 ::: {.code-file .sourceCode .cell-code}
 `r fontawesome::fa("file")` `demos/demo14.R`
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|12"
+#| code-line-numbers: ""
 #| file: "../demos/demo14.R"
 ```
 
-# Deploying Shiny apps
 
-## Organizing your app
+## Demo 15 - Using dynamic inputs
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo15.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|26-42|29-32|20,38-40"
+#| file: "../demos/demo15.R"
+```
 
 
 
-# Odds & Ends
+## tabset panels
+
+Another approach to hiding UI elements (when not needed or when unrelated) is to use a `tabsetPanel()` with a number of `tabPanel()` children.
+
+Once created each `tabPanel()` is a separate page with its own collection of UI elements, where only one panel can be viewed at a time.
+
+::: {.aside}
+Note what happens in Demo 10 when each tabset is selected and the city is changed.
+:::
+
+## Demo 16 - tabset panels
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo16.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|29-36|62,70"
+#| file: "../demos/demo16.R"
+```
+
+
+## Demo 17 - Putting it all together
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo17.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|29-36|62,70"
+#| file: "../demos/demo17.R"
+```
+
+## Saving state
+
+We've now allowed a user to augment the existing data - but how do we persist those changes?
+
+There are many options with various trade offs,
+
+- Local file storage (e.g. overwrite `weather.csv`)
+
+- Remote file storage (e.g. Dropbox, Google Drive, etc.)
+
+- Relational DB - local or remote (e.g. sqlite, MySQL, Postgres, etc.)
+
+
+::: {.aside}
+There is a article addressing different approaches [here](https://shiny.rstudio.com/articles/persistent-data-storage.html).
+:::
+
+# What next / what else
+
+## Shiny user showcase
+
+::: {.large style="text-align: center"}
+[shiny.rstudio.com/gallery/](https://shiny.rstudio.com/gallery/)
+:::
+
+> The Shiny User Showcase is comprised of contributions from the Shiny app developer community. The apps are categorized into application areas and presented with a brief description, tags, and for many, the source code. Note that many of these apps are winners and honorable mentions of our annual Shiny contest!
+
+Shiny contest winners blog posts:
+
+* [1st contest winners](https://www.rstudio.com/blog/first-shiny-contest-winners/)
+
+* [2nd contest winners](https://www.rstudio.com/blog/winners-of-the-2nd-shiny-contest/)
+
+* [3rd contest winners](https://www.rstudio.com/blog/winners-of-the-3rd-annual-shiny-contest/)
+
+
+
+
+
+
+## shinyjs
+
+::: {.large style="text-align: center"}
+[deanattali.com/shinyjs/](https://deanattali.com/shinyjs/)
+:::
+
+> Easily improve the user experience of your Shiny apps in seconds
+
+* Hide (or show) an element 
+
+* Disable (or enable) an input 
+
+* Reset an input back to its original value 
+
+* Delay code execution
+
+* Easily call your own JavaScript functions from R 
+
+
+## DT
+
+::: {.large style="text-align: center"}
+[rstudio.github.io/DT/](https://rstudio.github.io/DT/)
+:::
+
+> The R package DT provides an R interface to the JavaScript library DataTables. R data objects (matrices or data frames) can be displayed as tables on HTML pages, and DataTables provides filtering, pagination, sorting, and many other features in the tables.
+
+* Interactive tables
+
+* Tables as inputs
+
+* Editable tables
+
+
+## reactable
+
+::: {.large style="text-align: center"}
+[glin.github.io/reactable/](https://glin.github.io/reactable/)
+:::
+
+> Interactive data tables for R, based on the [React Table](https://github.com/tanstack/table/tree/v7) library and made with [reactR](https://github.com/react-R/reactR).
+
+* Sorting, filtering, pagination
+* Grouping and aggregation
+* Built-in column formatting
+* Custom rendering via R or JavaScript
+* Expandable rows and nested tables
+* Conditional styling
+
+
+## golem 
+
+::: {.large style="text-align: center"}
+[thinkr-open.github.io/golem/](https://thinkr-open.github.io/golem/)
+:::
+
+> golem is an opinionated framework for building production-grade shiny applications.
+
+![](https://raw.githubusercontent.com/ThinkR-open/golem/master/inst/rstudio/templates/project/golem.png){fig-align="center" width="20%"}
+
+## htmlwidgets
+
+::: {.large style="text-align: center"}
+[htmlwidgets.org](https://www.htmlwidgets.org/)
+:::
+
+> The htmlwidgets package provides a framework for easily creating R bindings to JavaScript libraries. Widgets created using the framework can be:
+>
+> * Used at the R console for data analysis just like conventional R plots (via RStudio Viewer).
+> * Seamlessly embedded within R Markdown documents and Shiny web applications.
+> * Saved as standalone web pages for ad-hoc sharing via email, Dropbox, etc.
+
+
+## pool
+
+::: {.large style="text-align: center"}
+[rstudio.github.io/pool/](https://rstudio.github.io/pool/)
+:::
+
+> The goal of the pool package is to abstract away the logic of connection management and the performance cost of fetching a new connection from a remote database. These concerns are especially prominent in interactive contexts, like Shiny apps (which connect to a remote database) or even at the R console.
+
+See articles available at [shiny.rstudio.com/articles/#data](https://shiny.rstudio.com/articles/#data)
+
+
+## Awesome Shiny Extensions
+
+::: {.large style="text-align: center"}
+[github.com/nanxstats/awesome-shiny-extensions](https://github.com/nanxstats/awesome-shiny-extensions)
+:::
+
+> A curated list of awesome R packages that offer extended UI or server components for the R web framework Shiny.
+
+![](https://raw.githubusercontent.com/nanxstats/awesome-shiny-extensions/master/logo.png){fig-align="center" width="20%"}
+
+
+## Shiny Developer Series
+
+::: {.large style="text-align: center"}
+[shinydevseries.com/](https://shinydevseries.com/)
+:::
+
+> The goals of the Shiny Developer Series are to showcase the innovative applications and packages in the ever-growing Shiny ecosystem, as well as the brilliant developers behind them! The series is composed of these components:
+>
+> * Interviews with guests ...
+>
+> * Video tutorials and live streams ...
 
 
 # Q&A 
