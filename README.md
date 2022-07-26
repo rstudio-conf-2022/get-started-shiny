@@ -48,11 +48,11 @@ This workshop will be a hands-on introduction to designing, implementing and dep
 
 | Time          | Activity         |
 | :------------ | :--------------- |
-| 09:00 - 10:30 | Uploads & Dynamic UIs |
+| 09:00 - 10:30 | shinydashboard & modules |
 | 10:30 - 11:00 | *Coffee break*   |
-| 11:00 - 12:30 | shinydashboard & modules |
+| 11:00 - 12:30 | Themeing & deploying apps |
 | 12:30 - 13:30 | *Lunch break*    |
-| 13:30 - 15:00 | Themeing         |
+| 13:30 - 15:00 | Dynamic UIs      |
 | 15:00 - 15:30 | *Coffee break*   |
 | 15:30 - 17:00 | Q&A + Wrapup     |
 
