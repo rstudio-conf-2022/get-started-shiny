@@ -8,33 +8,6 @@ d_vars = d %>%
   select(where(is.numeric)) %>%
   names()
 
-weatherBoxUI = function(id) {
-  infoBoxOutput(NS(id, "info"))
-}
-
-weatherBoxServer = function(id, data, var, func, text, color, icon, show_time = FALSE) {
-  moduleServer(
-    id,
-    function(input, output, session) {
-      output$info = renderInfoBox({
-        val = round(func(data()[[var]]),2)
-        time = if (show_time) {
-          data()$time[data()[[var]] == val] %>%
-            format(format="%a, %b %d\n%I:%M %p")
-        } else {
-          ""
-        }
-        
-        infoBox(
-          title = text, value = val, subtitle = time,
-          color = color, icon = icon
-        )
-      })
-    }
-  )
-}
-
-
 shinyApp(
   ui = dashboardPage(
     dashboardHeader(
@@ -65,31 +38,51 @@ shinyApp(
         )
       ),
       fluidRow(
-        weatherBoxUI("min_temp"),
-        weatherBoxUI("max_temp"),
-        weatherBoxUI("avg_wind")
+        infoBoxOutput("min_temp"),
+        infoBoxOutput("max_temp"),
+        infoBoxOutput("avg_wind")
       )
     )
   ),
   server = function(input, output, session) {
     
-    weatherBoxServer(
-      "min_temp", data = d_city, var = "temperature", func = min, 
-      text = "Min temp", color = "blue", icon = icon("temperature-low"),
-      show_time = TRUE
-    )
+    output$min_temp = renderInfoBox({
+      min_temp = min(d_city()$temperature)
+      min_temp_time = d_city()$time[d_city()$temperature == min_temp]
+      
+      infoBox(
+        title = "Min temp",
+        value = min_temp,
+        subtitle = format(min_temp_time, format="%a, %b %d\n%I:%M %p"),
+        color = "blue",
+        icon = icon("temperature-low")
+      )
+    })
     
-    weatherBoxServer(
-      "max_temp", data = d_city , var = "temperature", func = max, 
-      text = "Max temp", color = "red", icon = icon("temperature-high"),
-      show_time = TRUE
-    )
+    output$max_temp = renderInfoBox({
+      max_temp = max(d_city()$temperature)
+      max_temp_time = d_city()$time[d_city()$temperature == max_temp]
+      
+      infoBox(
+        title = "Max temp",
+        value = max_temp,
+        subtitle = format(max_temp_time, format="%a, %b %d\n%I:%M %p"),
+        color = "red",
+        icon = icon("temperature-high")
+      )
+    })
     
-    weatherBoxServer(
-      "avg_wind", data = d_city, var = "windSpeed", func = mean, 
-      text = "Avg wind", color = "green", icon = icon("wind"),
-      show_time = FALSE
-    )
+    output$avg_wind = renderInfoBox({
+      avg_wind = mean(d_city()$windSpeed)
+      
+      infoBox(
+        title = "Avg wind speed",
+        value = round(avg_wind,2),
+        color = "green",
+        icon = icon("wind")
+      )
+    })
+    
     
     d_city = reactive({
       req(input$city)

@@ -18,10 +18,8 @@ shinyApp(
         function(i) {
           selectInput(
             inputId = paste0("colsel",i),
-            label = paste0("Column matching `", new_cols[i], "`"),
-            choices = c("", cur_cols),
-            selected = cur_cols[ pmatch(new_cols[i], cur_cols) ] %>%
-              replace_na("")
+            label = paste0("Column matching `", new_cols[i],"`"),
+            choices = c("", cur_cols)
           )
         }
       )

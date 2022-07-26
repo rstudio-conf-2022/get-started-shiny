@@ -1,5 +1,3 @@
-options(shiny.fullstacktrace=TRUE)
-
 library(tidyverse)
 library(shiny)
 d_orig = readr::read_csv(here::here("data/weather.csv"))
@@ -31,8 +29,7 @@ shinyApp(
         tabsetPanel(
           tabPanel(
             "Weather",
-            plotOutput("plot"),
-            tableOutput("minmax")    
+            plotOutput("plot")
           ),
           tabPanel(
             "Upload",
@@ -44,36 +41,33 @@ shinyApp(
     )
   ),
   server = function(input, output, session) {
-    d = reactiveVal(d_orig)
-    d_new = reactiveVal(NULL)
-    
-    d_city = reactive({
-      req(input$city)
-      d() %>%
-        filter(city %in% input$city)
-    })
+    d = reactiveVal(d_orig)   # store for modified df 
+    d_new = reactiveVal(NULL) # temp store for new df (to be appended)
     
     observe({
-      data = readr::read_csv(input$upload$datapath)
+      d_new(
+        readr::read_csv(input$upload$datapath)
+      )
       
-      d_new(data)
-      d_new_cols = names(data)
+      new_cols = names(d_new()) # new column names
+      cur_cols = names(d())     # current column names
       
-      choices = names(d_orig)
-      
-      select_elems = imap(
-        d_new_cols,
-        function(x, i) {
+      # Create the dynamic select inputs
+      #   selected value based on partial matching
+      select_elems = lapply(
+        seq_along(new_cols),
+        function(i) {
           selectInput(
-            inputId = paste0("col_sel", i),
-            label = paste0("Column matching `", x,"`:"),
-            choices = c("", choices), 
-            selected = choices[ pmatch(x, choices) ] %>%
+            inputId = paste0("colsel",i),
+            label = paste0("Column matching `", new_cols[i],"`"),
+            choices = c("", cur_cols),
+            selected = cur_cols[ pmatch(new_cols[i], cur_cols) ] %>%
               replace_na("")
           )
         }
       )
       
+      # Show select elements and helper buttons
       output$col_match = renderUI({
         list(
           select_elems,
@@ -91,23 +85,19 @@ shinyApp(
       bindEvent(input$cancel)
     
     observe({
-      cur_cols = names(d_new())
+      new_cols = names(d_new())
       
-      rename_cols = map_chr(
-        seq_along(cur_cols),
-        ~ input[[paste0("col_sel", .x)]] 
-      )
-
-      select_vals = setNames(
-        cur_cols[rename_cols != ""],
-        rename_cols[rename_cols != ""]
+      choices = map_chr(
+        seq_along(new_cols), 
+        ~ input[[paste0("colsel", .x)]]
       )
       
-      d_new_renamed = d_new() %>% 
-        select(select_vals)
+      d_new_renamed = d_new() %>%
+        setNames(choices) %>%
+        {.[,choices != ""]}
       
       d(
-        bind_rows(d(), d_new_renamed)
+        bind_rows( d(), d_new_renamed )
       )
       
       # Cleanup
@@ -117,6 +107,13 @@ shinyApp(
       })
     }) %>%
       bindEvent(input$append)
+    
+    # Previous code
+    d_city = reactive({
+      req(input$city)
+      d() %>%
+        filter(city %in% input$city)
+    })
     
     observe({
       cities = d() %>%
@@ -136,20 +133,6 @@ shinyApp(
         ggplot(aes(x=time, y=.data[[input$var]], color=city)) +
         ggtitle(input$var) +
         geom_line()
-    })
-    
-    output$minmax = renderTable({
-      d_city() %>%
-        mutate(
-          day = lubridate::wday(time, label = TRUE, abbr = FALSE),
-          date = as.character(lubridate::date(time))
-        ) %>%
-        group_by(date, day) %>%
-        summarize(
-          `min` = min(.data[[input$var]]),
-          `max` = max(.data[[input$var]]),
-          .groups = "drop"
-        )
     })
   }
 )

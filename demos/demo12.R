@@ -8,9 +8,12 @@ d_vars = d %>%
   select(where(is.numeric)) %>%
   names()
 
+light = bs_theme(version = 5)
+dark = bs_theme(version = 5, bg = "black", fg = "white", primary = "purple")
+
 shinyApp(
   ui = fluidPage(
-    theme = bs_theme(),
+    theme = light,
     titlePanel("Weather Forecasts"),
     sidebarLayout(
       sidebarPanel(
@@ -26,7 +29,8 @@ shinyApp(
         selectInput(
           "var", "Select a variable",
           choices = d_vars, selected = "temperature"
-        )
+        ),
+        checkboxInput("dark_mode", "Dark mode")
       ),
       mainPanel( 
         plotOutput("plot"),
@@ -42,7 +46,10 @@ shinyApp(
     )
   ),
   server = function(input, output, session) {
-    bs_themer()
+    observe({
+      new_theme = if (input$dark_mode) dark else light
+      session$setCurrentTheme(new_theme)
+    })
     
     d_city = reactive({
       req(input$city)

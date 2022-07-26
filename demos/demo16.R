@@ -1,19 +1,13 @@
 library(tidyverse)
 library(shiny)
-library(bslib)
-library(thematic)
-
 d = readr::read_csv(here::here("data/weather.csv"))
 
 d_vars = d %>%
   select(where(is.numeric)) %>%
   names()
 
-thematic_shiny()
-
 shinyApp(
   ui = fluidPage(
-    theme = bs_theme(),
     titlePanel("Weather Forecasts"),
     sidebarLayout(
       sidebarPanel(
@@ -32,20 +26,18 @@ shinyApp(
         )
       ),
       mainPanel( 
-        plotOutput("plot"),
-        tableOutput("minmax"),
-        
-        actionButton("b1", "primary", class = "btn-primary"),
-        actionButton("b2", "secondary", class = "btn-secondary"),
-        actionButton("b3", "success", class = "btn-success"),
-        actionButton("b4", "info", class = "btn-info"),
-        actionButton("b5", "warning", class = "btn-warning"),
-        actionButton("b6", "danger", class = "btn-danger")
+        tabsetPanel(
+          tabPanel(
+            "Plot", plotOutput("plot")
+          ),
+          tabPanel(
+            "Table", tableOutput("minmax")
+          )
+        )
       )
     )
   ),
   server = function(input, output, session) {
-    bs_themer()
     
     d_city = reactive({
       req(input$city)
@@ -67,6 +59,7 @@ shinyApp(
     })
     
     output$plot = renderPlot({
+      message("Render plot")
       d_city() %>%
         ggplot(aes(x=time, y=.data[[input$var]], color=city)) +
         ggtitle(input$var) +
@@ -74,6 +67,7 @@ shinyApp(
     })
     
     output$minmax = renderTable({
+      message("Render table")
       d_city() %>%
         mutate(
           day = lubridate::wday(time, label = TRUE, abbr = FALSE),
