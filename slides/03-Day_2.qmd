@@ -326,6 +326,8 @@ Again starting with the app version from Demo 5 (code available in `exercises/ex
 
 * Try picking out a couple of bootswatch themes and try applying them to the app.
 
+    - Check the website for options or see `bslib::bootswatch_themes()`
+
 <countdown time="450"/>
 
 
